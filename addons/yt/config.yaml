@@ -11,7 +11,7 @@ startup: "services"
 boot: "auto"
 init: false
 options:
-  chatmail_qr: ""
+  chatmail_qr: "dcaccount:https://chat.gluek.info/new"
   email: ""
   password: ""
   mail_server: ""

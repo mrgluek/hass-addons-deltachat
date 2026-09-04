@@ -5,12 +5,17 @@ echo "============================================================"
 echo " Starting Delta Chat Uptime Bot..."
 echo "============================================================"
 
+cd /app
+export PYTHONUNBUFFERED=1
 export DC_DB_DIR="/data"
 export DB_PATH="/data/uptime.db"
 export PORT="8080"
 
-python3 - << 'EOF'
+python3 -u - << 'EOF'
 import json, os, subprocess, sys, time
+
+sys.stdout.reconfigure(line_buffering=True)
+sys.stderr.reconfigure(line_buffering=True)
 
 options = {}
 if os.path.exists("/data/options.json"):
@@ -50,18 +55,19 @@ if not has_account:
             has_account = True
     
     if not has_account:
-        print("\n" + "="*60)
-        print("⚠️  DELTA CHAT ACCOUNT SETUP REQUIRED")
-        print("="*60)
-        print("Please configure your bot in Home Assistant:")
-        print("  1. Go to the 'Configuration' tab for this add-on.")
-        print("  2. Enter either:")
-        print("     - 'chatmail_qr': Your Chatmail QR string (DCACCOUNT:...)")
-        print("     - 'email' & 'password': Your standard mail credentials")
-        print("  3. Click Save and Restart the add-on.")
-        print("="*60 + "\n")
+        print("\n" + "="*60, flush=True)
+        print("⚠️  DELTA CHAT ACCOUNT SETUP REQUIRED", flush=True)
+        print("="*60, flush=True)
+        print("Please configure your bot in Home Assistant:", flush=True)
+        print("  1. Go to the 'Configuration' tab for this add-on.", flush=True)
+        print("  2. Enter either:", flush=True)
+        print("     - 'chatmail_qr': Your Chatmail QR string (DCACCOUNT:...)", flush=True)
+        print("     - 'email' & 'password': Your standard mail credentials", flush=True)
+        print("  3. Click Save and Restart the add-on.", flush=True)
+        print("="*60 + "\n", flush=True)
         while True:
             time.sleep(30)
+            print("⏳ Waiting for credentials... Configure in add-on settings and restart.", flush=True)
 
 admin_email = options.get("admin_email", "").strip()
 admin_fp = options.get("admin_fingerprint", "").strip()

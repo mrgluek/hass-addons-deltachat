@@ -19,7 +19,7 @@ ports:
 ports_description:
   8080/tcp: "ntfy webhook receiver & topic web UI (optional direct access)"
 options:
-  chatmail_qr: ""
+  chatmail_qr: "dcaccount:https://chat.gluek.info/new"
   email: ""
   password: ""
   mail_server: ""

@@ -19,7 +19,7 @@ ports:
 ports_description:
   8080/tcp: "FastAPI redirect server and web cards (optional direct access)"
 options:
-  chatmail_qr: ""
+  chatmail_qr: "dcaccount:https://chat.gluek.info/new"
   email: ""
   password: ""
   mail_server: ""
