@@ -12,6 +12,9 @@ export DB_PATH="/data/bridge.db"
 export USERBOT_SESSION_PATH="/data/userbot_session"
 export XDG_CONFIG_HOME="/data"
 
+mkdir -p /root/.config
+ln -sfn /data /root/.config/tgbridge
+
 python3 -u - << 'EOF'
 import json, os, subprocess, sys, time
 
@@ -29,15 +32,36 @@ if os.path.exists("/data/options.json"):
 accounts_dir = "/data/accounts"
 has_account = False
 if os.path.exists(accounts_dir):
-    try:
-        from deltachat2 import IOTransport, Rpc
-        with IOTransport(accounts_dir=accounts_dir) as trans:
-            rpc = Rpc(trans)
-            accids = rpc.get_all_account_ids()
-            if accids and rpc.is_configured(accids[0]):
+    import glob, sqlite3
+    toml_path = os.path.join(accounts_dir, "accounts.toml")
+    if os.path.exists(toml_path):
+        dbs = glob.glob(os.path.join(accounts_dir, "*", "dc.db"))
+        for db in dbs:
+            try:
+                conn = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
+                cur = conn.cursor()
+                cur.execute("SELECT value FROM config WHERE keyname='configured'")
+                row = cur.fetchone()
+                conn.close()
+                if row and str(row[0]) == "1":
+                    has_account = True
+                    break
+            except Exception:
                 has_account = True
-    except Exception:
-        pass
+                break
+
+    if not has_account:
+        try:
+            from deltachat2 import IOTransport, Rpc
+            with IOTransport(accounts_dir=accounts_dir) as trans:
+                rpc = Rpc(trans)
+                accids = rpc.get_all_account_ids()
+                for accid in accids:
+                    if rpc.is_configured(accid):
+                        has_account = True
+                        break
+        except Exception:
+            pass
 
 if not has_account:
     chatmail_qr = options.get("chatmail_qr", "").strip()
