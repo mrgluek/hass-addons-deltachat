@@ -1,5 +1,5 @@
 name: "Delta Chat ntfy Bot"
-description: "Bidirectional push notification bridge between ntfy.sh topics and Delta Chat chats"
+description: "Emulates ntfy.sh backend to broadcast HTTP notifications and webhooks to Delta Chat topics with a web dashboard"
 version: "1.1.0"
 slug: "deltachat_ntfy"
 url: "https://github.com/mrgluek/deltachat_ntfy"
@@ -17,7 +17,7 @@ panel_title: "ntfy Bot"
 ports:
   8080/tcp: 8082
 ports_description:
-  8080/tcp: "ntfy webhook receiver & web UI"
+  8080/tcp: "ntfy webhook receiver & topic web UI (optional direct access)"
 options:
   chatmail_qr: ""
   email: ""
@@ -30,7 +30,7 @@ options:
   admin_email: ""
   admin_fingerprint: ""
   display_name: "ntfy Bot"
-  status_text: "Bridge between ntfy and Delta Chat"
+  status_text: "Bridge between ntfy webhooks and Delta Chat"
 schema:
   chatmail_qr: "str?"
   email: "str?"

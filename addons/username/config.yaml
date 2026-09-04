@@ -1,5 +1,5 @@
 name: "Delta Chat Username Bot"
-description: "Public directory service for registering and discovering Delta Chat aliases and contacts"
+description: "Registers custom usernames and short invite redirect links (HTTP 307) with OpenGraph preview cards and cryptographic verification"
 version: "1.8.1"
 slug: "deltachat_username"
 url: "https://github.com/mrgluek/deltachat_username"
@@ -12,12 +12,12 @@ boot: "auto"
 init: true
 ingress: true
 ingress_port: 8080
-panel_icon: "mdi:card-account-details"
+panel_icon: "mdi:account-badge-horizontal"
 panel_title: "Username Bot"
 ports:
   8080/tcp: 8084
 ports_description:
-  8080/tcp: "Directory web interface (optional direct access)"
+  8080/tcp: "FastAPI redirect server and web cards (optional direct access)"
 options:
   chatmail_qr: ""
   email: ""
@@ -26,10 +26,12 @@ options:
   mail_port: 993
   send_server: ""
   send_port: 465
+  base_url: "https://deltachat.id"
+  invite_base_url: "https://i.deltachat.id/#"
   admin_email: ""
   admin_fingerprint: ""
   display_name: "Username Bot"
-  status_text: "Delta Chat username directory service"
+  status_text: "Short custom invite link service for Delta Chat: https://deltachat.id"
 schema:
   chatmail_qr: "str?"
   email: "str?"
@@ -38,6 +40,8 @@ schema:
   mail_port: "int?"
   send_server: "str?"
   send_port: "int?"
+  base_url: "str?"
+  invite_base_url: "str?"
   admin_email: "str?"
   admin_fingerprint: "str?"
   display_name: "str?"

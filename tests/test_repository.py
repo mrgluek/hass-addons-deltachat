@@ -13,7 +13,7 @@ EXPECTED_ADDONS = [
     "ntfy",
     "youtube",
     "username",
-    "publisher",
+    "publish",
 ]
 
 class TestRepositoryStructure(unittest.TestCase):

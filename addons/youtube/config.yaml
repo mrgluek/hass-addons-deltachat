@@ -1,5 +1,5 @@
 name: "Delta Chat YouTube Bot"
-description: "High-speed YouTube, audio, and media downloader powered by yt-dlp and ffmpeg for Delta Chat"
+description: "Downloads YouTube videos and music via yt-dlp, slices tracks, and supports Yandex Music, SoundCloud, VK, and Navidrome"
 version: "1.6.54"
 slug: "deltachat_yt"
 url: "https://github.com/mrgluek/deltachat_yt"
@@ -21,7 +21,7 @@ options:
   admin_email: ""
   admin_fingerprint: ""
   display_name: "YouTube Bot"
-  status_text: "Downloads and extracts audio/video from YouTube"
+  status_text: "Downloads YouTube, audio and music via Delta Chat"
 schema:
   chatmail_qr: "str?"
   email: "str?"

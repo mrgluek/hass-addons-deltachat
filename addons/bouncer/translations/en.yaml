@@ -22,7 +22,7 @@ configuration:
     description: "Outgoing mail server port (default: 465)."
   admin_email:
     name: "Admin Delta Chat Email"
-    description: "Your Delta Chat address to receive forwarded messages and manage the bouncer."
+    description: "Your Delta Chat address to manage bot settings."
   admin_fingerprint:
     name: "Admin Fingerprint"
     description: "Cryptographic OpenPGP fingerprint of the administrator (optional)."

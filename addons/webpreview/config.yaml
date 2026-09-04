@@ -1,5 +1,5 @@
 name: "Delta Chat Web Preview Bot"
-description: "Generates rich OpenGraph link previews and full-page archive screenshots for URLs posted in Delta Chat"
+description: "Saves web pages as self-contained HTML files (monolith), reader mode previews, WebXDC apps, and AI summaries (Gemini)"
 version: "2.9.6"
 slug: "deltachat_webpreview"
 url: "https://github.com/mrgluek/deltachat_webpreview"
@@ -18,10 +18,13 @@ options:
   mail_port: 993
   send_server: ""
   send_port: 465
+  gemini_api_key: ""
+  proxy_url: ""
+  jina_api_key: ""
   admin_email: ""
   admin_fingerprint: ""
   display_name: "Web Preview Bot"
-  status_text: "Sends rich previews for web links"
+  status_text: "Saves web pages as offline HTML, WebXDC apps and AI summaries"
 schema:
   chatmail_qr: "str?"
   email: "str?"
@@ -30,6 +33,9 @@ schema:
   mail_port: "int?"
   send_server: "str?"
   send_port: "int?"
+  gemini_api_key: "password?"
+  proxy_url: "str?"
+  jina_api_key: "password?"
   admin_email: "str?"
   admin_fingerprint: "str?"
   display_name: "str?"

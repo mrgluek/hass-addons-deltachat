@@ -1,0 +1,64 @@
+configuration:
+  chatmail_qr:
+    name: "Chatmail QR / URI"
+    description: "DCACCOUNT:... invite URI or QR code string (leave empty if using Email/Password)."
+  email:
+    name: "Email Address"
+    description: "Email address for the bot (leave empty if using Chatmail QR)."
+  password:
+    name: "Email Password"
+    description: "Password or App Password for the email account."
+  mail_server:
+    name: "IMAP Server"
+    description: "Incoming mail server (optional, auto-detected if empty)."
+  mail_port:
+    name: "IMAP Port"
+    description: "Incoming mail server port (default: 993)."
+  send_server:
+    name: "SMTP Server"
+    description: "Outgoing mail server (optional, auto-detected if empty)."
+  send_port:
+    name: "SMTP Port"
+    description: "Outgoing mail server port (default: 465)."
+  admin_email:
+    name: "Admin Delta Chat Email"
+    description: "Your Delta Chat address authorized to publish blog posts."
+  admin_fingerprint:
+    name: "Admin Fingerprint"
+    description: "Cryptographic OpenPGP fingerprint of the administrator (optional)."
+  forgejo_url:
+    name: "Forgejo / Gitea URL"
+    description: "URL of your Forgejo or Gitea instance (e.g. https://git.gluek.info)."
+  forgejo_token:
+    name: "Forgejo API Token"
+    description: "Personal access token with repository write permissions."
+  forgejo_repo_owner:
+    name: "Repository Owner"
+    description: "User or organization owning the target blog repository."
+  forgejo_repo_name:
+    name: "Repository Name"
+    description: "Target blog repository name (e.g. gluek.info)."
+  forgejo_branch:
+    name: "Git Branch"
+    description: "Branch to commit new posts and images to (default: main)."
+  blog_post_format:
+    name: "Blog Post Layout"
+    description: "Layout format: single_file (post in src/content/blog/<slug>.md) or folder (post in src/content/blog/<slug>/index.md)."
+  blog_content_path:
+    name: "Content Path"
+    description: "Path to blog posts directory in repository (default: src/content/blog)."
+  blog_images_path:
+    name: "Images Path"
+    description: "Path to blog images directory in repository (default: public/images)."
+  blog_image_url_prefix:
+    name: "Image URL Prefix"
+    description: "Prefix used in Markdown image tags (default: /images)."
+  blog_public_url_prefix:
+    name: "Public Blog URL Prefix"
+    description: "Base public URL for replying with link to published post (e.g. https://gluek.info/blog)."
+  display_name:
+    name: "Display Name"
+    description: "Display name shown in Delta Chat profile."
+  status_text:
+    name: "Status Text"
+    description: "Status bio text shown in Delta Chat profile."

@@ -1,34 +1,34 @@
 configuration:
   chatmail_qr:
-    name: "Chatmail QR-код / URI"
-    description: "Строка приглашения DCACCOUNT:... или текст QR-кода (оставьте пустым при входе по Email/Паролю)."
+    name: "QR-код / URI Chatmail"
+    description: "Строка приглашения DCACCOUNT:... или QR-код (оставьте пустым при использовании Email/пароля)."
   email:
     name: "Email адрес"
     description: "Email адрес для бота (оставьте пустым при использовании Chatmail QR)."
   password:
-    name: "Пароль Email"
-    description: "Пароль или пароль приложения для почтового ящика."
+    name: "Пароль от почты"
+    description: "Пароль или пароль приложения для почтового ящика бота."
   mail_server:
     name: "Сервер IMAP"
-    description: "Сервер входящей почты (необязательно, автоопределение если пусто)."
+    description: "Сервер входящей почты (необязательно, определяется автоматически)."
   mail_port:
     name: "Порт IMAP"
-    description: "Порт сервера входящей почты (по умолчанию: 993)."
+    description: "Порт входящей почты (по умолчанию: 993)."
   send_server:
     name: "Сервер SMTP"
-    description: "Сервер исходящей почты (необязательно, автоопределение если пусто)."
+    description: "Сервер исходящей почты (необязательно, определяется автоматически)."
   send_port:
     name: "Порт SMTP"
-    description: "Порт сервера исходящей почты (по умолчанию: 465)."
+    description: "Порт исходящей почты (по умолчанию: 465)."
   admin_email:
-    name: "Email администратора в Delta Chat"
-    description: "Ваш адрес в Delta Chat для получения пересылаемых сообщений и управления."
+    name: "Email администратора"
+    description: "Ваш адрес в Delta Chat для управления настройками бота."
   admin_fingerprint:
-    name: "PGP-отпечаток администратора"
-    description: "Криптографический отпечаток OpenPGP ключа администратора (необязательно)."
+    name: "Отпечаток ключа администратора"
+    description: "Криптографический OpenPGP отпечаток администратора (необязательно)."
   display_name:
-    name: "Имя бота"
-    description: "Отображаемое имя бота в Delta Chat профиле."
+    name: "Отображаемое имя"
+    description: "Имя бота в профиле Delta Chat."
   status_text:
-    name: "Статус бота"
-    description: "Текст статуса (био) в профиле бота."
+    name: "Статус профиля"
+    description: "Текст статуса (био) в профиле Delta Chat."

@@ -17,7 +17,7 @@ MAPPING = {
     "ntfy": "deltachat_ntfy",
     "youtube": "deltachat_yt",
     "username": "deltachat_username",
-    "publisher": "deltachat_publish",
+    "publish": "deltachat_publish",
 }
 
 def main():

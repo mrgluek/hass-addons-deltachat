@@ -1,5 +1,5 @@
 name: "Delta Chat Bouncer Bot"
-description: "Anti-spam protection, message auto-responder, contact whitelist filter, and forwarder for Delta Chat"
+description: "Monitors group inactivity, purges stale members, manages group/channel catalogs, and tests mail relays with cmping"
 version: "2.8.1"
 slug: "deltachat_bouncer"
 url: "https://github.com/mrgluek/deltachat_bouncer"
@@ -21,7 +21,7 @@ options:
   admin_email: ""
   admin_fingerprint: ""
   display_name: "Bouncer Bot"
-  status_text: "Guards and bounces unwanted messages"
+  status_text: "Monitors group inactivity and manages group catalogs"
 schema:
   chatmail_qr: "str?"
   email: "str?"

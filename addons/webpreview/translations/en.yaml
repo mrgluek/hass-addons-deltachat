@@ -20,9 +20,18 @@ configuration:
   send_port:
     name: "SMTP Port"
     description: "Outgoing mail server port (default: 465)."
+  gemini_api_key:
+    name: "Gemini API Key"
+    description: "Google Gemini API key for AI summaries (/tldr) and article analysis (optional)."
+  proxy_url:
+    name: "Proxy Server URL"
+    description: "HTTP/SOCKS5 proxy URL for routing requests (e.g. socks5://127.0.0.1:9050) (optional)."
+  jina_api_key:
+    name: "Jina Reader API Key"
+    description: "API key for Jina AI Reader fallback scraping (optional)."
   admin_email:
     name: "Admin Delta Chat Email"
-    description: "Your Delta Chat address to claim administrative rights."
+    description: "Your Delta Chat address to manage bot settings."
   admin_fingerprint:
     name: "Admin Fingerprint"
     description: "Cryptographic OpenPGP fingerprint of the administrator (optional)."

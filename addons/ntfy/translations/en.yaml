@@ -21,11 +21,11 @@ configuration:
     name: "SMTP Port"
     description: "Outgoing mail server port (default: 465)."
   auth_token:
-    name: "Webhook Auth Token"
-    description: "Optional authorization bearer token to secure webhook requests."
+    name: "Auth Token"
+    description: "Optional secret authentication token to protect publishing to topics."
   admin_email:
     name: "Admin Delta Chat Email"
-    description: "Your Delta Chat address to claim administrative rights."
+    description: "Your Delta Chat address to manage bot settings."
   admin_fingerprint:
     name: "Admin Fingerprint"
     description: "Cryptographic OpenPGP fingerprint of the administrator (optional)."
@@ -35,5 +35,3 @@ configuration:
   status_text:
     name: "Status Text"
     description: "Status bio text shown in Delta Chat profile."
-network:
-  8080/tcp: "ntfy webhook receiver"

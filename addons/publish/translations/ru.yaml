@@ -1,0 +1,64 @@
+configuration:
+  chatmail_qr:
+    name: "QR-код / URI Chatmail"
+    description: "Строка приглашения DCACCOUNT:... или QR-код (оставьте пустым при использовании Email/пароля)."
+  email:
+    name: "Email адрес"
+    description: "Email адрес для бота (оставьте пустым при использовании Chatmail QR)."
+  password:
+    name: "Пароль от почты"
+    description: "Пароль или пароль приложения для почтового ящика бота."
+  mail_server:
+    name: "Сервер IMAP"
+    description: "Сервер входящей почты (необязательно, определяется автоматически)."
+  mail_port:
+    name: "Порт IMAP"
+    description: "Порт входящей почты (по умолчанию: 993)."
+  send_server:
+    name: "Сервер SMTP"
+    description: "Сервер исходящей почты (необязательно, определяется автоматически)."
+  send_port:
+    name: "Порт SMTP"
+    description: "Порт исходящей почты (по умолчанию: 465)."
+  admin_email:
+    name: "Email администратора"
+    description: "Ваш адрес в Delta Chat с правом публикации постов в блог."
+  admin_fingerprint:
+    name: "Отпечаток ключа администратора"
+    description: "Криптографический OpenPGP отпечаток администратора (необязательно)."
+  forgejo_url:
+    name: "URL Forgejo / Gitea"
+    description: "Адрес вашего инстанса Forgejo или Gitea (например, https://git.gluek.info)."
+  forgejo_token:
+    name: "API токен Forgejo"
+    description: "Токен доступа с правами записи в репозиторий (scope: repo)."
+  forgejo_repo_owner:
+    name: "Владелец репозитория"
+    description: "Имя пользователя или организации владельца репозитория блога."
+  forgejo_repo_name:
+    name: "Название репозитория"
+    description: "Имя репозитория блога (например, gluek.info)."
+  forgejo_branch:
+    name: "Ветка Git"
+    description: "Ветка для коммитов постов и картинок (по умолчанию: main)."
+  blog_post_format:
+    name: "Формат структуры блога"
+    description: "Структура файлов: single_file (пост в src/content/blog/<slug>.md) или folder (пост в src/content/blog/<slug>/index.md)."
+  blog_content_path:
+    name: "Путь к статьям"
+    description: "Путь к каталогу постов в репозитории (по умолчанию: src/content/blog)."
+  blog_images_path:
+    name: "Путь к изображениям"
+    description: "Путь к каталогу картинок в репозитории (по умолчанию: public/images)."
+  blog_image_url_prefix:
+    name: "Префикс URL изображений"
+    description: "Префикс в ссылках на картинки в Markdown (по умолчанию: /images)."
+  blog_public_url_prefix:
+    name: "Публичный URL блога"
+    description: "Базовый публичный адрес блога для ссылок в ответах (например, https://gluek.info/blog)."
+  display_name:
+    name: "Отображаемое имя"
+    description: "Имя бота в профиле Delta Chat."
+  status_text:
+    name: "Статус профиля"
+    description: "Текст статуса (био) в профиле Delta Chat."

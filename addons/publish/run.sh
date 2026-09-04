@@ -2,13 +2,13 @@
 set -e
 
 echo "============================================================"
-echo " Starting Delta Chat Publisher Bot..."
+echo " Starting Delta Chat Publish Bot (deltachat_publish)..."
 echo "============================================================"
 
 export DC_DB_DIR="/data"
 export DB_PATH="/data/publish.db"
 
-python3 - << 'EOF'
+python3 - << 'PY_EOF'
 import json, os, subprocess, sys, time
 
 options = {}
@@ -18,6 +18,15 @@ if os.path.exists("/data/options.json"):
             options = json.load(f)
     except Exception as e:
         print(f"Error reading /data/options.json: {e}")
+
+# Export options to env file for bash
+try:
+    with open("/tmp/options.env", "w") as out:
+        for k, v in options.items():
+            if v is not None and v != "":
+                out.write(f"export {k.upper()}={json.dumps(str(v))}\n")
+except Exception as e:
+    print(f"Error writing options.env: {e}")
 
 accounts_dir = "/data/accounts"
 has_account = False
@@ -75,13 +84,6 @@ if admin_email or admin_fp:
     except Exception as e:
         print(f"Admin configuration note: {e}")
 
-disp_name = options.get("display_name", "").strip()
-if disp_name:
-    os.environ["DISPLAY_NAME"] = disp_name
-status_text = options.get("status_text", "").strip()
-if status_text:
-    os.environ["STATUS_TEXT"] = status_text
-
 try:
     from deltachat2 import IOTransport, Rpc
     with IOTransport(accounts_dir=accounts_dir) as trans:
@@ -104,7 +106,9 @@ try:
             print("="*60 + "\n")
 except Exception:
     pass
-EOF
+PY_EOF
+
+[ -f /tmp/options.env ] && source /tmp/options.env
 
 echo "Starting bot service..."
 exec python3 -u bot.py -c /data serve

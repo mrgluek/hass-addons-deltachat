@@ -21,7 +21,7 @@ on:
           - ntfy
           - youtube
           - username
-          - publisher
+          - publish
   repository_dispatch:
     types: [bot-updated]
 
@@ -44,7 +44,7 @@ jobs:
           - ntfy
           - youtube
           - username
-          - publisher
+          - publish
     steps:
       - name: Check if addon should be built
         id: check
