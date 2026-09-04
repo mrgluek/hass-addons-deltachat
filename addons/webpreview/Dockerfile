@@ -1,18 +1,9 @@
 ARG BUILD_FROM=ghcr.io/home-assistant/base-debian:bookworm
-
-# Stage 1: Build monolith CLI
-FROM rust:slim-bookworm AS builder
-RUN apt-get update && apt-get install -y --no-install-recommends pkg-config libssl-dev git make && rm -rf /var/lib/apt/lists/*
-RUN cargo install monolith
-
-# Stage 2: Runtime
 FROM ${BUILD_FROM}
 
 ENV LANG=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
     DEBIAN_FRONTEND=noninteractive
-
-COPY --from=builder /usr/local/cargo/bin/monolith /usr/local/bin/monolith
 
 WORKDIR /app
 
@@ -24,6 +15,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+ARG TARGETARCH
+RUN case "${TARGETARCH}" in \
+        "amd64") ARCH="x86_64" ;; \
+        "arm64") ARCH="aarch64" ;; \
+        *) ARCH="x86_64" ;; \
+    esac && \
+    curl -sSL -o /usr/local/bin/monolith "https://github.com/Y2Z/monolith/releases/download/v2.10.1/monolith-gnu-linux-${ARCH}" && \
+    chmod +x /usr/local/bin/monolith
 
 ARG BOT_REPO=deltachat_webpreview
 ARG BOT_REF=v2.9.6
