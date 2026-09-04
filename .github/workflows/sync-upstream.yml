@@ -1,0 +1,43 @@
+name: Sync Upstream Bot Versions
+
+on:
+  schedule:
+    - cron: "0 4 * * *" # Every day at 04:00 UTC
+  workflow_dispatch:
+  repository_dispatch:
+    types: [bot-updated, sync-versions]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Check & Sync Bot Versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Sync versions
+        run: python3 check_versions.py --sync
+
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            echo "Changes detected, committing and pushing..."
+            git add addons/
+            git commit -m "chore: auto-sync bot versions with upstream repositories"
+            git push origin main
+          else
+            echo "All add-on versions are already up to date."
+          fi

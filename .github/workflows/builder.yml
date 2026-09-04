@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "addons/**"
+      - ".github/workflows/builder.yml"
   workflow_dispatch:
     inputs:
       target:
@@ -70,9 +71,23 @@ jobs:
         if: steps.check.outputs.build == 'true'
         uses: actions/checkout@v4
 
+      - name: Extract metadata from config.yaml
+        if: steps.check.outputs.build == 'true'
+        id: meta
+        run: |
+          VERSION=$(grep '^version:' addons/${{ matrix.addon }}/config.yaml | head -n1 | awk '{print $2}' | tr -d '"' | tr -d "'")
+          IMAGE=$(grep '^image:' addons/${{ matrix.addon }}/config.yaml | head -n1 | awk '{print $2}' | tr -d '"' | tr -d "'")
+          echo "Building image: $IMAGE version: $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
       - name: Set up QEMU
         if: steps.check.outputs.build == 'true'
         uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        if: steps.check.outputs.build == 'true'
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub Container Registry
         if: steps.check.outputs.build == 'true'
@@ -82,15 +97,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & Publish with Home Assistant Builder
+      - name: Build & Publish Multi-Arch Image (amd64, arm64)
         if: steps.check.outputs.build == 'true'
-        uses: home-assistant/builder@2024.08.2
+        uses: docker/build-push-action@v6
         with:
-          args: |
-            --target /data/addons/${{ matrix.addon }} \
-            --image addon-deltachat-{slug} \
-            --docker-hub ghcr.io/${{ github.repository_owner }} \
-            --docker-hub-check \
-            --addon \
-            --aarch64 \
-            --amd64
+          context: addons/${{ matrix.addon }}
+          file: addons/${{ matrix.addon }}/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.version }}
+            ${{ steps.meta.outputs.image }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

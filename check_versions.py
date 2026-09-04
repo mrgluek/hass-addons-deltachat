@@ -4,6 +4,8 @@
 import argparse
 import os
 import re
+import urllib.request
+import urllib.error
 import yaml
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -21,29 +23,46 @@ MAPPING = {
     "publish": "deltachat_publish",
 }
 
+def extract_version_from_text(content: str) -> str:
+    m = re.search(r'VERSION\s*=\s*["\']([^"\']+)["\']', content)
+    if m:
+        return m.group(1)
+    return ""
+
 def get_source_version(bot_repo: str) -> str:
+    # 1. Local filesystem check
     bot_dir = os.path.join(PARENT_DIR, bot_repo)
-    if not os.path.isdir(bot_dir):
-        return "N/A"
-    
-    # Check bot.py for VERSION = "..."
-    bot_py = os.path.join(bot_dir, "bot.py")
-    if os.path.isfile(bot_py):
-        with open(bot_py, "r", encoding="utf-8") as f:
-            content = f.read()
-            m = re.search(r'VERSION\s*=\s*["\']([^"\']+)["\']', content)
-            if m:
-                return m.group(1)
-                
-    # Fallback to git tags if available
-    try:
-        import subprocess
-        res = subprocess.run(["git", "describe", "--tags", "--abbrev=0"], cwd=bot_dir, capture_output=True, text=True)
-        if res.returncode == 0 and res.stdout.strip():
-            return res.stdout.strip().lstrip("v")
-    except Exception:
-        pass
-        
+    if os.path.isdir(bot_dir):
+        bot_py = os.path.join(bot_dir, "bot.py")
+        if os.path.isfile(bot_py):
+            with open(bot_py, "r", encoding="utf-8") as f:
+                ver = extract_version_from_text(f.read())
+                if ver:
+                    return ver
+        try:
+            import subprocess
+            res = subprocess.run(["git", "describe", "--tags", "--abbrev=0"], cwd=bot_dir, capture_output=True, text=True)
+            if res.returncode == 0 and res.stdout.strip():
+                return res.stdout.strip().lstrip("v")
+        except Exception:
+            pass
+
+    # 2. Remote check via GitHub
+    urls = [
+        f"https://raw.githubusercontent.com/mrgluek/{bot_repo}/main/bot.py",
+        f"https://git.gluek.info/gluek/{bot_repo}/raw/branch/main/bot.py",
+    ]
+    for url in urls:
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "hass-addons-version-checker"})
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                if resp.status == 200:
+                    ver = extract_version_from_text(resp.read().decode("utf-8", errors="ignore"))
+                    if ver:
+                        return ver
+        except Exception:
+            continue
+
     return "N/A"
 
 def sync_addon_version(addon_dir: str, new_ver: str) -> bool:
@@ -76,7 +95,6 @@ def sync_addon_version(addon_dir: str, new_ver: str) -> bool:
             ch_content = f.read()
         if f"## {new_ver}" not in ch_content and f"## [{new_ver}]" not in ch_content:
             entry = f"## {new_ver}\n- Upstream update to version {new_ver}.\n\n"
-            # Insert after "# Changelog\n\n"
             if ch_content.startswith("# Changelog\n"):
                 parts = ch_content.split("# Changelog\n", 1)
                 new_ch = "# Changelog\n\n" + entry + parts[1].lstrip()
