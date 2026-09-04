@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: "Add-on directory to build (e.g. 'uptime' or 'all')"
+        description: "Add-on to build ('all' or specific addon name)"
         required: true
         default: "all"
         type: choice
@@ -45,18 +45,37 @@ jobs:
           - youtube
           - username
           - publisher
-    if: >
-      github.event_name == 'push' ||
-      (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'all' || github.event.inputs.target == matrix.addon)) ||
-      (github.event_name == 'repository_dispatch' && (github.event.client_payload.addon == 'all' || github.event.client_payload.addon == matrix.addon))
     steps:
+      - name: Check if addon should be built
+        id: check
+        run: |
+          EVENT="${{ github.event_name }}"
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            TARGET="${{ inputs.target }}"
+          elif [ "$EVENT" = "repository_dispatch" ]; then
+            TARGET="${{ github.event.client_payload.addon }}"
+          else
+            TARGET="all"
+          fi
+
+          if [ -z "$TARGET" ] || [ "$TARGET" = "all" ] || [ "$TARGET" = "${{ matrix.addon }}" ]; then
+            echo "Selected for build: ${{ matrix.addon }}"
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping: ${{ matrix.addon }} (target is $TARGET)"
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Check out repository
+        if: steps.check.outputs.build == 'true'
         uses: actions/checkout@v4
 
       - name: Set up QEMU
+        if: steps.check.outputs.build == 'true'
         uses: docker/setup-qemu-action@v3
 
       - name: Log in to GitHub Container Registry
+        if: steps.check.outputs.build == 'true'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -64,11 +83,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & Publish with Home Assistant Builder
+        if: steps.check.outputs.build == 'true'
         uses: home-assistant/builder@2024.08.2
         with:
           args: |
-            --target /data/addons/${{ matrix.addon }} \
+            --target addons/${{ matrix.addon }} \
             --image addon-deltachat-{slug} \
             --docker-hub ghcr.io/${{ github.repository_owner }} \
+            --docker-user ${{ github.actor }} \
+            --docker-password ${{ secrets.GITHUB_TOKEN }} \
+            --docker-hub-check \
             --aarch64 \
             --amd64
