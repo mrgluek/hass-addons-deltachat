@@ -10,11 +10,14 @@ image: "ghcr.io/mrgluek/addon-deltachat-username"
 startup: "services"
 boot: "auto"
 init: true
-webui: "http://[HOST]:[PORT:8080]"
+ingress: true
+ingress_port: 8080
+panel_icon: "mdi:card-account-details"
+panel_title: "Username Bot"
 ports:
-  8080/tcp: 8080
+  8080/tcp: 8084
 ports_description:
-  8080/tcp: "Directory web interface"
+  8080/tcp: "Directory web interface (optional direct access)"
 options:
   chatmail_qr: ""
   email: ""

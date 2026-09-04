@@ -32,5 +32,3 @@ configuration:
   status_text:
     name: "Status Text"
     description: "Status bio text shown in Delta Chat profile."
-network:
-  8080/tcp: "Web preview service"

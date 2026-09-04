@@ -7,7 +7,6 @@ echo "============================================================"
 
 export DC_DB_DIR="/data"
 export DB_PATH="/data/webpreview.db"
-export PORT="8080"
 
 python3 - << 'EOF'
 import json, os, subprocess, sys, time

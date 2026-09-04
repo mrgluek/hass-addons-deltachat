@@ -22,15 +22,15 @@
 
 ## 📦 Available Add-ons
 
-| Add-on | Slug | Description | Web UI |
+| Add-on | Slug | Description | Web UI / Sidebar |
 | :--- | :--- | :--- | :---: |
-| **[Uptime Bot](addons/uptime)** | `deltachat_uptime` | Monitors websites, ping targets, ports & certificates with instant Delta Chat alerts | Yes (`8080`) |
+| **[Uptime Bot](addons/uptime)** | `deltachat_uptime` | Monitors websites, ping targets, ports & certificates with instant Delta Chat alerts | **Ingress** / Port `8081` |
 | **[Telegram Bridge](addons/telegram_bridge)** | `deltachat_telegram_bridge` | Bidirectional bridge between Telegram groups/channels and Delta Chat chats | No |
-| **[Web Preview](addons/webpreview)** | `deltachat_webpreview` | Generates rich OpenGraph link previews and full-page screenshots for URLs | Yes (`8080`) |
+| **[Web Preview](addons/webpreview)** | `deltachat_webpreview` | Generates rich OpenGraph link previews and full-page archive screenshots for URLs | No |
 | **[Bouncer](addons/bouncer)** | `deltachat_bouncer` | Spam protection, message auto-responder, whitelist filter, and forwarder | No |
-| **[ntfy Notifications](addons/ntfy)** | `deltachat_ntfy` | Bidirectional notification bridge between ntfy.sh topics and Delta Chat chats | Yes (`8080`) |
+| **[ntfy Notifications](addons/ntfy)** | `deltachat_ntfy` | Bidirectional notification bridge between ntfy.sh topics and Delta Chat chats | **Ingress** / Port `8082` |
 | **[YouTube Downloader](addons/youtube)** | `deltachat_yt` | Media and audio downloader powered by `yt-dlp` and `ffmpeg` | No |
-| **[Username Directory](addons/username)** | `deltachat_username` | Public directory service for registering and discovering Delta Chat aliases | Yes (`8080`) |
+| **[Username Directory](addons/username)** | `deltachat_username` | Public directory service for registering and discovering Delta Chat aliases | **Ingress** / Port `8084` |
 | **[Publisher](addons/publisher)** | `deltachat_publish` | Broadcast bot for publishing newsletters and announcements to subscribers | No |
 
 ---
@@ -66,8 +66,9 @@ Each bot includes a built-in setup wizard in its **Configuration** tab in Home A
    - `admin_email`: Your personal Delta Chat email address.
    - `display_name`: Friendly name displayed in chats (e.g. `Home Uptime Bot`).
    - `status_text`: Bio text shown in the bot profile.
-4. **Start the Add-on**: Click **Start**.
-5. **Connect via Delta Chat**:
+4. **Sidebar & Web UI**: For bots with a web interface (`Uptime`, `ntfy`, `Username`), enable the **Show in sidebar** toggle to access the web UI directly from Home Assistant's left navigation menu via Home Assistant Ingress without port conflicts!
+5. **Start the Add-on**: Click **Start**.
+6. **Connect via Delta Chat**:
    - Open the **Log** tab of the add-on.
    - You will see the bot's invitation link and an **ASCII QR Code** directly in the logs!
    - Open Delta Chat on your phone or desktop, scan the QR code (or paste the invite link), and you are connected!
@@ -76,6 +77,7 @@ Each bot includes a built-in setup wizard in its **Configuration** tab in Home A
 
 ## 🛡️ Architecture & Deployment
 
+- **Home Assistant Ingress**: Web UIs are securely embedded into the Home Assistant frontend and sidebar without requiring open host ports or router port forwarding.
 - **Pre-built Multi-Arch Containers**: Images are built for `linux/amd64` and `linux/arm64` (aarch64) and hosted on `ghcr.io/mrgluek/`.
 - **Automatic Fallback**: If `ghcr.io` images are not available, Home Assistant builds from the local `Dockerfile` by pulling from GitHub with an automatic fallback to the self-hosted Forgejo mirror at `https://git.gluek.info/gluek/`.
 - **Persistent Data**: All account keys, SQLite databases, and configurations are safely stored in `/data`, persisting across container restarts and add-on updates.

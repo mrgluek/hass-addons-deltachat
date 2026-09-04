@@ -38,8 +38,6 @@ RUN chmod a+x /run.sh
 
 VOLUME ["/data"]
 ENV DC_DB_DIR=/data \
-    DB_PATH=/data/webpreview.db \
-    PORT=8080
+    DB_PATH=/data/webpreview.db
 
-EXPOSE 8080
 CMD [ "/run.sh" ]

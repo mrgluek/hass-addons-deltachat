@@ -10,11 +10,14 @@ image: "ghcr.io/mrgluek/addon-deltachat-uptime"
 startup: "services"
 boot: "auto"
 init: true
-webui: "http://[HOST]:[PORT:8080]"
+ingress: true
+ingress_port: 8080
+panel_icon: "mdi:server-network"
+panel_title: "Uptime Bot"
 ports:
-  8080/tcp: 8080
+  8080/tcp: 8081
 ports_description:
-  8080/tcp: "Web status dashboard"
+  8080/tcp: "Web status dashboard (optional direct access)"
 options:
   chatmail_qr: ""
   email: ""

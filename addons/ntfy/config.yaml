@@ -10,11 +10,14 @@ image: "ghcr.io/mrgluek/addon-deltachat-ntfy"
 startup: "services"
 boot: "auto"
 init: true
-webui: "http://[HOST]:[PORT:8080]"
+ingress: true
+ingress_port: 8080
+panel_icon: "mdi:bell-ring"
+panel_title: "ntfy Bot"
 ports:
-  8080/tcp: 8080
+  8080/tcp: 8082
 ports_description:
-  8080/tcp: "ntfy webhook receiver & dashboard"
+  8080/tcp: "ntfy webhook receiver & web UI"
 options:
   chatmail_qr: ""
   email: ""

@@ -32,5 +32,3 @@ configuration:
   status_text:
     name: "Статус бота"
     description: "Текст статуса (био) в профиле бота."
-network:
-  8080/tcp: "Веб-сервис предпросмотра ссылок"
