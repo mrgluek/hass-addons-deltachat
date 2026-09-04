@@ -47,11 +47,13 @@ def get_source_version(bot_repo: str) -> str:
         except Exception:
             pass
 
-    # 2. Remote check via GitHub
-    urls = [
-        f"https://raw.githubusercontent.com/mrgluek/{bot_repo}/main/bot.py",
-        f"https://git.gluek.info/gluek/{bot_repo}/raw/branch/main/bot.py",
-    ]
+    # 2. Remote check via GitHub / Forgejo (supports main and master branches)
+    branches = ["main", "master"]
+    urls = []
+    for branch in branches:
+        urls.append(f"https://raw.githubusercontent.com/mrgluek/{bot_repo}/{branch}/bot.py")
+        urls.append(f"https://git.gluek.info/gluek/{bot_repo}/raw/branch/{branch}/bot.py")
+
     for url in urls:
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "hass-addons-version-checker"})
