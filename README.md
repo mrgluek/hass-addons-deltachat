@@ -29,7 +29,7 @@
 | **[Web Preview](addons/webpreview)** | `deltachat_webpreview` | Saves web pages as offline HTML (`monolith`), reader mode views, WebXDC apps & Gemini AI summaries | No |
 | **[Bouncer](addons/bouncer)** | `deltachat_bouncer` | Monitors group inactivity, purges stale members, manages group/channel catalogs, and tests relays (`cmping`) | No |
 | **[ntfy Notifications](addons/ntfy)** | `deltachat_ntfy` | Emulates ntfy.sh backend to broadcast HTTP webhooks to Delta Chat topics with a web dashboard | **Ingress** / Port `8082` |
-| **[YouTube Downloader](addons/youtube)** | `deltachat_yt` | Downloads YouTube & music (Yandex Music, SoundCloud, VK), slices tracks, and integrates with Navidrome | No |
+| **[YT Downloader](addons/yt)** | `deltachat_yt` | Downloads media & music (Yandex Music, SoundCloud, VK), slices tracks, and integrates with Navidrome | No |
 | **[Username & Short Links](addons/username)** | `deltachat_username` | Registers custom usernames and short invite redirect links (HTTP 307) with OpenGraph preview cards | **Ingress** / Port `8084` |
 | **[Publish Bot](addons/publish)** | `deltachat_publish` | Publishes blog posts and images to Astro blogs via Forgejo / Gitea REST API with single-commit publishing | No |
 

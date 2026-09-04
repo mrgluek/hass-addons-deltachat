@@ -20,7 +20,7 @@ on:
           - webpreview
           - bouncer
           - ntfy
-          - youtube
+          - yt
           - username
           - publish
   repository_dispatch:
@@ -43,7 +43,7 @@ jobs:
           - webpreview
           - bouncer
           - ntfy
-          - youtube
+          - yt
           - username
           - publish
     steps:

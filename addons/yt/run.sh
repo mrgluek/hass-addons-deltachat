@@ -2,7 +2,7 @@
 set -e
 
 echo "============================================================"
-echo " Starting Delta Chat YouTube Bot..."
+echo " Starting Delta Chat YT Bot..."
 echo "============================================================"
 
 export DC_DB_DIR="/data"

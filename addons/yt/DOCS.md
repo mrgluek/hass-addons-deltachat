@@ -1,10 +1,10 @@
-# Delta Chat YouTube Bot (`deltachat_yt`)
+# Delta Chat YT Bot (`deltachat_yt`)
 
-`deltachat_yt` is a Delta Chat bot that downloads YouTube videos, audio tracks, and music via `yt-dlp`. It is designed to stay within email delivery limits (50 MB) and ensure maximum compatibility across platforms.
+`deltachat_yt` is a Delta Chat bot that downloads video, audio tracks, and music via `yt-dlp`. It is designed to stay within email delivery limits (50 MB) and ensure maximum compatibility across platforms.
 
 ## Key Features
 
-- **Multi-Service Support**: Downloads from YouTube, **Yandex Music, PeerTube, Rutube, Dzen, OK.ru, SoundCloud, VK, Twitter, Reddit, TikTok, Twitch, Bilibili**, and more.
+- **Multi-Service Support**: Downloads from **Yandex Music, PeerTube, Rutube, Dzen, OK.ru, SoundCloud, VK, Twitter, Reddit, TikTok, Twitch, Bilibili**, and more.
 - **Track & Chapter Slicing**: Automatically detects tracklists and chapters in video metadata or descriptions. Downloads specific tracks or sections via `yt-dlp --download-sections` with embedded metadata tags and album art.
 - **Video & Audio Trimming**: Trims media based on URL start time parameters (e.g. `?t=1m20s`).
 - **Automatic 50 MB Chunking (`/yt`)**: Long videos are automatically offered in 10-minute chunks or chapter tracks to guarantee delivery within 50 MB email size limits, with clickable `▶️ Next track/chunk` navigation.

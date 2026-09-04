@@ -18,7 +18,7 @@ MAPPING = {
     "webpreview": "deltachat_webpreview",
     "bouncer": "deltachat_bouncer",
     "ntfy": "deltachat_ntfy",
-    "youtube": "deltachat_yt",
+    "yt": "deltachat_yt",
     "username": "deltachat_username",
     "publish": "deltachat_publish",
 }

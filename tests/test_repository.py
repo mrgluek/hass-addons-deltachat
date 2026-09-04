@@ -11,7 +11,7 @@ EXPECTED_ADDONS = [
     "webpreview",
     "bouncer",
     "ntfy",
-    "youtube",
+    "yt",
     "username",
     "publish",
 ]
