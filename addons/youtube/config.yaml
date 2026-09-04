@@ -1,0 +1,36 @@
+name: "Delta Chat YouTube Bot"
+description: "High-speed YouTube, audio, and media downloader powered by yt-dlp and ffmpeg for Delta Chat"
+version: "1.6.54"
+slug: "deltachat_yt"
+url: "https://github.com/mrgluek/deltachat_yt"
+arch:
+  - aarch64
+  - amd64
+image: "ghcr.io/mrgluek/addon-deltachat-youtube"
+startup: "services"
+boot: "auto"
+init: true
+options:
+  chatmail_qr: ""
+  email: ""
+  password: ""
+  mail_server: ""
+  mail_port: 993
+  send_server: ""
+  send_port: 465
+  admin_email: ""
+  admin_fingerprint: ""
+  display_name: "YouTube Bot"
+  status_text: "Downloads and extracts audio/video from YouTube"
+schema:
+  chatmail_qr: "str?"
+  email: "str?"
+  password: "password?"
+  mail_server: "str?"
+  mail_port: "int?"
+  send_server: "str?"
+  send_port: "int?"
+  admin_email: "str?"
+  admin_fingerprint: "str?"
+  display_name: "str?"
+  status_text: "str?"

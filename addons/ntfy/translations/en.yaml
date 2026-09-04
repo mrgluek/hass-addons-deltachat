@@ -1,0 +1,39 @@
+configuration:
+  chatmail_qr:
+    name: "Chatmail QR / URI"
+    description: "DCACCOUNT:... invite URI or QR code string (leave empty if using Email/Password)."
+  email:
+    name: "Email Address"
+    description: "Email address for the bot (leave empty if using Chatmail QR)."
+  password:
+    name: "Email Password"
+    description: "Password or App Password for the email account."
+  mail_server:
+    name: "IMAP Server"
+    description: "Incoming mail server (optional, auto-detected if empty)."
+  mail_port:
+    name: "IMAP Port"
+    description: "Incoming mail server port (default: 993)."
+  send_server:
+    name: "SMTP Server"
+    description: "Outgoing mail server (optional, auto-detected if empty)."
+  send_port:
+    name: "SMTP Port"
+    description: "Outgoing mail server port (default: 465)."
+  auth_token:
+    name: "Webhook Auth Token"
+    description: "Optional authorization bearer token to secure webhook requests."
+  admin_email:
+    name: "Admin Delta Chat Email"
+    description: "Your Delta Chat address to claim administrative rights."
+  admin_fingerprint:
+    name: "Admin Fingerprint"
+    description: "Cryptographic OpenPGP fingerprint of the administrator (optional)."
+  display_name:
+    name: "Display Name"
+    description: "Display name shown in Delta Chat profile."
+  status_text:
+    name: "Status Text"
+    description: "Status bio text shown in Delta Chat profile."
+network:
+  8080/tcp: "ntfy webhook receiver"

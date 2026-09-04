@@ -1,0 +1,41 @@
+name: "Delta Chat Username Bot"
+description: "Public directory service for registering and discovering Delta Chat aliases and contacts"
+version: "1.8.1"
+slug: "deltachat_username"
+url: "https://github.com/mrgluek/deltachat_username"
+arch:
+  - aarch64
+  - amd64
+image: "ghcr.io/mrgluek/addon-deltachat-username"
+startup: "services"
+boot: "auto"
+init: true
+webui: "http://[HOST]:[PORT:8080]"
+ports:
+  8080/tcp: 8080
+ports_description:
+  8080/tcp: "Directory web interface"
+options:
+  chatmail_qr: ""
+  email: ""
+  password: ""
+  mail_server: ""
+  mail_port: 993
+  send_server: ""
+  send_port: 465
+  admin_email: ""
+  admin_fingerprint: ""
+  display_name: "Username Bot"
+  status_text: "Delta Chat username directory service"
+schema:
+  chatmail_qr: "str?"
+  email: "str?"
+  password: "password?"
+  mail_server: "str?"
+  mail_port: "int?"
+  send_server: "str?"
+  send_port: "int?"
+  admin_email: "str?"
+  admin_fingerprint: "str?"
+  display_name: "str?"
+  status_text: "str?"

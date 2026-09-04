@@ -1,0 +1,38 @@
+name: "Delta Chat Telegram Bridge"
+description: "Bidirectional message and media bridge between Telegram groups/channels and Delta Chat chats"
+version: "2.18.4"
+slug: "deltachat_telegram_bridge"
+url: "https://github.com/mrgluek/deltachat_telegram_bridge"
+arch:
+  - aarch64
+  - amd64
+image: "ghcr.io/mrgluek/addon-deltachat-telegram-bridge"
+startup: "services"
+boot: "auto"
+init: true
+options:
+  chatmail_qr: ""
+  email: ""
+  password: ""
+  mail_server: ""
+  mail_port: 993
+  send_server: ""
+  send_port: 465
+  telegram_token: ""
+  admin_email: ""
+  admin_fingerprint: ""
+  display_name: "Telegram Bridge"
+  status_text: "Relays messages between Delta Chat and Telegram"
+schema:
+  chatmail_qr: "str?"
+  email: "str?"
+  password: "password?"
+  mail_server: "str?"
+  mail_port: "int?"
+  send_server: "str?"
+  send_port: "int?"
+  telegram_token: "password?"
+  admin_email: "str?"
+  admin_fingerprint: "str?"
+  display_name: "str?"
+  status_text: "str?"

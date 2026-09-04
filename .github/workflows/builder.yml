@@ -1,0 +1,74 @@
+name: Build & Publish Add-ons
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "addons/**"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Add-on directory to build (e.g. 'uptime' or 'all')"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - uptime
+          - telegram_bridge
+          - webpreview
+          - bouncer
+          - ntfy
+          - youtube
+          - username
+          - publisher
+  repository_dispatch:
+    types: [bot-updated]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.addon }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        addon:
+          - uptime
+          - telegram_bridge
+          - webpreview
+          - bouncer
+          - ntfy
+          - youtube
+          - username
+          - publisher
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'all' || github.event.inputs.target == matrix.addon)) ||
+      (github.event_name == 'repository_dispatch' && (github.event.client_payload.addon == 'all' || github.event.client_payload.addon == matrix.addon))
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & Publish with Home Assistant Builder
+        uses: home-assistant/builder@2024.08.2
+        with:
+          args: |
+            --target /data/addons/${{ matrix.addon }} \
+            --image addon-deltachat-{slug} \
+            --docker-hub ghcr.io/${{ github.repository_owner }} \
+            --aarch64 \
+            --amd64

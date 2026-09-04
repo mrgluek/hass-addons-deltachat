@@ -1,0 +1,41 @@
+name: "Delta Chat Web Preview Bot"
+description: "Generates rich OpenGraph link previews and full-page archive screenshots for URLs posted in Delta Chat"
+version: "2.9.6"
+slug: "deltachat_webpreview"
+url: "https://github.com/mrgluek/deltachat_webpreview"
+arch:
+  - aarch64
+  - amd64
+image: "ghcr.io/mrgluek/addon-deltachat-webpreview"
+startup: "services"
+boot: "auto"
+init: true
+webui: "http://[HOST]:[PORT:8080]"
+ports:
+  8080/tcp: 8080
+ports_description:
+  8080/tcp: "Web preview service"
+options:
+  chatmail_qr: ""
+  email: ""
+  password: ""
+  mail_server: ""
+  mail_port: 993
+  send_server: ""
+  send_port: 465
+  admin_email: ""
+  admin_fingerprint: ""
+  display_name: "Web Preview Bot"
+  status_text: "Sends rich previews for web links"
+schema:
+  chatmail_qr: "str?"
+  email: "str?"
+  password: "password?"
+  mail_server: "str?"
+  mail_port: "int?"
+  send_server: "str?"
+  send_port: "int?"
+  admin_email: "str?"
+  admin_fingerprint: "str?"
+  display_name: "str?"
+  status_text: "str?"
