@@ -4,7 +4,10 @@ on:
   push:
     branches: [main]
     paths:
-      - "addons/**"
+      - "addons/**/config.yaml"
+      - "addons/**/Dockerfile"
+      - "addons/**/run.sh"
+      - "addons/**/rootfs/**"
       - ".github/workflows/builder.yml"
   workflow_dispatch:
     inputs:
@@ -85,11 +88,11 @@ jobs:
             if [ -z "$DIFF" ] || echo "$DIFF" | grep -q "^.github/workflows/builder.yml"; then
               echo "Workflow changed or initial commit, building ${{ matrix.addon }}"
               echo "build=true" >> "$GITHUB_OUTPUT"
-            elif echo "$DIFF" | grep -q "^addons/${{ matrix.addon }}/"; then
-              echo "Changes detected in addons/${{ matrix.addon }}/, building..."
+            elif echo "$DIFF" | grep -E -q "^addons/${{ matrix.addon }}/(config\.yaml|Dockerfile|run\.sh|rootfs/)"; then
+              echo "Build files changed in addons/${{ matrix.addon }}/, building..."
               echo "build=true" >> "$GITHUB_OUTPUT"
             else
-              echo "Skipping: ${{ matrix.addon }} (no changes in addons/${{ matrix.addon }}/)"
+              echo "Skipping: ${{ matrix.addon }} (no image-affecting changes in addons/${{ matrix.addon }}/)"
               echo "build=false" >> "$GITHUB_OUTPUT"
             fi
           fi
