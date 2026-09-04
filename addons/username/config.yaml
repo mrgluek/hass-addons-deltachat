@@ -9,7 +9,7 @@ arch:
 image: "ghcr.io/mrgluek/addon-deltachat-username"
 startup: "services"
 boot: "auto"
-init: true
+init: false
 ingress: true
 ingress_port: 8080
 panel_icon: "mdi:account-badge-horizontal"

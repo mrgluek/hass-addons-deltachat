@@ -9,7 +9,7 @@ arch:
 image: "ghcr.io/mrgluek/addon-deltachat-webpreview"
 startup: "services"
 boot: "auto"
-init: true
+init: false
 options:
   chatmail_qr: ""
   email: ""
