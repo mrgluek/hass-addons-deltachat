@@ -1,6 +1,6 @@
 name: "Delta Chat Uptime Bot"
 description: "Monitors websites, ping targets, ports & certificates with instant Delta Chat alerts and web dashboard"
-version: "2.7.3"
+version: "2.7.4"
 slug: "deltachat_uptime"
 url: "https://github.com/mrgluek/deltachat_uptime"
 arch:
