@@ -2,4 +2,5 @@
 
 ## 2.9.6
 - Initial Home Assistant Add-on release.
-- Integrated Monolith archive generator and web preview server.
+- Saves web pages as offline HTML (`monolith`), reader mode views, and WebXDC apps.
+- Clean Instagram preview formatting and Gemini AI `/tldr` summaries.

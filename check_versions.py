@@ -67,7 +67,58 @@ def get_source_version(bot_repo: str) -> str:
 
     return "N/A"
 
-def sync_addon_version(addon_dir: str, new_ver: str) -> bool:
+def get_upstream_changelog(bot_repo: str) -> str:
+    # 1. Local filesystem check
+    bot_dir = os.path.join(PARENT_DIR, bot_repo)
+    if os.path.isdir(bot_dir):
+        ch_file = os.path.join(bot_dir, "CHANGELOG.md")
+        if os.path.isfile(ch_file):
+            try:
+                with open(ch_file, "r", encoding="utf-8") as f:
+                    return f.read()
+            except Exception:
+                pass
+
+    # 2. Remote check via GitHub / Forgejo
+    branches = ["main", "master"]
+    urls = []
+    for branch in branches:
+        urls.append(f"https://raw.githubusercontent.com/mrgluek/{bot_repo}/{branch}/CHANGELOG.md")
+        urls.append(f"https://git.gluek.info/gluek/{bot_repo}/raw/branch/{branch}/CHANGELOG.md")
+
+    for url in urls:
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "hass-addons-version-checker"})
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                if resp.status == 200:
+                    return resp.read().decode("utf-8", errors="ignore")
+        except Exception:
+            continue
+
+    return ""
+
+def extract_changelog_section(changelog_text: str, version: str) -> str:
+    if not changelog_text:
+        return ""
+    lines = changelog_text.splitlines()
+    header_re = re.compile(rf'^##\s*\[?{re.escape(version)}\]?(?:\s*-\s*\S+)?', re.IGNORECASE)
+    next_header_re = re.compile(r'^##\s+')
+
+    found = False
+    section_lines = []
+    for line in lines:
+        if not found:
+            if header_re.match(line):
+                found = True
+                continue
+        else:
+            if next_header_re.match(line):
+                break
+            section_lines.append(line)
+
+    return "\n".join(section_lines).strip()
+
+def sync_addon_version(addon_dir: str, new_ver: str, bot_repo: str = "") -> bool:
     addon_path = os.path.join(ADDONS_DIR, addon_dir)
     cfg_path = os.path.join(addon_path, "config.yaml")
     df_path = os.path.join(addon_path, "Dockerfile")
@@ -91,12 +142,18 @@ def sync_addon_version(addon_dir: str, new_ver: str) -> bool:
         with open(df_path, "w", encoding="utf-8") as f:
             f.write(updated_df)
 
-    # 3. Prepend CHANGELOG.md
+    # 3. Prepend CHANGELOG.md with real upstream changelog
     if os.path.isfile(ch_path):
         with open(ch_path, "r", encoding="utf-8") as f:
             ch_content = f.read()
         if f"## {new_ver}" not in ch_content and f"## [{new_ver}]" not in ch_content:
-            entry = f"## {new_ver}\n- Upstream update to version {new_ver}.\n\n"
+            upstream_text = get_upstream_changelog(bot_repo) if bot_repo else ""
+            notes = extract_changelog_section(upstream_text, new_ver)
+            if notes:
+                entry = f"## {new_ver}\n\n{notes}\n\n"
+            else:
+                entry = f"## {new_ver}\n- Upstream update to version {new_ver}.\n\n"
+
             if ch_content.startswith("# Changelog\n"):
                 parts = ch_content.split("# Changelog\n", 1)
                 new_ch = "# Changelog\n\n" + entry + parts[1].lstrip()
@@ -130,7 +187,7 @@ def main():
         if src_ver == "N/A":
             status = "ℹ️ Source not found"
         elif args.sync and addon_ver != src_ver:
-            if sync_addon_version(addon_dir, src_ver):
+            if sync_addon_version(addon_dir, src_ver, bot_repo):
                 status = f"🔄 Synced to {src_ver}"
                 updated.append((addon_dir, addon_ver, src_ver))
 
