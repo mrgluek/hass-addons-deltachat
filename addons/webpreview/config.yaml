@@ -1,6 +1,6 @@
 name: "Delta Chat Web Preview Bot"
 description: "Saves web pages as self-contained HTML files (monolith), reader mode previews, WebXDC apps, and AI summaries (Gemini)"
-version: "2.9.6"
+version: "2.9.7"
 slug: "deltachat_webpreview"
 url: "https://github.com/mrgluek/deltachat_webpreview"
 arch:

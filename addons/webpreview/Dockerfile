@@ -26,7 +26,7 @@ RUN case "${TARGETARCH}" in \
     chmod +x /usr/local/bin/monolith
 
 ARG BOT_REPO=deltachat_webpreview
-ARG BOT_REF=v2.9.6
+ARG BOT_REF=v2.9.7
 RUN (git clone --depth 1 -b ${BOT_REF} https://github.com/mrgluek/${BOT_REPO}.git /app 2>/dev/null || \
      git clone --depth 1 -b ${BOT_REF} https://git.gluek.info/gluek/${BOT_REPO}.git /app 2>/dev/null || \
      git clone --depth 1 https://github.com/mrgluek/${BOT_REPO}.git /app || \
