@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 ARG BOT_REPO=deltachat_uptime
-ARG BOT_REF=v2.7.4
+ARG BOT_REF=v2.7.5
 RUN (git clone --depth 1 -b ${BOT_REF} https://github.com/mrgluek/${BOT_REPO}.git /app 2>/dev/null || \
      git clone --depth 1 -b ${BOT_REF} https://git.gluek.info/gluek/${BOT_REPO}.git /app 2>/dev/null || \
      git clone --depth 1 https://github.com/mrgluek/${BOT_REPO}.git /app || \
