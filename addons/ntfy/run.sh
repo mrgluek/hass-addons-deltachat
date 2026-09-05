@@ -111,11 +111,16 @@ if admin_email or admin_fp:
         print(f"Admin configuration note: {e}")
 
 disp_name = options.get("display_name", "").strip()
-if disp_name:
-    os.environ["DISPLAY_NAME"] = disp_name
 status_text = options.get("status_text", "").strip()
-if status_text:
-    os.environ["STATUS_TEXT"] = status_text
+
+try:
+    with open("/tmp/bot_env", "w") as ef:
+        if disp_name:
+            ef.write(f"export DISPLAY_NAME={json.dumps(disp_name)}\n")
+        if status_text:
+            ef.write(f"export STATUS_TEXT={json.dumps(status_text)}\n")
+except Exception:
+    pass
 
 try:
     from deltachat2 import IOTransport, Rpc
@@ -124,6 +129,16 @@ try:
         accids = rpc.get_all_account_ids()
         if accids and rpc.is_configured(accids[0]):
             accid = accids[0]
+            if disp_name:
+                try:
+                    rpc.set_config(accid, "displayname", disp_name)
+                except Exception:
+                    pass
+            if status_text:
+                try:
+                    rpc.set_config(accid, "selfstatus", status_text)
+                except Exception:
+                    pass
             link = rpc.get_chat_securejoin_qr_code(accid, None)
             print("\n" + "="*60)
             print("🚀 Delta Chat Bot is ready!")
@@ -140,6 +155,11 @@ try:
 except Exception:
     pass
 EOF
+
+if [ -f /tmp/bot_env ]; then
+    source /tmp/bot_env
+    rm -f /tmp/bot_env
+fi
 
 echo "Starting bot service..."
 exec python3 -u bot.py -c /data serve
