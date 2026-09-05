@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.7.6
+
+### Fixed
+- **Home Assistant Display Name & Status Text Configuration:**
+  - Added direct fallback reading of `/data/options.json` in `on_init` for `display_name` and `status_text`, ensuring custom display names configured in Home Assistant Add-on settings are always applied even if environment variables are not exported.
+
 ## 2.7.3
 ### Added
 - **ASCII QR Code in Startup Logs:**
