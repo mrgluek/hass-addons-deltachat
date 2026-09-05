@@ -40,6 +40,7 @@ jobs:
             echo "Changes detected, committing and pushing..."
             git add addons/
             git commit -m "chore: auto-sync bot versions with upstream repositories"
+            git pull --rebase origin main
             git push origin main
           else
             echo "All add-on versions are already up to date."
