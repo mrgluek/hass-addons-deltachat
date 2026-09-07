@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.18.6
+
+- **Configurable Display Name & Status Text**:
+  - `on_init` now checks `DISPLAY_NAME` and `STATUS_TEXT` environment variables with `/data/options.json` fallback instead of overwriting display name and status text with static strings.
+
 ## 2.18.5
 
 - **Fixed Telethon Infinite Reconnection Loop on NoneType Connection**:

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.9.8
+
+### Added
+- **Configurable Display Name & Status Text**:
+  - `on_init` now checks `DISPLAY_NAME` and `STATUS_TEXT` environment variables with `/data/options.json` fallback instead of overwriting display name with static strings.
+
 ## 2.9.7
 - **Prebuilt Monolith Binary in Docker:**
   - Replaced multi-stage Rust compilation (`cargo install monolith`) with direct download of the official prebuilt `monolith` binary (v2.10.1) for x86_64 and aarch64.
