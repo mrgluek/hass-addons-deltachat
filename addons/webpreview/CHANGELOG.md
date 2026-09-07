@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.9.9
+
+### Fixed
+- **Filter Non-Fetchable Image URLs (`blob:`, `data:`, localhost, private IPs):**
+  - Added `_is_valid_image_url` helper to validate candidate preview images before making network requests.
+  - Skips non-fetchable URL schemes (`blob:`, `data:`, `javascript:`, `file:`, `about:`) and internal/private network targets (`localhost`, `127.0.0.1`, private IP ranges, `.local`, `.lan`) without triggering 3 failed download attempts or warning logs.
+  - Enhanced `_parse_jina_response` and HTML meta tag parsing to skip invalid or browser-local `blob:` images and discover the first valid HTTP/HTTPS image URL in webpage content.
+  - Enhanced `_inline_soup_images` to decompose `blob:` and `javascript:` images instead of attempting network fetches.
+
 ## 2.9.8
 
 ### Added
