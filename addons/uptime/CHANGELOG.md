@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.7.7
+
+### Security
+- **Credential Protection in `/addtransport`:**
+  - Restricted `/addtransport` exclusively to private 1:1 chats with the bot, protecting passwords and chatmail tokens from accidental exposure in group chats.
+- **Sanitized Command Error Messages:**
+  - Sanitized exception disclosures across administrative commands (`/rmaccount`, `/addtransport`, `/rmtransport`, `/setprimary`, `/resilient`, `/invite`, `/addpeer`) to prevent internal system or credential leakages in chat replies.
+- **Resilient Sending Concurrency Protection:**
+  - Synchronized initial message queueing inside `resilient_lock` to eliminate data races with background transport failover workers.
+
+### Performance & Optimization
+- **Single Atomic Write for Status & Latency:**
+  - Merged routine check latency and status updates into a single atomic SQLite transaction, cutting database disk write operations in half.
+- **Shared HTTP Connection Pooling:**
+  - Transitioned routine monitoring HTTP checks to a persistent shared `aiohttp.ClientSession` with connection pooling, DNS caching, and TCP keep-alive, significantly reducing socket and SSL handshake CPU overhead.
+- **Buffered Transport Stats:**
+  - Introduced in-memory buffering for transport send/receive statistics with periodic flushing (and automatic flush-on-read), eliminating per-message synchronous disk writes.
+- **Scheduler Cache Optimization:**
+  - Preserved resource schedule cache across active checks instead of invalidating it every 5-second tick, drastically reducing full-table database scans.
+- **Automated Database Maintenance:**
+  - Added scheduled pruning (`database.cleanup_old_records`) of resolved downtime events, closed incidents older than 90 days, and stale peer measurements older than 7 days.
+- **Rate Limiting on Diagnostic Checks:**
+  - Added a 15-second per-chat anti-spam cooldown on `/ping`, `/check`, and `/test` commands with administrator bypass to prevent resource exhaustion.
+
 ## 2.7.6
 
 ### Fixed
