@@ -1,6 +1,6 @@
 name: "Delta Chat Username Bot"
 description: "Registers custom usernames and short invite redirect links (HTTP 307) with OpenGraph preview cards and cryptographic verification"
-version: "1.8.2"
+version: "1.8.3"
 slug: "deltachat_username"
 url: "https://github.com/mrgluek/deltachat_username"
 arch:
