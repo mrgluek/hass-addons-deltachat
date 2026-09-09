@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.9.0
+
+### Added
+- **Native Async ICMP Ping (`aioping`)**:
+  - Integrated `aioping` for native in-process ICMP echo requests, avoiding OS subprocess spawning overhead on ping monitors.
+  - Implemented graceful fallback: automatically falls back to system `/bin/ping` subprocess if `aioping` is unavailable or if raw socket permissions (`CAP_NET_RAW`) are restricted.
+- **Asynchronous DNS Resolver & 5-Minute DNS TTL Caching (`aiodns`)**:
+  - Added `aiodns` integration with `aiohttp.AsyncResolver`, eliminating blocking system `getaddrinfo` calls from thread pools during routine HTTP/HTTPS checks.
+  - Configured 5-minute DNS caching (`ttl_dns_cache=300, use_dns_cache=True`) across the shared monitoring session.
+- **Deterministic Time Slot Staggering**:
+  - Implemented uniform deterministic phase staggering (`(r_id * 11) % interval`) to evenly distribute monitor checks across 5-second execution windows, eliminating thundering-herd CPU/network spikes on bot startup and synchronized intervals without expensive hashing.
+- **Concurrent Lock-Free SQLite WAL Reads (`_write_lock`)**:
+  - Separated SQLite synchronization into a dedicated `_write_lock` for database mutations (`INSERT`, `UPDATE`, `DELETE`, batch updates, and pruning).
+  - Unlocked all read-only queries (`SELECT`) with `_connect()` and `PRAGMA busy_timeout = 5000`, enabling parallel non-blocking reads across web status dashboards, commands (`/status`, `/list`), and background workers.
+  - Maintained `_lock = _write_lock` alias for full backwards compatibility.
+
+### Changed
+- **Two-Tier HTTP Monitoring Strategy (`HEAD` -> `GET`)**:
+  - For standard HTTP/HTTPS monitors without keyword assertions, the bot now issues a lightweight `HEAD` request first (transferring 0 body bytes and 0 CPU decode overhead).
+  - Automatically falls back to `GET` reading at most 16 KB (`16384` bytes) if the server returns non-2xx/3xx (e.g. `405 Method Not Allowed`) or on connection errors.
+  - When custom keyword assertions are configured, direct `GET` is used with body reading capped at 128 KB (`131072` bytes, reduced from 256 KB).
+  - `fetch_html_title` buffer reduced from 64 KB to 16 KB (`16384` bytes).
+
 ## 2.8.0
 
 ### Added
