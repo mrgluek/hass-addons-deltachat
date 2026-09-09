@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.8.0
+
+### Added
+- **Performance Indexes for SQLite**:
+  - Added indexes on `downtime_events` (`went_up_at`, `(resource_id, went_down_at, went_up_at)`), `incidents` (`(dc_chat_id, status)`, `resolved_at`), `resources` (`(dc_chat_id, status)`, `url`, `status`), `peers` (`last_seen`), and `peer_measurements` (`last_checked`) to eliminate full table scans during checks, audits, and cleanup.
+- **Dedicated Thread Pools for DB vs RPC**:
+  - Introduced separate `db_executor` (for fast non-blocking SQLite operations) and `rpc_executor` (for Delta Chat JSON-RPC and SMTP network operations) via `run_db` and `run_rpc`, preventing slow email delivery from exhausting worker threads.
+- **In-Memory Uptime TTL Cache & Batch Calculation**:
+  - Implemented `_uptime_cache` with a 60-second TTL and `get_resources_uptime_30d` for single-query batch calculation across all monitors in a chat, eliminating N+1 query patterns on web status dashboards, `/list`, and `/status`.
+  - Added cache invalidation on status transitions, resource deletions, and maintenance cleanup.
+- **Batch Check Status Updates**:
+  - Implemented `batch_update_resource_status` to commit grouped check results in a single transaction under the database lock.
+- **Non-Blocking Check Concurrency Semaphore**:
+  - Refactored `check_group_task` with `check_network_probe` to hold the concurrency semaphore only during physical network probes. Retry backoff sleeps (30s) and remote peer cross-checks now run without holding semaphore slots, preventing failing endpoints from starving healthy monitors.
+- **Incident Sync Lock Pruning**:
+  - Added `prune_incident_sync_locks` to automatically evict idle, unlocked chat incident synchronization locks, preventing unbounded in-memory dictionary growth over long operational periods.
+- **Standardized Admin Authentication**:
+  - Added standardized `get_admin_email`, `set_admin_email`, `get_admin_fingerprint`, `set_admin_fingerprint`, and `is_authorized_sender` in `database.py`.
+- **New Unit Test Suite**:
+  - Added `tests/test_database.py` covering schema indexes, batch uptime calculation, caching, status updates, and admin handling, bringing test coverage to 88 automated tests.
+
 ## 2.7.7
 
 ### Security
