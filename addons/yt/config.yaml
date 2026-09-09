@@ -1,6 +1,6 @@
 name: "Delta Chat YT Bot"
 description: "Downloads video and music via yt-dlp, slices tracks, and supports Yandex Music, SoundCloud, VK, and Navidrome"
-version: "1.6.56"
+version: "1.6.57"
 slug: "deltachat_yt"
 url: "https://github.com/mrgluek/deltachat_yt"
 arch:
