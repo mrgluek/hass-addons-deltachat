@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.9.1
+
+### Security Hardening & Concurrency Fixes
+- **Fix Undefined `resilient_lock`**:
+  - Declared `resilient_lock` globally, fixing runtime `NameError` crash during resilient sending and message failover.
+  - Synchronized transport switching and message sending during resilient delivery.
+- **Server Domain Input Validation (`/cmping`)**:
+  - Added strict regex domain validation (`DOMAIN_REGEX`) to `/cmping`, `/cmpingadd`, and `/cmpingdel` commands to prevent command injection and malformed subprocess parameters.
+- **Credential Protection (`/addtransport`)**:
+  - Enforced that `/addtransport` can only be executed in private 1-on-1 chats with the bot, preventing accidental password leakage in group chats.
+- **Rate Limiting (`/slap`)**:
+  - Added 15-second cooldown per chat for `/slap` commands.
+- **Sanitized User Error Messages**:
+  - Removed internal exception and traceback disclosures from user-facing error messages in `/kick`, `/invite`, `/relays`, `/approve`, `/decline`, and `/addtransport`.
+- **Bounded Message Deduplication**:
+  - Replaced full set clearing with an `OrderedDict` maintaining up to 2000 recent message IDs with FIFO eviction, preventing duplicate command execution.
+
+### High-Load & Database Optimizations
+- **SQLite WAL & Concurrency PRAGMAs**:
+  - Enabled `PRAGMA journal_mode = WAL`, `PRAGMA synchronous = NORMAL`, `cache_size = -4000`, and `busy_timeout = 5000` for high concurrency and performance under load.
+- **Buffered Transport Statistics**:
+  - Buffered sent/received message statistics in memory, flushed to SQLite in a single transaction every 30 seconds instead of executing database writes on every individual message.
+- **Database Indexes**:
+  - Added indexes on `autokick_warnings(chat_id)`, `pending_requests(chat_id, approved)`, `away_notifications(away_updated_at)`, and `cmping_history(checked_at)`.
+- **Automated Data Pruning**:
+  - Added periodic pruning in background monitor loop for `away_notifications` and `cmping_history` older than 30 days.
+  - Added periodic in-memory cleanup of stale anti-spam timestamps and unused domain locks.
+
 ## 2.9.0
 
 ### Added
