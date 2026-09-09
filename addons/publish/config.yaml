@@ -1,6 +1,6 @@
 name: "Delta Chat Publish Bot"
 description: "Publishes blog posts and images directly to Astro blogs via Forgejo / Gitea REST API with single-commit multi-file publishing"
-version: "1.0.2"
+version: "1.0.3"
 slug: "deltachat_publish"
 url: "https://github.com/mrgluek/deltachat_publish"
 arch:
