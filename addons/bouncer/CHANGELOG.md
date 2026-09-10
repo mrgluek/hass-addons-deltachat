@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.9.3
+
+### User Experience & Command Reporting
+- **Transparent Observation Progress in `/bounce`**:
+  - In group chats with `/autokick` enabled, `/bounce` now distinguishes between truly active members and silent members under observation.
+  - When members have not reached the warning threshold yet, `/bounce` displays an **Observation in progress** status reporting the number of silent members and the countdown to the earliest warning window (e.g. at day 83 of observation) instead of misleadingly claiming all users are active.
+  - Added total member count to the all-active report when every member has verified recent activity.
+  - Added observation summary note to the warning report when additional silent members remain under observation.
+- **Informative Metrics in `/autokick` Status**:
+  - Displays the number of days the bot has monitored the group.
+  - Displays the count of silent members under observation and the countdown until their earliest warning.
+  - Reports the count of members currently in the warning window (< 7d to kick).
+- **Accurate Candidate Reason Formatting**:
+  - Updated candidate descriptions from `never seen in Xd since joined` to `never seen in Xd of observation`, reflecting actual observation time rather than join time.
+- **Autokick Overview Helper (`_get_chat_autokick_overview`)**:
+  - Unified autokick metrics collection and candidate evaluation into a single-pass helper reused across `/bounce`, `/autokick`, and background monitor routines.
+
 ## 2.9.2
 
 ### Performance & Database Architecture

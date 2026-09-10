@@ -1,6 +1,6 @@
 name: "Delta Chat Bouncer Bot"
 description: "Monitors group inactivity, purges stale members, manages group/channel catalogs, and tests mail relays with cmping"
-version: "2.9.2"
+version: "2.9.3"
 slug: "deltachat_bouncer"
 url: "https://github.com/mrgluek/deltachat_bouncer"
 arch:
