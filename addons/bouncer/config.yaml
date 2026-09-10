@@ -36,4 +36,3 @@ schema:
   display_name: "str?"
   status_text: "str?"
   virustotal_api_key: "password?"
-

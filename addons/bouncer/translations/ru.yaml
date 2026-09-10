@@ -35,4 +35,3 @@ configuration:
   virustotal_api_key:
     name: "API ключ VirusTotal"
     description: "Бесплатный API ключ с сайта virustotal.com для проверки ссылок и файлов по команде /virus (необязательно)."
-

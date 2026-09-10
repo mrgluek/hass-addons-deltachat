@@ -35,4 +35,3 @@ configuration:
   virustotal_api_key:
     name: "VirusTotal API Key"
     description: "Free API key from virustotal.com for link and file inspection via /virus (optional)."
-
