@@ -22,6 +22,7 @@ options:
   admin_fingerprint: ""
   display_name: "Bouncer Bot"
   status_text: "Monitors group inactivity and manages group catalogs"
+  virustotal_api_key: ""
 schema:
   chatmail_qr: "str?"
   email: "str?"
@@ -34,3 +35,5 @@ schema:
   admin_fingerprint: "str?"
   display_name: "str?"
   status_text: "str?"
+  virustotal_api_key: "password?"
+

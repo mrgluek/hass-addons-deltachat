@@ -15,6 +15,7 @@
 - 🔍 **Member Search (`/search <query>`)**: Find group members across active transports by email or substring.
 - 📬 **Relay Check (`/relays`)**: Scan group members using standard webmail providers (Yandex, Mail.ru, Gmail, etc.).
 - 🏓 **ChatMail Ping (`/cmping`)**: Ping mail relays (transports) to/from specified target servers using the `cmping` utility with real-time reaction progress.
+- 🛡️ **VirusTotal Inspection (`/virus`)**: Check URLs and files (attachments or reply messages) against VirusTotal threat database.
 - 📡 **Server Connectivity Monitoring**: Periodic background monitoring of server connectivity with incident-based alerting.
 
 ## Configuration
@@ -29,6 +30,8 @@ In the **Configuration** tab:
    - `admin_fingerprint`: Optional cryptographic OpenPGP fingerprint.
    - `display_name`: Display name shown in Delta Chat profile.
    - `status_text`: Bot status/bio shown in Delta Chat profile.
+3. **VirusTotal (Optional)**:
+   - `virustotal_api_key`: Free API key from VirusTotal (virustotal.com) for `/virus` URL and file scanning.
 
 ## Getting Started
 
