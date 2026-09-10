@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.10.0
+
+### Security & VirusTotal Inspection
+- **VirusTotal Link & File Inspection (`/virus`)**:
+  - Added `/virus <url>` command to inspect links for phishing, malware, and threats via VirusTotal API v3.
+  - Added reply inspection: replying to a message with `/virus` automatically detects and scans either an attached file or the first URL in the quoted message.
+  - Added direct file inspection: sending a message with an attached file and `/virus` caption triggers a file scan.
+  - **On-Demand Attachment Download**: Automatically downloads full message attachments via Delta Chat RPC (`download_full_message`) when messages arrive without auto-downloaded blobs (`download_limit=1`).
+  - **Hash-First Querying**: Computes SHA-256 locally and checks existing VirusTotal reports first, avoiding redundant file uploads and conserving bandwidth.
+  - **Direct Upload Fallback**: If a file (up to 32 MB) is not present in the VirusTotal database, it is uploaded via multipart/form-data and polled until analysis completes.
+  - **Global Rate Limiting & Queueing**: Enforces a strict 1-check-per-15-seconds rate limit across the entire bot to safely respect VirusTotal free tier limits (4 lookups/min). Additional incoming requests receive a queue notification (`⏳ Another VirusTotal check is in progress, your request is queued...`) and are processed in FIFO order.
+  - **Visual Progress & Reactions**: Sets `⏳` reaction on trigger message during queuing and scanning, updating to `☑️` (clean), `⚠️` (suspicious), `🚨` (malicious), or `❌` (error) upon completion.
+  - Configurable via `VIRUSTOTAL_API_KEY` in `.env` or container environment.
+
 ## 2.9.3
 
 ### User Experience & Command Reporting
