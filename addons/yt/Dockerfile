@@ -24,7 +24,7 @@ ENV DENO_INSTALL=/root/.deno
 ENV PATH=$DENO_INSTALL/bin:$PATH
 
 ARG BOT_REPO=deltachat_yt
-ARG BOT_REF=v1.6.57
+ARG BOT_REF=v1.6.58
 RUN (git clone --depth 1 -b ${BOT_REF} https://github.com/mrgluek/${BOT_REPO}.git /app 2>/dev/null || \
      git clone --depth 1 -b ${BOT_REF} https://git.gluek.info/gluek/${BOT_REPO}.git /app 2>/dev/null || \
      git clone --depth 1 https://github.com/mrgluek/${BOT_REPO}.git /app || \
