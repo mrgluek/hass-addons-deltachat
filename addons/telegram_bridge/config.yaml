@@ -1,6 +1,6 @@
 name: "Delta Chat Telegram Bridge"
 description: "Bidirectional message and media bridge between Telegram groups/channels and Delta Chat chats"
-version: "2.20.1"
+version: "2.20.2"
 slug: "deltachat_telegram_bridge"
 url: "https://github.com/mrgluek/deltachat_telegram_bridge"
 arch:
