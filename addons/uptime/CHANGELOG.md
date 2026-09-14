@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.9.3
+
+### Added
+- **Auto-Memorization of GET Method on HTTP 405 (Method Not Allowed)**:
+  - When a target server responds with `405 Method Not Allowed` to a lightweight `HEAD` probe (common on GoToSocial, Mastodon, and specialized web frameworks that disallow HEAD on root or API endpoints), the bot now automatically remembers `GET` as the preferred method for that monitor and URL.
+  - Persisted to database via new `http_method` column in `resources` and `probe_targets` tables, and synchronized with active in-memory scheduler caches.
+  - Subsequent minute checks bypass the `HEAD` attempt and directly issue `GET` requests, eliminating redundant `405` error log entries on target servers and halving network overhead for those endpoints.
+
 ## 2.9.2
 
 ### Fixed
