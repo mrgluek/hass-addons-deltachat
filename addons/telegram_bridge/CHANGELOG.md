@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.21.1
+
+- **Fix SyntaxError on Python < 3.12**:
+  - Fixed nested single quote within single-quoted f-string in `_rich_text_to_html` (`TextSpoiler` handler) to maintain backward compatibility with Python 3.9, 3.10, and 3.11 runtimes in Docker containers.
+
 ## 2.21.0
 
 - **Native Telegram RichMessage & Inline Media Support**:
