@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.11.2
+
+### Improvements & UI
+- **Spacious `/dchannels` Catalog Layout**:
+  - Re-architected `/dchannels` output with a clear multi-line format separating command/title, description, and preview link onto distinct lines.
+  - Channels are now cleanly delineated with blank lines (`\n\n`) for optimal readability in Delta Chat mobile and desktop clients.
+- **Forgejo Mirror in Channel Previews**:
+  - Added the Forgejo repository mirror link (`https://git.gluek.info/gluek/deltachat_bouncer`) alongside version number in the footer of public channel preview pages (`/c/{token}`).
+
 ## 2.11.1
 
 ### Web Service & Channel Previews
