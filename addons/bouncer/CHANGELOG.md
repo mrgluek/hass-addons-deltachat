@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.12.2
+
+### Web Preview & Fediverse UI
+- **Fediverse Handle Tag with 1-Click Copy in Web Preview Header**:
+  - Replaced duplicate `📡 RSS Feed` link in the top-right header with an interactive Fediverse channel tag (`@<token>@<domain>`, e.g., `@twniAE9eNajd@dc.gluek.info`).
+  - Clicking the tag copies the handle to clipboard and provides immediate visual feedback (`✓ Copied!`), allowing users to easily paste the handle into their Mastodon or Fediverse search bar to follow the channel.
+  - The dedicated `📡 RSS Feed` action button remains in the main channel action row.
+
 ## 2.12.1
 
 ### Bug Fixes
