@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.12.4
+
+### Fediverse / ActivityPub Fixes
+- **Trailing Slash Sanitization & Multi-Slash Route Normalization**:
+  - Automatically strip trailing slashes and whitespace from `BASE_URL` and `database.get_config("base_url")` across `_ingest_channel_post`, `build_actor_json`, `build_note`, and `_deliver_post` to prevent double slashes in actor URLs (`//c/{token}`) and public key identifiers.
+  - Added multi-slash route patterns (`/{slash:/*}c/{token}`, `/{slash:/*}c/{token}/actor`, `/{slash:/*}inbox`, etc.) so that requests with leading multiple slashes (e.g. `////c/{token}`) sent by reverse proxies or Go HTTP clients resolve with 200 OK instead of failing with 404.
+
 ## 2.12.3
 
 ### Fediverse / ActivityPub Federation
