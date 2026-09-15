@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.11.5
+
+### Web Preview & Landing Redesign
+- **Authentic Delta Chat Styling & System Typography**:
+  - Replaced generic AI-generated neon gradients and external Google Fonts (`Outfit`) with clean, privacy-respecting native system typography (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif`) inspired by [gluek.info](https://gluek.info).
+  - Integrated official Delta Chat dark wallpaper pattern with doodle envelopes, speech bubbles, and symbols on `#19232b`, served with immutable caching via `/background.jpg` and `/static/background.jpg`.
+  - Formatted channel posts into authentic Delta Chat messenger message bubbles (`#232d36`, rounded 12px) with sender names highlighted in Delta Chat blue (`#53bdeb`), quotes styled with vertical accent bars, monospace code blocks, and bottom-right timestamps with checkmarks (`✓`).
+  - Unified aesthetics across the channel catalog landing page, channel preview view, tombstone, and 404 pages with zero third-party font tracking.
+
 ## 2.11.4
 
 ### Channel Catalog Automation
