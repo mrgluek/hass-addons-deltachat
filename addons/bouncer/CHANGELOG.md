@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.11.4
+
+### Channel Catalog Automation
+- **Automatic Channel Removal on Bot Ejection**:
+  - Automatically detects when the bot is removed from a channel by the channel owner/admin (via `SystemMessageType.MEMBER_REMOVED_FROM_GROUP`, self contact ID `1`, or system removal messages).
+  - Soft-deletes the channel from the public catalog (`/dchannels`, `/c/`), invalidates preview and RSS caches immediately, and serves a graceful tombstone message on preview URLs without attempting to re-join.
+  - Automatically keeps catalog channel member counts synchronized on member join/leave events.
+
 ## 2.11.3
 
 ### Media Optimization & Post Cleanup
