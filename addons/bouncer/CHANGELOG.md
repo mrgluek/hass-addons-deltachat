@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.12.0
+
+### Fediverse / ActivityPub Federation
+- **Full Fediverse Channel Federation (`@<token>@<domain>`)**:
+  - Every cataloged Delta Chat channel functions as an autonomous Fediverse actor of type `Service` (displaying the 🤖 Bot badge on Mastodon and compatible platforms).
+  - Users on Mastodon, Pleroma, Misskey, Friendica, and other Fediverse instances can discover channels using standard WebFinger queries (`RFC 7033`) via `GET /.well-known/webfinger?resource=acct:<token>@<domain>`.
+  - Channel preview URLs (`/c/{token}`) implement standard Content Negotiation: requests with `Accept: application/activity+json` or `application/ld+json` return the full ActivityStreams 2.0 Actor representation with public key, avatar icon, inbox, outbox, and followers collection endpoints.
+- **Cryptographic HTTP Signatures (`draft-cavage-http-signatures`)**:
+  - Independent RSA-2048 keypairs generated per channel actor and persisted in the SQLite database (`ap_actor_keys`).
+  - Strict verification of incoming `Signature`, `Digest` (SHA-256), and `Date` (±300s window) headers on Actor inboxes to guard against replay and spoofing attacks.
+  - Automatic outgoing request signing for deliveries and `Accept(Follow)` notifications.
+- **Federated Follower Management & Outbox**:
+  - `POST /c/{token}/inbox` handles `Follow` activities by recording the follower in `ap_followers` and asynchronously returning a cryptographically signed `Accept` activity to the follower's inbox.
+  - Handles `Undo(Follow)` and `Delete(Actor)` events to keep follower rosters clean and GDPR-compliant.
+  - `GET /c/{token}/outbox` serves an `OrderedCollection` of recent notes; `GET /c/{token}/followers` reports total follower count.
+  - `GET /c/{token}/posts/{msg_id}` returns individual Note objects.
+- **Asynchronous Background Delivery Pipeline**:
+  - New channel posts ingested via `_ingest_channel_post` are automatically queued and broadcast as `Create(Note)` activities to remote follower inboxes with deduplicated `sharedInbox` delivery.
+  - Rich text formatting with autolinked URLs and media enclosures (WebP images, MP4 videos, audio, and documents).
+- **GoToSocial-Modeled `robots.txt` & NodeInfo 2.0**:
+  - Replaced simple disallow-all `robots.txt` with a comprehensive, GoToSocial-modeled configuration blocking abusive AI scrapers and SEO crawlers while permitting channel previews (`/c/`) and media (`/media/`).
+  - Added NodeInfo 2.0 discovery (`/.well-known/nodeinfo` and `/nodeinfo/2.0`) for discovery by Fediverse crawlers and directory indexers.
+
 ## 2.11.6
 
 ### Channel Catalog & Privacy
