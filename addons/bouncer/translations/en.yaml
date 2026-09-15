@@ -35,3 +35,6 @@ configuration:
   virustotal_api_key:
     name: "VirusTotal API Key"
     description: "Free API key from virustotal.com for link and file inspection via /virus (optional)."
+  base_url:
+    name: "Base Web URL"
+    description: "Public base URL for channel preview pages and RSS feeds (e.g. https://dc.yourdomain.com or https://my-ha.duckdns.org:8080)."

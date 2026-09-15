@@ -3,6 +3,9 @@
 ## 2.11.0
 
 ### Web Service & Channel Previews
+- **Home Assistant Ingress Support**:
+  - Integrated Home Assistant Ingress on port 8080 with seamless sidebar navigation (`Open Web UI`).
+  - Added support for `X-Ingress-Path` dynamic header for proper subpath asset resolution (logos, avatars, QR codes, links).
 - **Public Channel Web Preview (`/c/{token}`)**:
   - Implemented an embedded, lightweight aiohttp web server providing instant web preview pages for channels registered in `/dchannels`.
   - Each channel is assigned a unique, unguessable 12-character base62 token.
@@ -18,10 +21,12 @@
 - **Core Handshake Backfill**:
   - Automatically backfills the initial batch of up to 10 messages provided by the Delta Chat core handshake upon joining via `/dchanneladd <url>`.
   - Real-time ingestion stores subsequent incoming channel messages up to a sliding window of 100 posts per channel.
-- **Base Web URL Configuration (`/url`)**:
-  - Added `/url [url]` admin command to view or configure the public base URL stored in database settings.
+- **Base Web URL Configuration (`base_url`)**:
+  - Added `base_url` add-on configuration option and `/url` admin command to view or configure the public base URL stored in database settings.
   - Supports fallback to `BASE_URL` environment variable.
   - Updated `/dchannels` and `/dchannel<ID>` commands to provide preview URLs alongside join links.
+- **Optional Direct Access (Port 8080)**:
+  - Exposed port `8080/tcp` in add-on configuration for optional direct external reverse proxy access.
 - **Landing Page (`/`)**:
   - Public landing page introducing Bouncer Bot capabilities, active channel counts, and Delta Chat connection instructions.
 

@@ -9,6 +9,7 @@ cd /app
 export PYTHONUNBUFFERED=1
 export DC_DB_DIR="/data"
 export DB_PATH="/data/bouncer.db"
+export PORT="8080"
 
 mkdir -p /root/.config
 ln -sfn /data /root/.config/bouncer

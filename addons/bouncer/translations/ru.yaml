@@ -35,3 +35,6 @@ configuration:
   virustotal_api_key:
     name: "API ключ VirusTotal"
     description: "Бесплатный API ключ с сайта virustotal.com для проверки ссылок и файлов по команде /virus (необязательно)."
+  base_url:
+    name: "Базовый веб-URL"
+    description: "Публичный базовый адрес для предпросмотра каналов и RSS лент (например, https://dc.yourdomain.com или https://my-ha.duckdns.org:8080)."

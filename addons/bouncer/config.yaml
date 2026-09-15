@@ -1,5 +1,5 @@
 name: "Delta Chat Bouncer Bot"
-description: "Monitors group inactivity, purges stale members, manages group/channel catalogs, and tests mail relays with cmping"
+description: "Monitors group inactivity, purges stale members, manages group/channel catalogs, tests mail relays, and provides channel web previews & RSS"
 version: "2.11.0"
 slug: "deltachat_bouncer"
 url: "https://github.com/mrgluek/deltachat_bouncer"
@@ -10,6 +10,14 @@ image: "ghcr.io/mrgluek/addon-deltachat-bouncer"
 startup: "services"
 boot: "auto"
 init: false
+ingress: true
+ingress_port: 8080
+panel_icon: "mdi:shield-account"
+panel_title: "Bouncer Bot"
+ports:
+  8080/tcp: 8080
+ports_description:
+  8080/tcp: "Channel preview & RSS web service (optional direct external access)"
 options:
   chatmail_qr: "dcaccount:https://chat.gluek.info/new"
   email: ""
@@ -23,6 +31,7 @@ options:
   display_name: "Bouncer Bot"
   status_text: "Monitors group inactivity and manages group catalogs"
   virustotal_api_key: ""
+  base_url: ""
 schema:
   chatmail_qr: "str?"
   email: "str?"
@@ -36,3 +45,4 @@ schema:
   display_name: "str?"
   status_text: "str?"
   virustotal_api_key: "password?"
+  base_url: "str?"
