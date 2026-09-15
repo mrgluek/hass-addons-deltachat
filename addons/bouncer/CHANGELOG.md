@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.12.3
+
+### Fediverse / ActivityPub Federation
+- **Shared Inbox Support (`POST /inbox`)**:
+  - Added route `POST /inbox` to receive activities sent to the instance-level `sharedInbox` advertised in Actor JSON.
+  - Automatically extracts target channel token from the incoming activity's `object` / `target` properties (supporting `Follow`, `Undo`, and `Delete`).
+- **Following Endpoint (`GET /c/{token}/following`)**:
+  - Implemented `GET /c/{token}/following` returning an empty `OrderedCollection` (`totalItems: 0`) as requested by GoToSocial and other Fediverse servers during actor profile discovery.
+- **Robust Remote Key Resolution & Authorized Fetch**:
+  - Added `resolve_public_key` with support for standalone PublicKey endpoints (like GoToSocial `/main-key`) and embedded `publicKey` objects (like Mastodon `#main-key`).
+  - Added support for Authorized Fetch (HTTP Signatures on GET) when resolving remote follower profiles to obtain their personal `inbox` and `sharedInbox`.
+  - Addressed `Accept(Follow)` activity directly with `to: [follower_id]` and delivered to the follower's inbox.
+  - Supported SHA-512 in HTTP signature verification alongside SHA-256.
+
 ## 2.12.2
 
 ### Web Preview & Fediverse UI
