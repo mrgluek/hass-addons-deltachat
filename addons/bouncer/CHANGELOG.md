@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.11.3
+
+### Media Optimization & Post Cleanup
+- **Automatic WebP Image Compression**:
+  - Attached images (`.jpg`, `.jpeg`, `.png`, `.bmp`) in channel posts are automatically compressed to modern WebP format (`quality=80`, `method=3`, `max_dim=1600`) via Pillow on ingestion.
+  - Reduces media traffic by 70–90% for web preview pages and RSS feed readers.
+  - Animated GIFs and SVGs are preserved in their native formats.
+  - Graceful fallback to original image format and file serving if compression fails or Pillow is unavailable.
+  - Backwards-compatible resolution in `handle_media_file` allows requests for `.jpg`/`.png` to seamlessly serve `.webp` when available.
+- **Delta Chat Attachment Fallback Stripping (`DC_FALLBACK_PATTERN`)**:
+  - Automatically filters out Delta Chat core email fallback placeholders (e.g. `[Image – 304.26 KiB]`, `[Document - file.pdf]`) from message text, preventing redundant metadata labels from cluttering post previews when attachments are displayed natively.
+- **Forward Header Formatting**:
+  - Standard Delta Chat forwarded message headers (`>> Channel Name <<`) are now styled with an elegant forward indicator badge (`↪ Channel Name`).
+
 ## 2.11.2
 
 ### Improvements & UI
