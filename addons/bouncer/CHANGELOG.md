@@ -10,9 +10,7 @@
   - Graceful fallback to original image format and file serving if compression fails or Pillow is unavailable.
   - Backwards-compatible resolution in `handle_media_file` allows requests for `.jpg`/`.png` to seamlessly serve `.webp` when available.
 - **Delta Chat Attachment Fallback Stripping (`DC_FALLBACK_PATTERN`)**:
-  - Automatically filters out Delta Chat core email fallback placeholders (e.g. `[Image – 304.26 KiB]`, `[Document - file.pdf]`) from message text, preventing redundant metadata labels from cluttering post previews when attachments are displayed natively.
-- **Forward Header Formatting**:
-  - Standard Delta Chat forwarded message headers (`>> Channel Name <<`) are now styled with an elegant forward indicator badge (`↪ Channel Name`).
+  - Automatically filters out Delta Chat core email fallback placeholders (e.g. `[Image – 304.26 KiB]`, `[Document - file.pdf]`) from message text, preventing redundant metadata labels from cluttering post previews when attachments are displayed natively while preserving authentic author text.
 
 ## 2.11.2
 
