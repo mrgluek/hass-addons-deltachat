@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.11.1
+
+### Web Service & Channel Previews
+- **Rich Markdown Post Formatting (`format_markdown_html`)**:
+  - Full CommonMark and Delta Chat formatting engine with support for bold (`**text**`, `__text__`), italic (`*text*`, `_text_`), strikethrough (`~~text~~`), inline code (`` `code` ``), fenced code blocks with syntax styling (` ```lang ... ``` `), blockquotes (`> text`), spoilers (`||spoiler||` with click-to-reveal), and links (`[label](url)` and autolinked URLs).
+  - 100% XSS immunity via strict HTML escaping and javascript/data URI protocol stripping.
+  - Channel preview post timeline and RSS feed item descriptions (`<![CDATA[ ... ]]>`) now render rich markdown identically to ArcaneChat / Delta Chat clients.
+- **In-Memory Caching Layer & High Load Optimization**:
+  - Added fast in-memory response caches with TTL and ETag headers for channel web preview pages (60s TTL) and RSS feeds (120s TTL), returning `304 Not Modified` on matching `If-None-Match`.
+  - Added in-memory binary caching for QR code generation (SVG and PNG) to eliminate repeated CPU-bound QR rendering.
+  - Event-driven cache invalidation hooks automatically purge channel caches on new incoming posts (`_ingest_channel_post`), channel removals (`/dchannelremove`), or base URL changes (`/url`).
+- **Crawler & Bot Blocking (`robots.txt`)**:
+  - Configured `robots.txt` (`/robots.txt`) with `User-agent: *\nDisallow: /\n` to block search engine scrapers and AI crawlers from generating unnecessary traffic.
+
 ## 2.11.0
 
 ### Web Service & Channel Previews
