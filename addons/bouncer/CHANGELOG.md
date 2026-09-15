@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.11.6
+
+### Channel Catalog & Privacy
+- **Unlisted Channels by Default (`/dchanneladd`)**:
+  - Channels added via `/dchanneladd <URL>` are now initialized in **unlisted** mode by default (`is_public = 0`).
+  - Unlisted channels retain their own unique web preview page (`/c/{token}`) and standard RSS feed (`/c/{token}/rss.xml`), and the bot ingests new messages and attachments continuously.
+  - Excluded from public directory listings: unlisted channels are hidden from the bot's web landing page (`/` and `/c/`) and the public `/dchannels` command in group chats and for non-admin users.
+- **Dynamic Catalog Visibility Toggles (`/dchannelpub<ID>on` & `/dchannelpub<ID>off`)**:
+  - Added administrative commands to toggle channels between public and unlisted at any time.
+  - Toggling public status automatically updates the catalog and invalidates web preview and landing page caches immediately.
+  - `/dchanneladd` confirmation message now directly provides the preview link, RSS link, and suggests `/dchannelpub<ID>on` if the administrator wishes to make the channel publicly discoverable.
+- **Admin Direct Message Catalog Visibility**:
+  - When the bot administrator queries `/dchannels` in a private 1-on-1 direct message, all registered channels are shown, with unlisted channels clearly marked with `🔒 [Unlisted]` and quick-action `/dchannelpub<ID>on` command links.
+  - In group chats or when queried by non-admin members, only public channels are displayed to prevent leakage.
+  - Direct queries via `/dchannel<ID>` for unlisted channels are restricted to bot administrators, preventing numeric ID enumeration by regular users.
+
 ## 2.11.5
 
 ### Web Preview & Landing Redesign
