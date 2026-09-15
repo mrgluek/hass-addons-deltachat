@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.11.0
+
+### Web Service & Channel Previews
+- **Public Channel Web Preview (`/c/{token}`)**:
+  - Implemented an embedded, lightweight aiohttp web server providing instant web preview pages for channels registered in `/dchannels`.
+  - Each channel is assigned a unique, unguessable 12-character base62 token.
+  - Channel preview pages feature a modern dark-mode aesthetic (matching Uptime Bot), displaying channel name, description, member count, avatar, and a live message timeline.
+  - Interactive Delta Chat join dialog with dynamic QR code generation (SVG and PNG download options), deep links (`https://i.delta.chat/#...` and `OPEN-CHAT:...`), and one-click clipboard copying.
+  - Media file support: attached photos, videos, voice notes, audio, and documents are displayed inline and served directly from a dedicated media cache directory (`CHANNEL_MEDIA_DIR`).
+- **Standard RSS 2.0 Feeds (`/c/{token}/rss.xml`)**:
+  - Full-fidelity RSS feed at `/c/{token}/rss.xml` (with convenient `/c/{token}/rss` redirect).
+  - Includes channel metadata, item timestamps (RFC 822), author names, message contents, and media enclosures for RSS readers.
+- **Graceful Channel Removal & Tombstone**:
+  - Channels removed from the catalog via `/dchannelremove` are soft-deleted (`is_deleted = 1`).
+  - Accessing a removed channel's preview URL displays a clean tombstone notice (*"The channel has been removed from the public catalog and is no longer available for preview."*) instead of a generic 404.
+- **Core Handshake Backfill**:
+  - Automatically backfills the initial batch of up to 10 messages provided by the Delta Chat core handshake upon joining via `/dchanneladd <url>`.
+  - Real-time ingestion stores subsequent incoming channel messages up to a sliding window of 100 posts per channel.
+- **Base Web URL Configuration (`/url`)**:
+  - Added `/url [url]` admin command to view or configure the public base URL stored in database settings.
+  - Supports fallback to `BASE_URL` environment variable.
+  - Updated `/dchannels` and `/dchannel<ID>` commands to provide preview URLs alongside join links.
+- **Landing Page (`/`)**:
+  - Public landing page introducing Bouncer Bot capabilities, active channel counts, and Delta Chat connection instructions.
+
 ## 2.10.1
 
 ### Improvements
