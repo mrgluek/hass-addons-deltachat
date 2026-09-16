@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.12.6
+
+### Security & Hardening
+- **SSRF Mitigation (`S1`)**: Block private/reserved/loopback/cloud-metadata IP fetches (`is_safe_url()`) across remote actor and key resolution.
+- **Cheap Signature Rejection (`S1`)**: Validate Date freshness window (±300s) and body Digest (SHA-256) prior to outbound remote `keyId` resolution.
+- **Request Body Limits & Rate Limiting (`S2`)**: Limit `client_max_size` to 256 KB on `web.Application`, 64 KB on ActivityPub inbox (`413`), and apply sliding-window rate limiting (`429`): inbox (60 r/min), preview & media (120 r/min).
+- **Dependency Pinning (`S3`)**: Pinned CVE-free dependency floors in `requirements.txt` and pinned `cmping` to exact commit SHA.
+
+## 2.12.5
+
+### Fediverse / ActivityPub Improvements
+- **Recent Posts Backfill on Follow**: Deliver up to 10 recent channel posts to new followers after `Accept(Follow)`.
+- **Delta Chat Wallpaper as Header Banner**: Added `"image"` field pointing to `/background.jpg`.
+- **Standalone Note `@context`**: Added JSON-LD context to Note objects for direct search and dereferencing in GoToSocial.
+- **Mastodon Instance Metadata (`GET /api/v1/instance`)**: Added instance metadata endpoint for Fediverse discovery.
+
 ## 2.12.4
 
 ### Fediverse / ActivityPub Fixes
