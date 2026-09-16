@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.12.8
+
+### ActivityPub Federation & Resilience
+- **RFC 9421 HTTP Message Signatures Support**:
+  - Implemented `extract_signature_info()` and full verification for RFC 9421 signatures (`Signature-Input` + `Signature: sig1=...`), including `@method`, `@target-uri`, `@path`, `@authority`, `created` timestamp verification, and signature parameters base string construction.
+  - Eliminated `Missing keyId in Signature header` errors when modern Fediverse instances (e.g. Mastodon 4.3+, 4.4-alpha) retry or send requests using RFC 9421.
+- **Graceful Handling of Deletion Activities for Gone/Suspended Remote Actors**:
+  - Prevented infinite retry loops and 401 spam when remote instances send `Delete(Actor)` for deleted or suspended accounts whose actor endpoints return HTTP 410 (Gone) or 403 (Forbidden).
+  - Cleaned up matching follower records from SQLite database and responded with `202 Accepted` after validating that the deletion request and keyId share the same origin host.
+  - Downranked expected actor lookup status codes (403, 404, 410) from `WARNING` to `INFO` in logging.
+- **Follower Public Key Local Caching**:
+  - Added `follower_public_key` storage in `ap_followers` database table with automatic schema migration.
+  - Caches follower public key PEM upon initial `Follow` activity to allow immediate local cryptographic verification for subsequent requests (`Undo`, `Delete`) without requiring outbound network requests.
+
 ## 2.12.7
 
 ### UI & UX Improvements
