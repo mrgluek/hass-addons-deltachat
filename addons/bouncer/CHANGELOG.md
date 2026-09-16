@@ -1,5 +1,39 @@
 # Changelog
 
+## 2.13.2
+
+### Security & Hardening
+- **Rate Limiting on All Public Web Endpoints** (`#5`):
+  - Extended `@rate_limited` decorator coverage to every public-facing HTTP handler: `handle_icon`, `handle_background`, `handle_index`, `handle_qr_svg`, `handle_qr_png`, `handle_channel_qr_png`, `handle_channel_qr_svg`, `handle_channel_avatar`, `handle_channel_rss`, `handle_media_file`, `handle_ap_actor`, `handle_ap_outbox`, `handle_ap_followers`, `handle_ap_following`, `handle_ap_post`, `handle_webfinger`, `handle_nodeinfo_discovery`, `handle_nodeinfo`, `handle_api_v1_instance`.
+  - Removed duplicate inline `check_rate_limit` calls from previously partially-protected handlers.
+- **Trusted Proxy IP Extraction** (`#7`):
+  - Added `_get_client_ip()` function: only honours `X-Forwarded-For` when the direct peer IP belongs to a trusted local reverse proxy (`127.0.0.1`, `::1`, `localhost`), preventing IP spoofing by external clients.
+  - Added `_TRUSTED_PROXIES` set for configurable trusted proxy list.
+- **ActivityPub Key Ownership Verification** (`#8`):
+  - Added `is_key_owned_by_actor(key_id, key_doc, actor)` function in `activitypub.py` to verify that a resolved signing public key actually belongs to the claiming actor (via `owner`, embedded publicKey, actor `id`/`url` matching, or key URI fragment).
+  - Integrated ownership check into `handle_ap_inbox()` after successful key resolution; rejects requests where the key's declared owner does not match the activity actor with HTTP 401.
+- **Caddy X-Forwarded-Proto Header** (`#6`):
+  - Added `header_up X-Forwarded-Proto {scheme}` to `Caddyfile` reverse proxy configuration so the upstream application can reliably detect HTTPS.
+
+### Bounded Memory & SQL Queries
+- **Bounded `_qr_cache`** (`#1`): Capped QR code cache at 200 items with FIFO eviction.
+- **Bounded `_cmping_server_status`/`_cmping_server_errors`** (`#4`): Added `_set_cmping_server_status()` helper capping those dicts at 500 entries.
+- **Bounded SQL Queries** (`#3`):
+  - `get_all_cmping_results()` now adds `ORDER BY checked_at DESC LIMIT ?` (default 500).
+  - `get_cmping_incident_downtime_events()` now adds `LIMIT ?` (default 500).
+
+### Performance & Debug
+- **Guarded Debug Logging** (`#2`): Wrapped hot-path `logger.debug()` calls with `logger.isEnabledFor(logging.DEBUG)` guards to avoid f-string evaluation overhead when debug is off.
+
+### Web & Accessibility
+- **QR Modal Focus Trap** (`#9`):
+  - Added `openQrModal()` / `closeQrModal()` JS functions to both landing page and channel preview page that capture the opener button's focus, move focus into the modal on open, trap Tab/Shift-Tab within modal focusable elements, and restore focus on close.
+  - Pressing Escape now correctly calls `closeQrModal()` and returns focus.
+- **Inline Copy Feedback on QR Modal** (`#10`):
+  - Replaced `alert('Link copied to clipboard!')` with inline `✓ Copied!` button-text feedback via new `copyJoinLink()` function; reverts after 2 seconds without blocking the page.
+- **RSS Language Tag Removed** (`#13`):
+  - Removed hardcoded `<language>en</language>` tag from RSS channel XML, since channel content language is user-determined.
+
 ## 2.13.1
 
 ### Security & Hardening
