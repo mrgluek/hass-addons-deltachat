@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.12.9
+
+### Performance & Scalability
+- **SQLite Reader Connection Pooling (`P1`)**:
+  - Implemented thread-safe LIFO read connection pool (`_ReaderConnectionPool`) and connection wrapper (`_PooledConnection`) with automatic pool invalidation on dynamic database switches.
+  - Added `_reader_connection()` context manager and refactored all 46 read operations in `database.py` to reuse pooled connections.
+  - Accelerated unit test suite execution from 33.0s down to 2.7s (>12x speedup) while guaranteeing concurrent reader isolation under SQLite WAL mode without thread contention.
+  - Updated `close_db()` to safely drain and close pooled reader handles alongside the primary writer handle.
+- **Non-Blocking Background Workers & Offloaded I/O (`P2`)**:
+  - **VirusTotal Inspection (`/virus`)**: Decoupled message quote resolution and file attachment downloads (`_get_msg_file_info`) from the Delta Chat event handler thread into background daemon worker `bg_virus_worker`. Command handler responds immediately with `⏳` reaction (or synchronous usage message for empty invocations) without stalling incoming message processing.
+  - **Channel Post Media Ingestion**: Offloaded `_ingest_channel_post` (file attachment downloading and Pillow WebP image compression) from `handle_all_messages` to a dedicated daemon thread, preventing media uploads from blocking the main Delta Chat event loop.
+  - **CMPing Worker Concurrency Bounding**: Pinned `_run_cmping_subprocess` strictly to background worker thread and capped multi-server relay check thread pool (`ThreadPoolExecutor`) concurrency to `min(4, len(bot_domains))`, preventing system load and process spikes.
+  - **Async-Safe QR Code Generation**: Wrapped synchronous Pillow and SVG QR generation calls (`_generate_qr_bytes`) in `handle_qr_svg`, `handle_qr_png`, `handle_channel_qr_png`, and `handle_channel_qr_svg` with `await asyncio.to_thread(...)`, keeping the aiohttp web server event loop responsive.
+
 ## 2.12.8
 
 ### ActivityPub Federation & Resilience
