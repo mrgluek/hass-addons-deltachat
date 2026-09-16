@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.11.0
+
+### Added
+- **Audio & Voice Message Support for `/ai` and `/tldr`**:
+  - Added support for summarizing audio and Delta Chat voice messages via `/tldr` (by replying to a voice note or attaching audio).
+  - Added voice message transcription, Q&A, and analysis via `/ai` (by replying to an audio note with or without a prompt, or sending `/ai` with an audio attachment).
+  - Implemented audio MIME detection (`_detect_audio_mime`) supporting OGG/Opus, MP3, WAV, AAC, M4A/MP4, FLAC, and WebM via magic header bytes, declared message MIME types, and file extensions.
+  - Implemented multimodal media extraction (`_extract_media_from_msg_or_quote`, `_extract_audio_from_msg_or_quote`) supporting direct attachments, quoted messages (`quote.message_id`), and parent messages (`parent_id`).
+  - Generalized `_call_gemini_api` to send audio data using Google Gemini's native `inline_data` multimodal payload format with automatic text-only model exclusion (`gemma-*`).
+  - Added `_summarize_audio_with_gemini` with 24-hour SQLite caching per audio hash and target language (`/lang`).
+  - Added 20 MB file size limit enforcement (`MediaTooLargeError`) with polite user rejection messages for oversized media.
+  - Increased media attachment download timeout from 15s to 30s to reliably fetch voice recordings across slower mail relays.
+- **Unit Tests (`tests/test_audio.py`)**:
+  - Added 13 comprehensive unit tests covering audio MIME detection, 20MB limit checks, Gemini audio summarization, 24h caching, `/tldr` voice summarization, and `/ai` voice message processing.
+
 ## 2.10.1
 
 ### Security
