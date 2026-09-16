@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.22.1
+
+- **Security & Media Protection**:
+  - Enhanced SSRF guard (`_is_safe_telegram_url`) with DNS resolution to block domains resolving to loopback, private, link-local, multicast, or cloud metadata IP ranges, plus rejection of raw IP literals and `.lan` hostnames.
+  - Added strict input validation for Telegram channel usernames and post IDs in `_extract_public_tg_post_rich`, preventing directory traversal and malformed embed URLs.
+  - Enforced a 20 MB download size cap on remote images in `_download_image_to_file` and `_download_image_url`.
+- **Dependency Hardening**:
+  - Pinned `telethon`, `qrcode`, `Pillow`, and `httpx` to secure version ranges in `requirements.txt`.
+
 ## 2.22.0
 
 - **Security & Authorization Hardening**:
