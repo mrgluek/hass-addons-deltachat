@@ -1,5 +1,51 @@
 # Changelog
 
+## 2.13.0
+
+### Security & Hardening
+- **Environment File Gitignore (`S4`)**:
+  - Added `.env` to `.gitignore` to prevent accidental credential, token, and API key exposure while retaining `.env.example`.
+- **Host Header & Base-URL Poisoning Protection (`S5`)**:
+  - Validated incoming `X-Forwarded-Host` and `Host` headers in `_get_base_url()` against strict URL scheme and hostname syntax rules (`SAFE_HOST_REGEX`), preventing cache and link poisoning when `BASE_URL` is unset.
+  - Added `header_up Host {host}` and `header_up X-Forwarded-Host {host}` to `Caddyfile` reverse proxy configuration.
+- **ActivityPub Replay Prevention & KeyId/Actor Binding (`S6`)**:
+  - Implemented 300s TTL HTTP signature anti-replay cache (`check_and_record_signature_replay()`) in `activitypub.py` tracking signature digests.
+  - Enforced strict origin matching between signing `keyId` URI and activity `actor` URI in `handle_ap_inbox()`, rejecting spoofed cross-origin signatures.
+
+### UI & UX Improvements
+- **Independent Command Cooldowns (`U5`)**:
+  - Decoupled cooldown state tracking into separate dictionaries (`_chat_bounce_anti_spam`, `_chat_top_anti_spam`, `_chat_invite_anti_spam`) so executing `/bounce`, `/top`, or `/invite` never blocks another command.
+- **Safe Bare `/away` Query (`U6`)**:
+  - Invoking bare `/away` without arguments now safely displays the user's current away status or usage instructions without inadvertently clearing away state or sending `_is back_` notifications.
+- **Community Multi-Chat Age Indicators (`U7`)**:
+  - Replaced circle emojis with colored squares (`🟥🟧🟨🟩🟦🟪🟫⬛⬜`) for contacts who are active across multiple community chats, visually distinguishing experienced community members.
+  - Streamlined new member welcome greetings by removing redundant `(💬 X)` tokens.
+- **Social Media Metadata for Web Previews (`U8`)**:
+  - Added OpenGraph (`og:title`, `og:description`, `og:image`, `og:type`) and Twitter Card (`twitter:card`) meta tags to the channel directory landing page.
+- **Accurate RSS Enclosure Sizes (`U9`)**:
+  - Resolved true file byte sizes on disk or in-memory buffers for `<enclosure length="...">` attributes in `generate_rss_xml()`, replacing placeholder zero values.
+- **Accessible QR Code Modals (`U10`)**:
+  - Added ARIA accessibility attributes (`role="dialog"`, `aria-modal="true"`, `aria-labelledby="qr-modal-title"`) and ESC key event listener to QR join modals across landing and channel preview pages.
+- **Dynamic Fediverse Domain Resolution (`U11`)**:
+  - Resolved Fediverse domain dynamically from server configuration without hardcoded `dc.gluek.info` fallbacks, hiding the Fediverse button gracefully if no public domain is configured.
+- **Whole-Word Away Mention Matching (`U12`)**:
+  - Replaced substring matching in group mention detection with word-boundary regex (`(?i)(?<!\w)name(?!\w)`), eliminating false positive away alerts (e.g. "Dan" matching "Daniel").
+- **Command Documentation Clarifications (`U13`, `U14`)**:
+  - Updated `/help` descriptions: `/contact<ID>` clearly indicates sharing a contact card, and `/relays` accurately reflects scanning for public Russian mail providers.
+- **Role and Status Badges (`U15`)**:
+  - Added visual user badges in `/search` and `/bounce` output: `👑` (Bot Administrator), `⭐` (Autokick Ignored), and `💤` (Away).
+
+### Performance & Resource Optimization
+- **Adaptive Polling Backoff (`P3`)**:
+  - Implemented adaptive sleep intervals in background channel join and message resend workers (`bg_channel_join_worker`, `bg_resend_worker`), scaling sleep up to 30s when queues are idle.
+- **Bounded Read Query Limits (`P4`)**:
+  - Added default safety `limit` parameters to database read functions (`get_all_catalog_chats`, `get_all_catalog_channels`, `get_all_transport_stats`, `get_all_autokick_ignored_fingerprints`, `get_all_active_cmping_incidents`, `get_ap_followers`, `get_ap_follower_inboxes`).
+- **In-Memory Cache Pruning (`P5`)**:
+  - Bounded `_cmping_last_results` cache to 500 entries with automatic pruning of oldest entries.
+  - Pruned server status and error records from `_cmping_server_status` and `_cmping_server_errors` when servers are removed via `/cmpingdel`.
+- **Lazy Debug Log Formatting (`P6`)**:
+  - Protected expensive key fingerprint formatting and admin lookup debug logging behind `logger.isEnabledFor(logging.DEBUG)` guards.
+
 ## 2.12.9
 
 ### Performance & Scalability
