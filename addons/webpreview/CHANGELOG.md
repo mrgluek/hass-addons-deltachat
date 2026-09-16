@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.10.1
+
+### Security
+- **Image URL SSRF & DNS Rebinding Hardening**: Added DNS resolution checks to `_is_valid_image_url()` to verify that candidate preview image domains do not resolve to private, loopback, link-local, cloud metadata, or reserved IP ranges.
+- **Archive Command URL Protection**: Enforced `_is_internal_or_invalid_url` check in `_handle_keep_command` to reject local, internal, or private endpoints.
+- **Dependency Pinning**: Pinned dependencies to secure ranges in `requirements.txt`.
+
 ## 2.10.0
 
 ### Security
