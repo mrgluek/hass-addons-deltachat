@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.59
+
+### Security
+- **SSRF & DNS Rebinding Hardening**: Added `is_safe_url()` with DNS resolution and private IP checks. Tightened PeerTube URL pattern to require valid domain with TLD. Added URL safety checks in `_handle_link_info`, `_do_download`, and `_download_thumbnail` (with 5MB read limit).
+- **Dependency Pinning**: Pinned dependencies to secure ranges in `requirements.txt`.
+
 ## 1.6.58
 
 ### Fixed
