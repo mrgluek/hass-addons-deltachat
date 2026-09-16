@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.12.7
+
+### UI & UX Improvements
+- **Cooldown Accuracy (`U1`)**: Updated `/help` and documentation to accurately state real command cooldowns (60s general, 15s cmping/slap, 10s search).
+- **Graceful Empty Invites (`U2`)**: Render disabled button and omit QR modal when channel has no invite link.
+- **Landing Page Fallback (`U3`)**: Render disabled button and clear fallback notice when bot invite link is unavailable.
+- **Silent Cooldown & Queue (`U4`)**: Replaced chat text spam with `⏳` reaction on cooldown, queueing delayed execution and transitioning reaction to `☑️` upon completion.
+
 ## 2.12.6
 
 ### Security & Hardening
