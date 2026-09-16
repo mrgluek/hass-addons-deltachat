@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.4
+
+### Security
+- **Web Endpoint Rate Limiting**: Added sliding-window per-IP rate limiting to root homepage (`GET /`) and username card view (`GET /{username}/card`) with HTTP 429 `Retry-After: 60` response headers.
+- **Dependency Pinning**: Pinned dependencies to secure ranges in `requirements.txt`.
+
 ## 1.8.3
 
 ### Security & Hardening
