@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.3
+
+### Security
+- **SSRF Defense**: Added rigorous IP and DNS validation via `is_safe_url()` before fetching external attachments to block loopback, private, link-local, cloud metadata, and DNS rebinding.
+- **Unbounded Attachment & Body Protection**: Enforced `client_max_size = 15MB` on web server and capped streaming attachment downloads to 15MB.
+- **Rate Limiting**: Added thread-safe sliding-window rate limiting on all public web endpoints with HTTP 429 `Retry-After: 60`.
+- **Dependency Hardening**: Pinned `aiohttp>=3.10.5,<4.0.0`, `qrcode>=7.4.2,<8.0.0`, and `emoji>=2.12.0,<3.0.0`.
+
 ## 1.1.2
 
 ### Added
