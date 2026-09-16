@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.9.4
+
+### Security
+- **SSRF & DNS Rebinding Hardening**: Added DNS resolution check in `is_safe_target_url()` ensuring domains resolving to loopback, private, link-local, cloud metadata, or reserved ranges are rejected. Blocked `.local`, `.internal`, `.lan`, `.localdomain` suffixes. Added SSRF validation to `/add`, `fetch_html_title`, and `run_single_check`.
+- **Request Body Limits & Rate Limiting**: Added `client_max_size=256KB` on web server and sliding-window rate limiting on public web endpoints with HTTP 429 `Retry-After: 60`.
+- **Dependency Pinning**: Pinned dependencies to secure ranges in `requirements.txt`.
+
 ## 2.9.3
 
 ### Added
