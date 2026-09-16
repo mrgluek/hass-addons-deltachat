@@ -1,5 +1,32 @@
 # Changelog
 
+## 2.13.1
+
+### Security & Hardening
+- **Restricted Database File Permissions**:
+  - Enforced POSIX `0o600` permissions on the primary SQLite database file and WAL sidecars (`-wal`, `-shm`) during database initialization and connection setup, protecting stored plaintext ActivityPub private keys and configuration data.
+- **Strict Static Asset Whitelisting**:
+  - Restricted `handle_icon` and `handle_background` to explicit filename allowlists (`_ALLOWED_ICON_FILENAMES`, `_ALLOWED_BG_FILENAMES`) to prevent unauthorized file access or path disclosure.
+- **ActivityPub Foreign Target Inbox Validation & Backfill Rate Limiting**:
+  - Enforced host matching between the follower actor URI and target delivery inbox URI in `handle_ap_inbox()`, rejecting delivery and backfill attempts to foreign/victim inboxes.
+  - Added concurrency throttling (`asyncio.Semaphore(2)`) and a 10-second per-channel cooldown to follower post backfilling to prevent inbox bombing and outbound resource exhaustion.
+- **RSS CDATA Breakout Prevention**:
+  - Implemented `_escape_cdata()` to escape `]]>` sequences into `]]]]><![CDATA[>` across channel titles, descriptions, and post contents in RSS XML generation, preventing feed breakage and malformed XML.
+
+### Bug Fixes & API Consistency
+- **Mastodon/Pleroma `GET /api/v1/instance` Admin Email Resolution**:
+  - Fixed configuration key lookup in `handle_api_v1_instance()` to check `admin_dc_email` prior to `admin_email`, accurately returning the bot administrator's contact email.
+
+### Web & RSS Polish
+- **Per-Post Permalinks & HTML Anchors**:
+  - Added unique per-post permalink URIs (`<link>` and `<guid isPermaLink="true">` with `#post-{msg_id}`) to RSS 2.0 items and matching `id="post-{msg_id}"` anchor attributes to web preview articles for direct message linking.
+- **Zero-Repaint Background Rendering**:
+  - Replaced `background-attachment: fixed` with a fixed pseudo-element (`body::before`) across landing, preview, and error page templates, eliminating high scrolling repaint costs.
+- **Responsive Layout & Accessibility Polish**:
+  - Improved channel grid layout responsiveness on small viewports (<340px) using `minmax(min(280px, 100%), 1fr)`.
+  - Upgraded `--text-muted` color to `#aebac1` achieving WCAG AA contrast ratio (>4.5:1).
+  - Added `@media (prefers-color-scheme: light)` support for automated light theme rendering across landing and preview pages.
+
 ## 2.13.0
 
 ### Security & Hardening
