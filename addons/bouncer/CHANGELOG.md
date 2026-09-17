@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.14.1
+
+### Performance & Optimization
+- **Sticker Pre-Scaling Before Matting**:
+  - Automatically downscale input images to max 512px *before* feeding them into `rembg` neural network matting.
+  - Reduces CPU and RAM consumption by over 90% when users submit multi-megapixel smartphone photos (12–48 MP), cutting processing time down to under a second.
+- **Lightweight Model Default (`u2netp`)**:
+  - Switched default `rembg` model from the heavy `bria-rmbg-2.0` (~1.02 GB download) to `u2netp` (**only 4.7 MB**).
+  - Configurable via `REMBG_MODEL` environment variable (defaults to `u2netp`).
+- **Persistent Model Cache Storage**:
+  - Configured `U2NET_HOME` and `REMBG_HOME` pointing to `/app/data/u2net` (`./data/u2net` on the host).
+  - Models are downloaded exactly once and persist across container restarts, rebuilds, and updates.
+- **Optional Background Removal (`ENABLE_REMBG`)**:
+  - Background removal can be completely disabled for resource-constrained hosts via `ENABLE_REMBG=false`.
+- **Global Concurrency Lock & Dedicated Cooldown**:
+  - Added global concurrency lock (`_rembg_global_lock`) ensuring only one background removal runs at a time across the bot.
+  - Split cooldowns: 5 seconds for `/sticker` and 15 seconds for `/stickernobg` with independent anti-spam tracking.
+
+### Bug Fixes
+- **Virus Command Attachment Detection**:
+  - Added strict type checking (`isinstance(..., (str, int))`) for `view_type` and `download_state` to prevent false positive attachment detections in unit tests.
+
 ## 2.14.0
 
 ### Features
