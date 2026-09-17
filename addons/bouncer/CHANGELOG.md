@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.14.0
+
+### Features
+- **Sticker Generation (`/sticker` & `/stickernobg`)**:
+  - Convert any attached or replied image into a WebP sticker formatted to standard 512px dimensions compatible with Delta Chat, Telegram, and Signal.
+  - `/sticker`: Generates a sticker preserving the original image and background.
+  - `/stickernobg`: Generates a sticker with background removed via `rembg` (also accepts `/sticker nobg` or `/sticker --nobg`).
+  - Supports invocation as a reply/quote to an image message or as the caption of a newly sent image.
+  - Automatic EXIF orientation transpose (`ImageOps.exif_transpose`) to keep smartphone photos correctly oriented.
+  - Non-blocking asynchronous worker thread with immediate `⏳` acknowledgment and `☑️`/`❌` reaction updates.
+  - Independent 5-second anti-spam cooldown per chat with automatic delayed execution queuing.
+  - Graceful degradation when `rembg` is not installed, recommending `/sticker` as a fallback.
+
+### Dependencies & Containerization
+- Added `rembg[cpu]>=2.0.50` to `requirements.txt` and relaxed `pillow>=10.4.0`.
+- Added `libgomp1` to Debian package dependencies in `Dockerfile` for ONNX Runtime CPU inference support.
+
 ## 2.13.2
 
 ### Security & Hardening
