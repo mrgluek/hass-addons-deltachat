@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.14.5
+
+### UI & Theming Enhancements
+- **Light / Dark / System Theme Switcher**:
+  - Implemented an elegant 3-way theme switcher (Light ☀️, Dark 🌙, System 💻) across all web pages (landing page, channel previews, tombstone, and 404 pages), matching the design and behavior of `gluek.info`.
+  - Added inline head preload script (`_THEME_PRELOAD_SCRIPT`) reading `localStorage.theme` with fallback to system preference, completely eliminating Flash of Unstyled Content (FOUC).
+  - Added zero-latency transition suppression during theme switches to prevent sluggish background or text transition artifacts.
+  - Implemented dynamic system preference listeners (`matchMedia("(prefers-color-scheme: dark)")`) updating the page in real-time when in System mode.
+- **Fixed Feature Card Headings in Light Theme**:
+  - Fixed white-on-white text in Core Capabilities cards (`.feature-text h3`) by binding heading colors to `var(--text-main)` with explicit light theme color `#111b21`.
+  - Ensured code pills, tables, hero text, and subtitle colors have crisp high-contrast styling in both dark and light modes.
+
 ## 2.14.4
 
 ### Improvements & Bug Fixes
