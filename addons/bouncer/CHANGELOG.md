@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.14.7
+
+### UI & Branding Improvements
+- **Delta Chat Identity Icon**:
+  - Replaced the custom broadcast-tower SVG with the official Delta Chat `identity.svg` icon for the default channel avatar (shown when a channel has no avatar set).
+  - Added `/icon.svg` route serving the same Delta Chat identity SVG, used as the browser tab favicon (`<link rel="icon" type="image/svg+xml">`) across all web pages (landing, tombstone, 404). PNG favicon retained as fallback.
+- **Light Theme Background**:
+  - Replaced the previous small `background-light.png` (772×744) with the official i.delta.chat colorful doodle wallpaper (`background-light.jpg`, 860×1345), matching the dimensions of the dark-mode background for consistent tile sizing across themes.
+
 ## 2.14.6
 
 ### UI & Theming Improvements
