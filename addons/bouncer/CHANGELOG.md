@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.14.6
+
+### UI & Theming Improvements
+- **Direct Bot Invite Link on Landing Page**:
+  - The hero CTA button on the landing page now links directly to the bot's Delta Chat invite link (`i.delta.chat`) with speech bubble icon `🗨️` ("Add Bot to Delta Chat"), streamlining onboarding.
+  - The QR modal remains instantly accessible via the `📱 QR Code` button in the top navigation header.
+- **Fixed Light Theme Modal Overlay & Dialog Styling**:
+  - Removed solid white override (`background: #ffffff !important;`) on `.modal` which was washing out the entire viewport on light theme.
+  - Configured high-contrast translucent darkened backdrop with blur (`background: rgba(17, 27, 33, 0.55); backdrop-filter: blur(6px);`) across light mode on landing and preview pages, providing depth and focus.
+  - Enhanced modal dialog card (`.modal-content`) with refined drop shadow (`0 20px 48px rgba(0, 0, 0, 0.22)`), rounded corners (`16px`), styled QR image frame, and modern neutral action buttons (`.close-btn`).
+
 ## 2.14.5
 
 ### UI & Theming Enhancements
