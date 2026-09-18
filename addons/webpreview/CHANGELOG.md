@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.12.0
+
+### Added
+- **Telegram Post Link Delegation to TG Bridge**:
+  - Added `_is_tg_bridge_in_chat` detection checking for active `TG Bridge` / `Telegram Bridge` bot contacts in the current chat.
+  - Added `_is_telegram_post_url` to accurately identify direct channel post URLs (`t.me/{channel}/{post_id}` and `t.me/s/{channel}/{post_id}`).
+  - In `on_new_message`, automatically skips link auto-preview for Telegram posts if `TG Bridge` is present in the chat, yielding handling to TG Bridge's native MTProto / WebXDC pipeline to avoid duplicate previews and ensure complete delivery of rich posts, media albums, and videos.
+- **Unit Tests (`tests/test_telegram_parser.py`)**:
+  - Added `TestTgBridgeDelegation` suite covering Telegram post URL detection, `_is_tg_bridge_in_chat` contact lookup, and `on_new_message` skip verification.
+
 ## 2.11.0
 
 ### Added
