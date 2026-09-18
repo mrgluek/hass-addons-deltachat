@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.12.1
+
+### Security & Robustness
+- **Anti-Loop Defense Hardening**:
+  - Excluded messages starting with bot card and message prefixes (`📰`, `🌐`, `🤖`, `📷`, `💬`) from URL auto-parsing.
+  - Hardened `_is_bot_blocked` with strict boolean evaluation on both message snapshots and contact RPC objects (`contact.is_bot is True`) to prevent bot-to-bot echo loops and MagicMock false positives in test environments.
+  - Added unit test coverage for anti-loop prefix filtering and contact bot evaluation in `tests/test_telegram_parser.py`.
+
 ## 2.12.0
 
 ### Added
