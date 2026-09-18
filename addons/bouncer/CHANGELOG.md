@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.14.4
+
+### Improvements & Bug Fixes
+- **Dedicated Channel Avatar Placeholder (`channel-default.svg`)**:
+  - Channels without an avatar now render a dedicated broadcast channel SVG icon instead of falling back to the bot's own avatar (`icon.png`).
+- **Robust Delta Chat Channel Avatar Extraction**:
+  - Fixed channel avatar retrieval across Delta Chat Rust core by checking both camelCase (`profileImage`) and snake_case (`profile_image`) in `get_basic_chat_info`, `get_full_chat_by_id`, and channel contacts.
+- **Dynamic Bot Avatar Customization (`AVATAR_PATH`)**:
+  - Bot web endpoints (`/icon.png`, `/{AVATAR_PATH}`) now dynamically serve custom bot avatars configured via `AVATAR_PATH`, Delta Chat `selfavatar`, or `bot_avatar_path` in SQLite.
+- **Accurate MIME Type Delivery (WebP & Media)**:
+  - Added deterministic MIME type headers (`image/webp`, `image/jpeg`, `image/png`, `video/mp4`, etc.) and magic header sniffing across all media and avatar handlers, ensuring browsers display WebP images inline rather than downloading them as generic `application/octet-stream`.
+- **Channel Preview CTA Emoji Update**:
+  - Replaced airplane `✈️` with speech bubble `🗨️` in "Open in Delta Chat" and fallback buttons.
+
 ## 2.14.3
 
 ### UI & Theming Enhancements
