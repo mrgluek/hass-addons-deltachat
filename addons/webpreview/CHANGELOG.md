@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.13.0
+
+### Added & Improved
+- **24-Hour Unified Cache Retention (`CACHE_MAX_AGE = 86400`)**:
+  - Elevated OpenGraph preview cards (`og_cache`) and compiled reader mode HTML / WebXDC files (`url_cache`) from 1 hour to 24 hours, matching `tldr_cache` and other bots in the fleet (`TG Bridge`, `YT Bot`).
+  - Greatly reduces outbound network traffic, protects against external rate limits and anti-bot captchas, and delivers instant 0ms responses for previously requested links.
+- **Cache Hit / Miss Tracking & Efficiency Metrics**:
+  - Added `cache_log` SQLite table with indexes on `created_at` and `cache_type`.
+  - Added `log_cache_event(cache_type, hit)` and `get_cache_stats()` tracking 24-hour hits, misses, overall hit ratio percentage, and granular breakdowns across `og` preview cards, `article` reader files, and `tldr` AI summaries.
+  - Enhanced `/stats` command output to display live cache efficiency metrics over the last 24 hours.
+  - Added automatic 30-day retention cleanup for `cache_log` records in `cleanup_old_records`.
+- **Unit Tests (`tests/test_database.py`, `tests/test_transport_commands.py`)**:
+  - Added comprehensive test suites verifying cache logging, 24h stats calculation, hit ratio formatting, breakdown accuracy, retention cleanup, and `/stats` command presentation.
+
 ## 2.12.1
 
 ### Security & Robustness
