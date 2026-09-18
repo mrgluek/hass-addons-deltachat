@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.14.3
+
+### UI & Theming Enhancements
+- **Delta Chat Client Native Light Theme**:
+  - Aligned light theme primary button colors to Delta Chat client styling (`#415e6b`, hover `#354e59`) across landing, channel preview, tombstone, and 404 pages.
+  - Added official Delta Chat light doodle wallpaper (`/background-light.png` and `/static/background-light.png`), rendered with zero-repaint fixed `body::before` architecture.
+- **Landing Page Header & Hero Redesign**:
+  - Replaced bot logo and generic title in the top navigation header with the instance URL domain (e.g. `dc.gluek.info`).
+  - Added quick `📱 QR Code` modal launcher in the top header replacing the GitHub link (code repository links remain accessible in the footer).
+  - Promoted bot branding to hero badge (`🛡️ Delta Chat Bouncer Bot`).
+  - Added seamless `Copy Link` clipboard action button in landing page QR modal with inline `✓ Copied!` visual feedback.
+
 ## 2.14.2
 
 ### Performance & Memory Optimization
