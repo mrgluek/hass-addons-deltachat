@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.24.3
+
+- **Fix: NameError Crashing Rich Article Extraction**:
+  - `_process_page_blocks()`'s `PageBlockVideo` handling referenced `TG_WEBXDC_VIDEO_MAX_BYTES`, a constant that was never defined (a leftover from the v2.24.0 inline article rendering rewrite), causing every rich post containing an inline video block to fail extraction with `NameError`.
+  - Defined `TG_WEBXDC_VIDEO_MAX_BYTES = 20 * 1024 * 1024` (20 MB), matching the existing `MAX_SINGLE_VIDEO_BYTES` cap used in `_package_tg_post_webxdc`.
+
 ## 2.24.2
 
 - **Direct Post Link Progress Feedback**:
