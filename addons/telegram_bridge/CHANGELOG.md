@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.24.4
+
+- **Fix: Direct Post Links Hanging Silently After Detection**:
+  - `_process_page_blocks()`'s `PageBlockPhoto`/`PageBlockCollage`/`PageBlockVideo` handlers, the "remaining photos" download loop, and the channel-avatar `download_profile_photo()` call in `_extract_telethon_rich_message()` (all added/touched in the v2.24.0 article rendering rewrite) called `userbot_client.download_media()`/`download_profile_photo()` with no timeout, unlike every other download call site in the file. A slow or stalled Telegram media fetch (e.g. after the v2.24.3 `NameError` fix let a real video download attempt through) could hang the whole request indefinitely with no error logged, appearing as "detects the link, then nothing happens."
+  - Wrapped all of these in `asyncio.wait_for()` (60s for photos, 90s for inline videos, 30s for the avatar), matching the timeout convention already used elsewhere (e.g. the 60s single-image and 300s general-media download paths).
+  - Also added the same 15s timeout guard to the new `_resolve_full_res_photos_for_group()` sibling-photo lookup from v2.24.1.
+
 ## 2.24.3
 
 - **Fix: NameError Crashing Rich Article Extraction**:
