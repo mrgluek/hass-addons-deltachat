@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.24.5
+
+- **Fix: TypeError Crashing Rich Article Extraction on Inline Videos**:
+  - `_process_page_blocks()`'s `PageBlockVideo` handling constructed `TelegramRichVideo(..., is_playable=...)`, but the `TelegramRichVideo` dataclass has no `is_playable` field (only `video_url`, `poster_url`, `duration`, `is_too_big`) — another leftover from the v2.24.0 rewrite. Every rich post with an inline video block raised `TypeError` right after downloading it, discarding the whole post.
+  - Dropped the invalid `is_playable` kwarg from both call sites; playability is already fully expressed by `video_url` being set and `is_too_big` being false.
+
 ## 2.24.4
 
 - **Fix: Direct Post Links Hanging Silently After Detection**:
