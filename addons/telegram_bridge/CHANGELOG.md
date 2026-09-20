@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.24.2
+
+- **Direct Post Link Progress Feedback**:
+  - Added `_react()` helper and wired it into `_async_handle_direct_tg_post()`: reacts with ⏳ on the triggering DC message as soon as a direct Telegram post link is detected, ☑️ once the post is delivered (cache hit, WebXDC, photo, or text), and ❌ if extraction fails or errors out — matching the feedback pattern already used by `deltachat_yt` and `deltachat_webpreview`.
+
 ## 2.24.1
 
 - **Fix: Micro-sized Images in Rich Article WebXDC Posts**:
