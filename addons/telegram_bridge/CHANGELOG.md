@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.24.10
+
+- **Diagnostics: Log Telethon's Actual Selected Photo Size**:
+  - v2.24.9 showed `@artjockey/3402`'s photos have real large `PhotoSize` entries (up to ~1546x1260), yet inspecting the actual generated `.xdc` on the server showed every embedded image was only 40x32px — the exact dimensions of Telegram's `PhotoStrippedSize` blur placeholder — meaning `download_media()` is picking the stub despite larger sizes being listed. A synthetic reproduction of Telethon's `_get_thumb()` sort with equivalent fake data picked the large size correctly, so something differs for the real object.
+  - Added a call to Telethon's own `_get_thumb()` against the real `Photo.sizes` (+ `video_sizes`) in the diagnostic log, to see exactly what it selects for these specific photos and narrow down why.
+
 ## 2.24.9
 
 - **Diagnostics: Log RichMessage Photo Dimensions**:
