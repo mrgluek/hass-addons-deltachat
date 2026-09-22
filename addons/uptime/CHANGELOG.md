@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.9.5
+
+### Fixed
+- **False SSRF block for hosts with Yggdrasil IPv6 records**: Domains publishing an AAAA record in the Yggdrasil mesh range (`200::/7`, e.g. `cm1.wwire.su`) were rejected with "Target blocked: internal or private network address", because Python's `ipaddress` flags that range as reserved. Yggdrasil addresses are now treated as routable, while other reserved ranges stay blocked. IP checks are consolidated in a new `_is_blocked_ip()` helper.
+
 ## 2.9.4
 
 ### Security
