@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.14.0
+
+### Added
+- **OpenRouter Fallback (`OPENROUTER_API_KEY`, `OPENROUTER_MODELS`)**: When every Gemini model is rate-limited, overloaded or timing out, `/tldr`, `/ai` and preview TL;DRs now fall back to OpenRouter (default model `openrouter/free`, which routes to any available free model). Supports text and image prompts; audio stays Gemini-only. It also works as the only AI backend when `GEMINI_API_KEY` is empty. `/stats` shows OpenRouter request counts.
+
+### Changed
+- **Retired Model Removed**: Dropped `gemini-2.5-flash-lite` (no longer served, HTTP 404) from the default `GEMINI_MODELS` chain.
+- **404 Cooldown**: A Gemini model answering HTTP 404 is placed on a 24-hour cooldown instead of being retried on every request.
+
 ## 2.13.2
 
 ### Fixed
