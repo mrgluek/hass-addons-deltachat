@@ -10,6 +10,12 @@ on:
 permissions:
   contents: write
 
+# Pushes from several bots fire dispatches at once; run syncs one at a time so
+# they don't race each other pushing to main ("cannot lock ref").
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
 jobs:
   sync:
     name: Check & Sync Bot Versions

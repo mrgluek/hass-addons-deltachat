@@ -4,6 +4,7 @@
 import argparse
 import os
 import re
+import subprocess
 import urllib.request
 import urllib.error
 import yaml
@@ -29,30 +30,58 @@ def extract_version_from_text(content: str) -> str:
         return m.group(1)
     return ""
 
+# Files that may hold the VERSION constant (some bots moved it out of bot.py)
+VERSION_FILES = ["bot.py", "config.py", "dc_commands.py", "commands.py"]
+
+def highest_version_tag(ls_remote_output: str) -> str:
+    versions = re.findall(r"refs/tags/v(\d+(?:\.\d+)*)$", ls_remote_output, re.M)
+    return max(versions, key=lambda v: tuple(int(p) for p in v.split(".")), default="")
+
+def get_latest_tag_version(bot_repo: str) -> str:
+    # The add-on Dockerfile clones BOT_REF=v<version>, so the newest pushed tag is
+    # the version that can actually be built (and no CDN cache is involved).
+    for url in (f"https://github.com/mrgluek/{bot_repo}.git", f"https://git.gluek.info/gluek/{bot_repo}.git"):
+        try:
+            res = subprocess.run(["git", "ls-remote", "--tags", "--refs", url], capture_output=True, text=True,
+                                 timeout=20, env={**os.environ, "GIT_TERMINAL_PROMPT": "0"})
+        except Exception:
+            continue
+        if res.returncode == 0:
+            ver = highest_version_tag(res.stdout)
+            if ver:
+                return ver
+    return ""
+
 def get_source_version(bot_repo: str) -> str:
-    # 1. Local filesystem check
+    # 1. Newest version tag on GitHub / Forgejo
+    ver = get_latest_tag_version(bot_repo)
+    if ver:
+        return ver
+
+    # 2. Local filesystem check
     bot_dir = os.path.join(PARENT_DIR, bot_repo)
     if os.path.isdir(bot_dir):
-        bot_py = os.path.join(bot_dir, "bot.py")
-        if os.path.isfile(bot_py):
-            with open(bot_py, "r", encoding="utf-8") as f:
-                ver = extract_version_from_text(f.read())
-                if ver:
-                    return ver
+        for name in VERSION_FILES:
+            path = os.path.join(bot_dir, name)
+            if os.path.isfile(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    ver = extract_version_from_text(f.read())
+                    if ver:
+                        return ver
         try:
-            import subprocess
             res = subprocess.run(["git", "describe", "--tags", "--abbrev=0"], cwd=bot_dir, capture_output=True, text=True)
             if res.returncode == 0 and res.stdout.strip():
                 return res.stdout.strip().lstrip("v")
         except Exception:
             pass
 
-    # 2. Remote check via GitHub / Forgejo (supports main and master branches)
+    # 3. Remote file check via GitHub / Forgejo (supports main and master branches)
     branches = ["main", "master"]
     urls = []
     for branch in branches:
-        urls.append(f"https://raw.githubusercontent.com/mrgluek/{bot_repo}/{branch}/bot.py")
-        urls.append(f"https://git.gluek.info/gluek/{bot_repo}/raw/branch/{branch}/bot.py")
+        for name in VERSION_FILES:
+            urls.append(f"https://raw.githubusercontent.com/mrgluek/{bot_repo}/{branch}/{name}")
+            urls.append(f"https://git.gluek.info/gluek/{bot_repo}/raw/branch/{branch}/{name}")
 
     for url in urls:
         try:
