@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.15.0
+- Upstream update to version 2.15.0.
+
 ## 2.14.1
 
 ### Fixed
