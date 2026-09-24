@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.5
+
+### Fixed
+- **`update.sh` Deployed the Wrong Branch**: Branch detection took the first remote branch in alphabetical order, so a leftover PR branch such as `origin/claude/...` sorted before `origin/master` and was deployed instead (and new `master` commits were reported as "Already up to date"). It now follows the checked-out branch, falling back to `main`/`master`.
+
 ## 1.1.4
 
 ### Changed
