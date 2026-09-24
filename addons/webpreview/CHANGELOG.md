@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.15.2
+
+### Fixed
+- **Odd OpenRouter Models**: `openrouter/free` alone could route to a moderation classifier (`nvidia/nemotron-3.5-content-safety:free` answered "User Safety: safe") or a coding model. The default `OPENROUTER_MODELS` is now an ordered list of free chat models tested with Russian prompts (Nemotron 3 Ultra/Super, Qwen 3.8, Gemma 4 31B, dots-3), with `openrouter/free` as the last resort, and answers from `*safety*`/`*guard*` models are discarded.
+- **403 Stopped the Whole Fallback**: A model-specific HTTP 403 aborted OpenRouter entirely; now only 401/402 (bad key / no credits) do, and 403 moves on to the next model.
+- **OpenRouter Time Cap**: The OpenRouter chain is capped at 60s in total (30s per request).
+
 ## 2.15.1
 
 ### Fixed
