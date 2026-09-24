@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.14.1
+
+### Fixed
+- **Empty OpenRouter Answers**: `openrouter/free` can route to reasoning models that spend the whole token budget thinking and return no text. Requests now ask for low reasoning effort with 2048 tokens of headroom, and an empty answer is retried once (re-routed to another free model). Auth/credit errors (401/402/403) stop the fallback immediately.
+
 ## 2.14.0
 
 ### Added
