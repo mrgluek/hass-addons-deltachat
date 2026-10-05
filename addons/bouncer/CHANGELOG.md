@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.18.0
+
+### Added
+- **Call Monitoring Between Relays**: A second monitor next to cmping, over the same server list (bot transports + `/cmpingadd`, minus `/cmcallskip`). Every `CMCALL_MONITOR_INTERVAL` seconds (default 3600, `0` disables) a round-robin source relay calls every other relay with `cmcall --json` (TURN-only media, `CMCALL_MONITOR_DURATION` = 5 s of audio). One call per pair, direction alternating per cycle; a lone relay calls itself. Hard failures are retried once; if the source fails with all of ≥ 2 targets the source is blamed, otherwise the failing target. Packet loss ≥ `CMCALL_DEGRADED_LOSS_PCT` (10 %) in two checks in a row marks a relay degraded; relays announcing no TURN server are `n/a` and never alert. Monitoring and `/cmcall` share one lock, since they use the same cmcall test profiles.
+- **Call Alerts**: Each failing/degraded episode is one `📞🚨 Calls failing` / `📞⚠️ Calls degraded` message per `/cmreport` chat, edited in place when the error changes and when it resolves (`📞✅ Calls restored`).
+- **Commands**: `/cmcallstatus [server]`, `/cmcallhistory [server]`, `/cmcallskip [server]` and `/cmcallunskip <server>` (admin). `/cmpinglist` shows a call badge per server.
+- New tables `cmcall_results`, `cmcall_servers`, `cmcall_skip`, `cmcall_events`, `cmcall_event_messages`.
+
 ## 2.16.0
 
 ### Removed
