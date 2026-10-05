@@ -1,5 +1,5 @@
 name: "Delta Chat Bouncer Bot"
-description: "Monitors group inactivity, purges stale members, manages group/channel catalogs, tests mail relays, and provides channel web previews & RSS"
+description: "Monitors group inactivity, purges stale members, manages group/channel catalogs, tests mail relays and calls (echo service), and provides channel web previews & RSS"
 version: "2.16.0"
 slug: "deltachat_bouncer"
 url: "https://github.com/mrgluek/deltachat_bouncer"
@@ -32,6 +32,11 @@ options:
   status_text: "Monitors group inactivity and manages group catalogs"
   virustotal_api_key: ""
   base_url: ""
+  call_echo: true
+  call_echo_who: "everybody"
+  call_echo_delay: 0
+  call_echo_max_seconds: 300
+  call_echo_max_concurrent: 2
 schema:
   chatmail_qr: "str?"
   email: "str?"
@@ -46,3 +51,8 @@ schema:
   status_text: "str?"
   virustotal_api_key: "password?"
   base_url: "str?"
+  call_echo: "bool?"
+  call_echo_who: "list(everybody|contacts)?"
+  call_echo_delay: "float(0,10)?"
+  call_echo_max_seconds: "int(30,3600)?"
+  call_echo_max_concurrent: "int(1,10)?"

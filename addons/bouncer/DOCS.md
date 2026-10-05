@@ -17,6 +17,8 @@
 - 🔍 **Member Search (`/search <query>`)**: Find group members across active transports by email or substring.
 - 📬 **Relay Check (`/relays`)**: Scan group members using standard webmail providers (Yandex, Mail.ru, Gmail, etc.).
 - 🏓 **ChatMail Ping (`/cmping`)**: Ping mail relays (transports) to/from specified target servers using the `cmping` utility with real-time reaction progress.
+- 📞 **Echo Calls**: Call the bot from any Delta Chat app: it answers, echoes your voice back and, after you hang up, sends a call report (media path, packet loss, jitter, round trip). `/callstats` shows your recent calls.
+- 📲 **Call Test (`/cmcall`)**: Test a Delta Chat call between two relays (signaling, TURN, audio) using the `cmcall` utility.
 - 🛡️ **VirusTotal Inspection (`/virus`)**: Check URLs and files (attachments or reply messages) against VirusTotal threat database.
 - 📡 **Server Connectivity Monitoring**: Periodic background monitoring of server connectivity with incident-based alerting.
 
@@ -37,6 +39,13 @@ In the **Configuration** tab:
    - If port `8080` is forwarded on your router or exposed in the add-on's network settings, channel preview links can be accessed directly from the internet.
 4. **VirusTotal (Optional)**:
    - `virustotal_api_key`: Free API key from VirusTotal (virustotal.com) for `/virus` URL and file scanning.
+
+5. **Echo Calls (Optional)**:
+   - `call_echo`: Answer calls with an echo (default on).
+   - `call_echo_who`: `everybody` (default) or `contacts`.
+   - `call_echo_delay`: Echo playback delay in seconds (default `0`, live).
+   - `call_echo_max_seconds` / `call_echo_max_concurrent`: Call length cap (default 300 s) and parallel calls (default 2).
+   - Call media goes through the TURN server of the bot's relay, so no extra ports are needed.
 
 ## Getting Started
 

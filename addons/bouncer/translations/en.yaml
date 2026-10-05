@@ -38,3 +38,18 @@ configuration:
   base_url:
     name: "Base Web URL"
     description: "Public base URL for channel preview pages and RSS feeds (e.g. https://dc.yourdomain.com or https://my-ha.duckdns.org:8080)."
+  call_echo:
+    name: "Echo Calls"
+    description: "Answer Delta Chat calls and echo the caller's voice back, then send call statistics (packet loss, jitter, round trip)."
+  call_echo_who:
+    name: "Who Can Call"
+    description: "everybody: any non-blocked contact, including contact requests; contacts: accepted contacts only."
+  call_echo_delay:
+    name: "Echo Delay (seconds)"
+    description: "0 is a live echo; e.g. 1.5 lets callers finish a sentence before hearing it back."
+  call_echo_max_seconds:
+    name: "Max Call Length (seconds)"
+    description: "The bot hangs up after this many seconds."
+  call_echo_max_concurrent:
+    name: "Max Parallel Calls"
+    description: "Further callers get a 'line busy' message."
