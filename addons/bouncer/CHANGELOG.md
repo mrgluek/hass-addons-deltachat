@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.23.0
+
+### Security
+- **Meetings Belong to Their Chat**: A room is bound to the chat `/meet` was sent in. Before, an open room belonged to its creator, and `/meet` in any other chat replied with the existing `/join_<id>` link, leaking a meeting meant for one group into another. Now `/meet` in the room's chat shows its link again, and in any other chat the creator is only told to close their open meeting first.
+- **Group Rooms for Members Only**: Rooms started in a group can only be joined by that group's members: checked on `/join`, on calls back into the room and every 30 s during the meeting (people who left or were removed drop out with a notice). Rooms started in a private chat with the bot stay open to whoever has the link. Meetings can no longer be started in channels or mailing lists.
+
+### Added
+- **`/meetclose` and `/meetnew`**: The creator (in the room's chat or privately) can close their meeting, or restart it with a new link when the old one leaked; the new link is posted only in the room's chat and disconnected participants are not sent it. The admin can do both for any room and close one by id or 4-character prefix from `/meets` (`/meetclose <id>`), e.g. when a slot is needed.
+- **Invitations for Private Rooms**: `/meet` in a private chat also sends a message made for forwarding: the bot's invite link plus the `/join_<id>` command. Group rooms suggest *Reply Privately* to keep `/join` commands out of the group.
+
 ## 2.22.0
 
 ### Changed
