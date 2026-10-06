@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.19.1
+
+### Privacy
+- **Caller IP Addresses No Longer Logged**: aioice logs every ICE candidate pair it checks at INFO level, so the container logs kept the IP addresses of everyone who called the echo service. aiortc/aioice now log at WARNING; `CALL_DEBUG_LOG=1` restores INFO for troubleshooting.
+- **Call Message Deleted After the Call**: The incoming call message carries the caller's SDP offer with their ICE candidates (local and public IPs). The bot now deletes it as soon as the call ends instead of keeping it for 36 h (`delete_device_after`).
+- **Call Statistics Retention**: New `CALL_ECHO_LOG_DAYS` (default 30): `call_echo_log` rows older than that are deleted (at start, after each call and on `/callstats`); `0` keeps no call history at all.
+- **Privacy Notes**: `/callstats` and `/help` state that calls are not recorded and how long statistics are kept; new "Echo Call Privacy" section in the README.
+
 ## 2.19.0
 
 ### Changed
