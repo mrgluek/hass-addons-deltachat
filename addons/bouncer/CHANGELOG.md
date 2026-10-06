@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.20.0
+
+### Added
+- **Voice Meetings (prototype, off by default)**: `/meet` creates a room (12-character base62 id) and replies with `/join_<id>`; `/join_<id>` / `/join <id>` makes the bot call you into it (via `place_outgoing_call` + `OutgoingCallAccepted`), and while the room is open an incoming call from someone who joined goes into the room instead of the echo. The bot is the hub of a star of 1:1 calls and mixes every 20 ms: noise gate with 300 ms hold, participants whose app reports `mutedState` muted are left out, each one hears the others (mix-minus). Join/leave are announced with the echo greeting's tones (330→440 Hz / 440→330 Hz). Rooms close 60 min after the last person left (`MEET_IDLE_MINUTES`), at most `MEET_MAX_HOURS` (6) after creation, and live in memory only. Every room and join message says that the bot does not record voices, that meetings are not end-to-end encrypted between participants and that participants can record.
+- **Capacity Budget**: `MEET_TOTAL_SLOTS` (8) places across at most `MEET_MAX_ROOMS` (2) rooms: one room of 8, or two of 4; a second room is refused while the first has more than 4 people. `MEET_MAX_PARTICIPANTS`, `MEET_RING_SECONDS`, `MEET_MAX_ROOMS_PER_USER` (1).
+- **Admin Switch**: `/meets on|off` (or `1|0`); `off` closes all rooms. `/meets` shows the status and open rooms. Off by default because every participant costs ~10 % of a core (8 participants ≈ 0.7–0.9 core, ~95 MB; `tests/bench_meet.py`).
+- **Dependencies**: `cmcall` 0.1.3 (`EchoPeer` with own outgoing track, audio callback, `mutedState` callback and outgoing calls).
+
 ## 2.19.2
 
 ### Fixed
