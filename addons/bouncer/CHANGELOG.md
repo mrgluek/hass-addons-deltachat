@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.19.0
+
+### Changed
+- **Echo Calls Can Connect Peer-to-Peer**: The bot runs behind NAT (Docker bridge) and chatmail relays announce only a TURN server, so its only reachable ICE candidate was the TURN relay and every echo call went through TURN. The Delta Chat apps avoid this because libwebrtc also queries the TURN server as STUN; aiortc does not. New `CALL_ECHO_STUN` (default `auto`) does the same, giving the bot a server-reflexive candidate so calls can connect peer-to-peer through the NAT, with TURN as fallback. `off` restores TURN-only, or set an explicit `host:port`. The `Path:` line of the call report now reflects the caller's network rather than the bot's limitation.
+- **Dependencies**: `cmcall` 0.1.2 (`turn_as_stun`). `/cmcall` and call monitoring still test TURN only.
+
 ## 2.18.0
 
 ### Added
