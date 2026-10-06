@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.22.0
+
+### Changed
+- **`/stickernobg` at Idle CPU Priority**: The background-removal subprocess (`sticker_tool.py`) switches itself to Linux `SCHED_IDLE` (fallback: nice 19) before loading onnxruntime, whose worker threads inherit it. It now only gets CPU time nothing else wants, so it can no longer make voice meetings or echo calls stutter. `REMBG_PRIORITY=normal` restores the old behaviour.
+
+### Fixed
+- **`tests/bench_meet.py` Hung Above 8 Participants**: The benchmark used the bot's meeting limits, so the 9th participant was refused and the clients waited forever. It now raises `MEET_TOTAL_SLOTS` / `MEET_MAX_PARTICIPANTS` to the participant count, gives up after 30 s without an answer and shows progress when piped.
+
 ## 2.21.0
 
 ### Added
