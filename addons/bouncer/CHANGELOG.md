@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.24.0
+
+### Added
+- **Meeting Radio**: `/radio` lists the stations, `/radio <number>` plays one quietly under the conversation of this chat's meeting, `/radio 0` / `/radio off` stops it. The admin manages the list with `/radioadd <url> [name]` (http(s) streams only; the stream is played for a moment before it is added, and its `icy-name` becomes the default name) and `/radiodel <number>`; stations keep their numbers. Anyone who can use the room controls it (group rooms: the group's members).
+- **`/play`**: Reply `/play` to an audio or video message (or use it as the caption) to play its sound once in this chat's meeting; videos contribute their audio track only. The radio pauses for it and comes back afterwards; `/play off` stops the file.
+- **Ducking**: Background audio plays at `MEET_MUSIC_VOLUME` (0.35) and drops to `MEET_MUSIC_DUCK` (0.3) of that while someone talks (fast down, slow up). Everyone hears it, the speaker included.
+- **`meet_media.py`**: Decoding (PyAV) in its own thread with a 0.5 s queue as the clock; files pause and radio stations drop their connection (after 10 s) while nobody is in the meeting; stations reconnect with back-off. ffmpeg runs with protocol and format whitelists (streams: http/https, files: local file only; audio/video formats only), so crafted files or playlists cannot read local files or fetch other URLs.
+
 ## 2.23.0
 
 ### Security
