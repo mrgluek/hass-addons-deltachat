@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.25.0
+
+### Added
+- **Callers' TURN Server in Echo Reports**: The bot reads the relay candidates of the caller's offer and those trickled in later (their address is the TURN server's), names them by forward DNS of the TURN hosts it knows (`turn.delta.chat`, its relays, the monitored relays, `CALL_TURN_HOSTS`; cached for an hour) and reports `Your app's TURN server: … ✅`, or that the app got no relay address — its TURN server is blocked or unreachable — with a link to the test page. Stored per call (`caller_turn`, plus the caller's address domain); the admin's `/callstats` shows a 7-day summary per TURN server and which domains got none, and the TURN server per recent call.
+- **`/test-turn` Page**: A browser self-test (Russian/English): relay allocation on `turn.delta.chat` over UDP and TCP, and STUN reachability of the TURN servers the bot's relays announce, with a verdict (works / UDP blocked / unreachable). Runs entirely in the visitor's browser; nothing is reported back. `TURN_TEST_PAGE=0` turns it off.
+
 ## 2.24.1
 
 ### Fixed
