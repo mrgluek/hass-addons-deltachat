@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.27.0
+
+### Added
+- **Channel Name & Avatar Follow Delta Chat**: When a channel owner renames the channel or changes its picture, the bot now picks it up on its own - the catalog (`/dchannels`), web preview, RSS feed and Fediverse actor show the new name, and the cached avatar is replaced (or dropped, so the default is shown, if the picture was removed). Triggered by the channel's "name changed" / "image changed" system message, and re-checked on every new post as a safety net in case that message was missed. Previously the name was frozen at the time the channel was added and the avatar was cached forever.
+
+### Fixed
+- **`/dchanneldesc<ID>`**: The database function it relies on (`update_catalog_channel_description`) was missing, so the command failed; added.
+
 ## 2.26.1
 
 ### Fixed
