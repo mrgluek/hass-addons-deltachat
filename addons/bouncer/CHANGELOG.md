@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.28.0
+
+### Added
+- **Group FAQ (`/faq`, `/save`, `/remove`)**: The FAQ Bot's features, built in. Reply to a message with `/save <topic>` to make it the answer to a topic; sending the topic name (case-insensitive) gets the answer, as a reply to the person the question replied to if any. `{faq}` and `{name}` placeholders work as in the FAQ Bot. Additions: `/faq <topic>` shows one answer; only the topic's author or the bot admin can overwrite or remove it; the same topic (and the `/faq` list) is answered at most once per 30 s per chat (admin exempt); topics can't start with `/`. Answers are copies - text in the database (`faq_entries`), attachments downloaded on demand and kept in `./data/faq/` (up to 25 MB) - so they survive the 36-hour message cleanup.
+- **FAQ Bot Coexistence**: While a FAQ Bot (a member with the bot flag and "FAQ" in its name) is in the group, Bouncer does not answer FAQ commands or topics, so nothing is answered twice, but mirrors `/save` and `/remove` silently; once the FAQ Bot is removed (detected within a minute) its topics saved in the meantime work right away. `/faq@boun` is always answered.
+
 ## 2.27.0
 
 ### Added
