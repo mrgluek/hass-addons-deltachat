@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.32.0
+
+### Added
+- **DNS Lookup (`/dns`)**: dig-like syntax with arguments in any order - `/dns <domain> [TYPE] [@server|@auth]`.
+  - `/dns chatmail.uk` - **full report**: addresses with reverse DNS; zone name servers (found at the zone apex, so `nine.testrun.org` shows `testrun.org`'s), DNSSEC (DS in the parent), CAA grouped by tag; and for a mail domain: MX hosts with forward-confirmed reverse DNS (PTR resolving back to the same address - big providers reject mail without it), SPF (exactly one record, the `all` policy, whether `a` / `mx` / `ip4` / `ip6` / `a:` cover the MX addresses; `include` / `redirect` are named, not expanded), DKIM at common selectors with key type and size, DMARC policy and alignment, MTA-STS (the policy is fetched from `https://mta-sts.<domain>/.well-known/mta-sts.txt` and its `mx:` lines checked against the real MX hosts), TLS-RPT and client SRV records. Null MX and domains without MX are recognized.
+  - **Chatmail relays** (MX = the domain itself and a DKIM key at selector `opendkim`) also get the records `cmdeploy dns` expects: required (A/AAAA, MX, `_mta-sts` TXT, `mta-sts` and `www` CNAME, DKIM, MTA-STS policy `enforce` listing the domain) and recommended (SPF, DMARC `p=reject; adkim=s; aspf=s`, CAA `letsencrypt.org`, `_adsp`, the four SRV records), as counts with what is missing. Other domains don't get this block.
+  - `/dns chatmail.uk MX` - one record type with TTL and CNAME chain; `/dns 213.165.89.146` - reverse DNS (PTR). Types: A, AAAA, CNAME, MX, NS, TXT, SOA, CAA, SRV, PTR, DS, DNSKEY, TLSA, HTTPS, SVCB; `ANY` is refused (RFC 8482).
+  - `@1.1.1.1` / `@dns.google` asks that resolver (public addresses only); `@auth` asks the zone's authoritative name server, bypassing caches - as `cmdeploy` does - e.g. right after changing records.
+  - Reports run three at a time and the rest wait in a queue (up to 50, a spam guard); answers are cached for 5 minutes. The MTA-STS policy request goes only to a public address (checked before connecting, then pinned), without redirects, at most 64 KB.
+- **`dnspython`** is now an explicit dependency (it was already installed by aiortc).
+
+### Changed
+- **`/ip`**: host names from reverse DNS are shown in Unicode (`кц.рф` rather than `xn--j1ay.xn--p1ai`); a host name lookup ends with a `/dns <name>` hint, and `/dns` reports with an `/ip` hint.
+
 ## 2.31.0
 
 ### Added
