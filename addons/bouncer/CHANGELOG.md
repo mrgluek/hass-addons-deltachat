@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.30.0
+
+### Added
+- **Open Ports in `/ip`**: IP lookups now also show what Shodan InternetDB (free, no key) knows about the address: open ports with service names (`22 SSH`, `443 HTTPS`, `1194 OpenVPN`, ...), software from CPEs (`nginx 1.18.0`), Shodan tags (`tor`, `vpn`, `proxy`, `cloud`, `self-signed` ...), known CVEs by software version, and the host names Shodan saw when ipinfo has none. Two hint lines: **VPN / proxy / Tor ports** (IPsec, OpenVPN, L2TP, PPTP, WireGuard, SOCKS, HTTP proxy, Shadowsocks, Tor) and **router management ports** (TR-069, MikroTik Winbox, UPnP - a home / office router). These are hints, not verdicts: the data is a snapshot of Shodan's periodic scans (can be weeks old and miss ports), only shows servers on the address itself - a VPN user's own address looks like any home connection - and IPv6 is rarely scanned. A link to the Shodan host page is added when ports were found.
+
 ## 2.29.0
 
 ### Added
