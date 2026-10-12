@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.31.0
+
+### Added
+- **Host Names in `/ip`**: `/ip chatmail.uk` (also a link like `/ip https://delta.chat/en/`, `host:port`, or an internationalized name like `пример.рф`) resolves the name with the bot's DNS and runs the full IP lookup on its first public address - IPv4 first, since Shodan rarely scans IPv6. The other addresses are listed on an "also:" line to check separately. When the name points to a CDN (Cloudflare, Akamai, Fastly, CDN77, Imperva, or Shodan's `cdn` tag) the reply says that this is the CDN's address, not the real server. Replying `/ip` to a message now falls back to the host of its first link when there is no IP address, block or AS in it; bare words with dots ("v2.0") and e-mail addresses are not taken for names. Names resolving only to private addresses, or not at all, get a clear error.
+
 ## 2.30.0
 
 ### Added
