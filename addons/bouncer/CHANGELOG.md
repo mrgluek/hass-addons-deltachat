@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.32.1
+- Upstream update to version 2.32.1.
+
 ## 2.32.0
 
 ### Added
