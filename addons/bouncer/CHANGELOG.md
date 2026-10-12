@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.29.0
+
+### Added
+- **IP / Network / AS Lookup (`/ip`)**: `/ip <address>`, `/ip <prefix>` (e.g. `84.64.0.0/13`) or `/ip AS<number>` (also `/ip 5378`). Reply `/ip` to a message to check the first public IP address, block or AS number in it - a log line like `10.0.0.5 -> 84.65.49.143` gives the public one. An IP shows city / region / country, organization and AS, host name, time zone and its announced BGP prefix; a block shows the announcing AS (or the bigger announced prefix it belongs to), more specific announcements, country and registry allocation; an AS shows holder, country and its announced prefixes, largest first. Links to the matching ipinfo.io pages are included. Data: ipinfo.io for IPs, RIPEstat (free, no key, global BGP data) for prefixes and AS numbers - ipinfo's ASN and IP-range APIs are paid only.
+- **`IPINFO_TOKEN`** (optional, `.env`): tried first for IP lookups, then no token, then the free Lite API (country + AS, unlimited). ipinfo's current free token only gives country-level data, so the tokenless endpoint (city level, rate-limited) stays in use; a paid token adds VPN / proxy / Tor / hosting flags.
+- Available to everyone with one global queue: one lookup every 15 seconds (both services rate-limit the bot's IP), at most 5 waiting - more are refused with "try again in a minute". Answers are cached for an hour and a cached answer is sent right away.
+
 ## 2.28.0
 
 ### Added
