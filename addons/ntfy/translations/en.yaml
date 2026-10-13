@@ -1,7 +1,10 @@
 configuration:
+  auto_server:
+    name: "Select closest server automatically"
+    description: "Optional. If no Chatmail QR and no Email/Password is set, the core picks the closest available Chatmail server automatically (and adds more relays later)."
   chatmail_qr:
     name: "Chatmail QR / URI"
-    description: "DCACCOUNT:... invite URI or QR code string (leave empty if using Email/Password)."
+    description: "DCACCOUNT:... invite URI or QR code string. Optional: leave empty to use the closest server automatically (or Email/Password)."
   email:
     name: "Email Address"
     description: "Email address for the bot (leave empty if using Chatmail QR)."

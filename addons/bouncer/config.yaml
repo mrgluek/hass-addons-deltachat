@@ -19,7 +19,8 @@ ports:
 ports_description:
   8080/tcp: "Channel preview & RSS web service (optional direct external access)"
 options:
-  chatmail_qr: "dcaccount:https://chat.gluek.info/new"
+  auto_server: true
+  chatmail_qr: ""
   email: ""
   password: ""
   mail_server: ""
@@ -38,6 +39,7 @@ options:
   call_echo_max_seconds: 300
   call_echo_max_concurrent: 2
 schema:
+  auto_server: "bool?"
   chatmail_qr: "str?"
   email: "str?"
   password: "password?"

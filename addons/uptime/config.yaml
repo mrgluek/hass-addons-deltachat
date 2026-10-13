@@ -19,7 +19,8 @@ ports:
 ports_description:
   8080/tcp: "Web status dashboard (optional direct access)"
 options:
-  chatmail_qr: "dcaccount:https://chat.gluek.info/new"
+  auto_server: true
+  chatmail_qr: ""
   email: ""
   password: ""
   mail_server: ""
@@ -31,6 +32,7 @@ options:
   display_name: "Uptime Bot"
   status_text: "Monitors websites and servers"
 schema:
+  auto_server: "bool?"
   chatmail_qr: "str?"
   email: "str?"
   password: "password?"

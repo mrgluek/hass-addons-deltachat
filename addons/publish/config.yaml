@@ -11,7 +11,8 @@ startup: "services"
 boot: "auto"
 init: false
 options:
-  chatmail_qr: "dcaccount:https://chat.gluek.info/new"
+  auto_server: true
+  chatmail_qr: ""
   email: ""
   password: ""
   mail_server: ""
@@ -33,6 +34,7 @@ options:
   display_name: "Publish Bot"
   status_text: "Publishes blog posts directly to Git/Astro via Delta Chat"
 schema:
+  auto_server: "bool?"
   chatmail_qr: "str?"
   email: "str?"
   password: "password?"

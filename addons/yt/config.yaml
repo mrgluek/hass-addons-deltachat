@@ -11,7 +11,8 @@ startup: "services"
 boot: "auto"
 init: false
 options:
-  chatmail_qr: "dcaccount:https://chat.gluek.info/new"
+  auto_server: true
+  chatmail_qr: ""
   email: ""
   password: ""
   mail_server: ""
@@ -23,6 +24,7 @@ options:
   display_name: "YT Bot"
   status_text: "Downloads media, audio and music via Delta Chat"
 schema:
+  auto_server: "bool?"
   chatmail_qr: "str?"
   email: "str?"
   password: "password?"

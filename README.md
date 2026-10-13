@@ -59,8 +59,8 @@ Click the My Home Assistant badge above, or use this button:
 Each bot includes a built-in setup wizard in its **Configuration** tab in Home Assistant:
 
 1. **Install the Bot**: Choose the desired bot and click **Install**.
-2. **Configure Credentials**: Open the **Configuration** tab. You can connect your bot using either:
-   - **Chatmail QR / URI** *(Recommended)*: Paste a `DCACCOUNT:...` invite string or QR text from any Chatmail server into the `chatmail_qr` field.
+2. **Configure Credentials**: Open the **Configuration** tab. **This step is optional**: with `auto_server` enabled (default) and the fields below left empty, the Delta Chat core picks the closest available Chatmail server by itself (it probes its built-in server list over TCP and later adds more relays). To choose a server yourself, use either:
+   - **Chatmail QR / URI**: Paste a `DCACCOUNT:...` invite string or QR text from any Chatmail server into the `chatmail_qr` field.
    - **Standard E-mail**: Enter `email` and `password` (and optional IMAP/SMTP server/port if using custom domains).
 3. **Set Admin & Profile**:
    - `admin_email`: Your personal Delta Chat email address.

@@ -81,6 +81,7 @@ if not has_account:
     chatmail_qr = options.get("chatmail_qr", "").strip()
     email = options.get("email", "").strip()
     password = options.get("password", "").strip()
+    auto_server = options.get("auto_server", True)
     
     if chatmail_qr:
         print("Initializing Delta Chat account from Chatmail QR / URI...")
@@ -132,6 +133,40 @@ if not has_account:
             res = subprocess.run(["python3", "bot.py", "-c", "/data", "init", email, password])
             if res.returncode == 0:
                 has_account = True
+    elif auto_server:
+        # No QR and no credentials: let the core pick the relay. Since core 2.61,
+        # init_transports() probes the built-in candidate relays with a TCP connect
+        # and configures the first that answers (i.e. the closest one); the core then
+        # adds further relays in the background.
+        print("Initializing Delta Chat account on the closest available server...")
+        try:
+            import threading
+            from deltachat2 import IOTransport, Rpc
+            with IOTransport(accounts_dir=accounts_dir) as trans:
+                rpc = Rpc(trans)
+                accid = rpc.add_account()
+                rpc.set_config(accid, "bot", "1")
+                done_event = threading.Event()
+                def drain_events():
+                    # Keep the core's event queue empty while it configures
+                    while not done_event.is_set():
+                        try:
+                            rpc.get_next_event()
+                        except Exception:
+                            break
+                threading.Thread(target=drain_events, daemon=True).start()
+                try:
+                    rpc.init_transports(accid, None)
+                finally:
+                    done_event.set()
+                if rpc.is_configured(accid):
+                    has_account = True
+                else:
+                    # Don't leave a half-created account behind for the next attempt
+                    rpc.remove_account(accid)
+        except Exception as e:
+            print(f"Automatic server selection failed: {e}", flush=True)
+
     
     if not has_account:
         print("\n" + "="*60, flush=True)
@@ -142,6 +177,7 @@ if not has_account:
         print("  2. Enter either:", flush=True)
         print("     - 'chatmail_qr': Your Chatmail QR string (DCACCOUNT:...)", flush=True)
         print("     - 'email' & 'password': Your standard mail credentials", flush=True)
+        print("     - or enable 'auto_server' to pick the closest server automatically", flush=True)
         print("  3. Click Save and Restart the add-on.", flush=True)
         print("="*60 + "\n", flush=True)
         while True:
