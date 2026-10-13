@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.2
+
+### Fixed
+- **Every CMPing Check Failed With `TypeError: sequence item 0: expected str instance, NoneType found`**: the bundled `cmping` read the account address via `get_config("addr")`, which returns nothing on core 2.61+ (multi-transport). `cmping` is bumped to a build that reads `configured_addr` first.
+
 ## 2.32.1
 - Upstream update to version 2.32.1.
 
