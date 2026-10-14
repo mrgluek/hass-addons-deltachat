@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.33.1
+
+### Fixed
+- **`/dchanneladd` Catalogued the Wrong Chat**: when the bot had joined a channel before (its chat already existed), the join worker found no new chat and fell back to the 1:1 chat with the channel owner, registered that as the channel and reported success - the web preview and RSS stayed empty forever. The worker now uses the chat id returned by `secure_join` (the channel chat itself) and refuses to catalogue a private chat for a group/channel link.
+- **Pending Join Reported as Joined**: the bot only becomes a channel member once the owner's device answers the handshake. `/dchanneladd` now checks membership: if the join is not done after 30 seconds it says so, keeps the entry (unlisted) so posts are cached as soon as they arrive, watches for 30 more minutes and reports when the join completes (or that it is still pending). The recent posts that a channel join delivers are backfilled into the web preview once the bot is a member.
+- **Re-added Channel Kept Old Visibility**: adding a channel that had been removed from the catalog revived it with its old public flag although the reply said "unlisted"; it now takes the new (unlisted) visibility. A channel that was not removed keeps the visibility the admin set.
+
 ## 2.33.0
 
 ### Added
