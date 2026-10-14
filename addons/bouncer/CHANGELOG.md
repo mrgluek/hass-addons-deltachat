@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.33.0
+
+### Added
+- **WHOIS / RDAP (`/whois`)**: `/whois <domain | IP | prefix | AS>`, or reply `/whois` to a message (its first address, AS or link).
+  - **Domains, any TLD**: RDAP where the TLD has it (.com, .net, .org, .info, .cc, .xyz, .uk, .app, most new gTLDs - the server comes from IANA's RDAP bootstrap list), classic WHOIS on port 43 otherwise (.ru, .su, .рф, .io, .me, .de, .eu, .co ... - the server named by whois.iana.org); if RDAP is down the port-43 server is tried too. Both are shown in the same fields: registrar, created / updated / expires (⚠️ under 30 days left, ❌ expired), `free-date` for .ru / .рф, status, name servers, DNSSEC, the registrar's abuse contact, and the registrant's organization / country when the registry publishes them ("not public" when redacted). A name the registry does not know is reported as not registered.
+  - **Subdomains** are looked up as their registered domain, found with the ICANN section of the Public Suffix List (downloaded daily, a copy kept in `./data/` for when publicsuffix.org is unreachable): `mail.chatmail.uk` -> `chatmail.uk`, `x.example.msk.ru` -> `example.msk.ru`. A TLD or public suffix (`/whois ru`, `/whois co.uk`) shows who runs the zone from IANA's root database.
+  - **IP addresses, prefixes and AS numbers** go to the regional registry's RDAP (RIPE NCC, ARIN, APNIC, LACNIC, AFRINIC): block and its name, type, holder (the registrant, not an admin contact), country, dates and the **abuse contact** - where to report an address (ipinfo has this only on Enterprise).
+  - Registries such as tcinet.ru and DENIC block clients that query too often, so one server is asked at most every 5 seconds (different servers in parallel); three lookups run at a time, the rest wait in a queue (up to 50); answers are cached for an hour.
+- **`/dig`**: alias of `/dns`.
+
+### Changed
+- **Commands Work In Any Case**: `/DNS`, `/Ip`, `/HELP`, `/WhoIs` ... now work like their lower-case form - deltachat2 matched the command word exactly. Only the command word is compared case-insensitively; the arguments stay as typed.
+- `/ip`, `/dns` and `/whois` point to each other in their replies.
+
 ## 2.32.2
 
 ### Fixed
