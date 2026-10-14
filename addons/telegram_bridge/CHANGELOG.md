@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.27.1
+
+- **`/status` Busiest Chats**: Channel names are now shown even when chat details can't be read from the core, and shares are computed against all messages relayed in the last 24 hours instead of only the top 5.
+
 ## 2.27.0
 
 - **`/status` Shows Send Load for Capacity Planning**: A new **Send load** section replaces the queue worker list and the list of all channels (only the channel/group counts remain). It shows what is waiting right now (group messages, channel events, ETA), how many bridge messages the Delta Chat core has not sent yet and whether channel posts are held back, sends this hour / last 24h (group vs channel) / last 7 days as a share of the send limit, time spent waiting at the limit, the largest backlog, the busiest chats, and a 🟢/🟡/🔴 verdict on whether the bot is running out of capacity.
