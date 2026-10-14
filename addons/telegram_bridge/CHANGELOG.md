@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.29.0
+
+- **Channel Name and Avatar Changes Are Synced**: When a Telegram channel (or a group bridged via the Userbot) changes its title or photo, the bridge used to relay the service message as a post. It had no text or media, so subscribers got an empty message with only the `t.me` link. Now a new title renames the Delta Chat chat, a new photo replaces its avatar and a removed photo clears it, and the Delta Chat core shows its usual "name/image changed" notice. Other service messages (pinned posts, video chats, etc.) are skipped instead of arriving as empty links.
+
 ## 2.28.0
 
 - **`/transports` Shows the Relay Actually Used for Sending**: Since core 2.61 the core sends through the relay that last worked and switches only when it cannot connect, so the main address (`configured_addr`) says nothing about where mail goes out. `/transports` now reads the sending order from the core (`smtp_success`) and lists the current sending relay first, shows the core's send queue (waiting messages and retries) and the outgoing status, and per relay the incoming status, when the last message arrived, mailbox storage usage (⚠️ from 80%) and when it was added. The core database is opened read-only.
