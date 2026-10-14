@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.35.0
+
+### Added
+- **New Group (`/newgroup <name>`)**: creates a new group with the bot in it and replies with its join link, like Ntfy Bot's command (without its "Share this link…" line). Without a name it shows the usage. Anyone can use it, with a 1-minute cooldown per sender (admins are exempt) so one user cannot make the bot create many groups.
+- **No Double Groups with Ntfy Bot**: in a group where Ntfy Bot is a member, plain `/newgroup` is left to Ntfy Bot; `/newgroup@bouncer` still reaches this bot. Ntfy Bot is recognized by address, not display name (anyone can call themselves "Ntfy Bot"); `NTFY_BOT_ADDRS` takes full addresses or local parts, default `ntfydcbot`, which matches it on every relay.
+- **MIT License**: the project is now licensed under MIT (`LICENSE`).
+
 ## 2.34.0
 
 - **`/transports` Shows the Relay Actually Used for Sending**: Since core 2.61 the core sends through the relay that last worked and switches only when it cannot connect, so the main address (`configured_addr`) says nothing about where mail goes out. `/transports` now lists relays in the order the core tries them, with the current sending relay first, shows the core's send queue (waiting messages and retries) and outgoing status, and per relay the incoming status, when the last message arrived, mailbox storage usage (⚠️ from 80%) and when it was added. The sending order and queue are read from the core's account database (read-only); the report is built by the shared `transports_view.py`.
