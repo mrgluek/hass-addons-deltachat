@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.11.1
+
+- **User-Agent No Longer Contains "Bot"**: HTTP checks now send `Delta Chat Uptime Monitor/<version> (+https://git.gluek.info/gluek/deltachat_uptime)` instead of `DeltaChat-Uptime-Bot/...`. Hiddify Manager (and other services that block crawlers) answered `400 Bad Request` to any User-Agent containing "bot", so working subscription links showed as down while they opened fine in a browser.
+
 ## 2.11.0
 
 - **`/transports` Shows the Relay Actually Used for Sending**: Since core 2.61 the core sends through the relay that last worked and switches only when it cannot connect, so the main address (`configured_addr`) says nothing about where mail goes out. `/transports` now lists relays in the order the core tries them, with the current sending relay first, shows the core's send queue (waiting messages and retries) and outgoing status, and per relay the incoming status, when the last message arrived, mailbox storage usage (⚠️ from 80%) and when it was added. The sending order and queue are read from the core's account database (read-only); the report is built by the shared `transports_view.py`.
