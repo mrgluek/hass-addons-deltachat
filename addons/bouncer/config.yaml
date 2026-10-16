@@ -61,7 +61,7 @@ schema:
   ntfy_bot_addrs: "str?"
   mention_reply: "bool?"
   username_bot_addrs: "str?"
-  username_lookup_url: "url?"
+  username_lookup_url: "str?"
   base_url: "str?"
   call_echo: "bool?"
   call_echo_who: "list(everybody|contacts)?"
