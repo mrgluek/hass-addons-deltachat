@@ -44,6 +44,15 @@ configuration:
   ntfy_bot_addrs:
     name: "Адреса Ntfy Bot"
     description: "Адреса или локальные части адресов Ntfy Bot через запятую (по умолчанию ntfydcbot). В группах с Ntfy Bot простую команду /newgroup выполняет он."
+  mention_reply:
+    name: "Ответы на @упоминания"
+    description: "Пересылать сообщения группы, начинающиеся с @Ник, ответом на последнее сообщение Ника, чтобы он получил уведомление."
+  username_bot_addrs:
+    name: "Адреса Username Bot"
+    description: "Адреса или локальные части адресов Username Bot через запятую (по умолчанию usernamebot)."
+  username_lookup_url:
+    name: "URL поиска ников"
+    description: "Веб-сервис Username Bot для поиска ников людей, которых нет в группе (по умолчанию https://deltachat.id)."
   base_url:
     name: "Базовый веб-URL"
     description: "Публичный базовый адрес для предпросмотра каналов и RSS лент (например, https://dc.yourdomain.com или https://my-ha.duckdns.org:8080)."

@@ -44,6 +44,15 @@ configuration:
   ntfy_bot_addrs:
     name: "Ntfy Bot Addresses"
     description: "Comma-separated addresses or local parts of Ntfy Bot (default: ntfydcbot). In groups with Ntfy Bot, plain /newgroup is left to it."
+  mention_reply:
+    name: "@Mention Replies"
+    description: "Resend group messages starting with @Nick as a reply to Nick's last message, so Nick gets a notification."
+  username_bot_addrs:
+    name: "Username Bot Addresses"
+    description: "Comma-separated addresses or local parts of Username Bot (default: usernamebot)."
+  username_lookup_url:
+    name: "Username Lookup URL"
+    description: "Username Bot web service for looking up nicks of people who are not in the group (default: https://deltachat.id)."
   base_url:
     name: "Base Web URL"
     description: "Public base URL for channel preview pages and RSS feeds (e.g. https://dc.yourdomain.com or https://my-ha.duckdns.org:8080)."

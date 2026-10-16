@@ -10,6 +10,7 @@
 - 📇 **Web Profile Cards & Avatars**: Dynamic endpoints (`/{username}/og.png`, `/{username}/avatar.svg`, and `/{username}/card`) for visual badges, QR codes, and web verification.
 - ⚡️ **Group Chat Auto-Binding**: Use `/username myname` directly inside any group chat — the bot instantly generates the group's invite URL without manual link pasting.
 - 🔀 **HTTP 307 Temporary Redirect**: Guarantees browsers and proxies always fetch the newest invite link without aggressive caching.
+- 🤝 **Lookup API for Bots (`GET /api/username/<name>`)**: JSON with the username, its type, display name, short link and `i.delta.chat` invite link, or 404 for an unclaimed name. Bouncer Bot uses it to point people to a mentioned user who is not in the group. Shares the 10 requests/minute per IP limit with profile pages.
 - 🌐 **Web Landing Page**: Dark-mode glassmorphism interface on `GET /` displaying bot description, QR code, and interactive command hints.
 
 ## Configuration

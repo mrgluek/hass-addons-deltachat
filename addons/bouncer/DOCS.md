@@ -14,6 +14,7 @@
 - 🔐 **Join Approval Workflows**: Private groups (`🔐`) require approvals from existing members via dynamic `/approve<ID>` commands.
 - 👋🏻 **Custom Welcome Messages (`/welcome`)**: Configurable greetings for new members joining groups with common chat statistics.
 - 🔗 **Invite Link & QR Code (`/invite`)**: Generate SecureJoin invite links and QR codes directly in chat.
+- 🔔 **@Mentions With Notifications**: Delta Chat has no real mentions, so a group message that starts with `@Nick` is sent again by the bot as a reply to Nick's last message in the chat, under the author's name. A reply to your own message is what makes Delta Chat notify you, also in a muted chat. If nobody in the group has that nick and Username Bot is a member, the author gets the person's invite link privately.
 - ➕ **New Group (`/newgroup <name>`)**: Create a new group with the bot in it and get its join link. Anyone can use it, with a 1-minute cooldown per sender (admins are exempt). In a group where Ntfy Bot is a member, plain `/newgroup` is left to Ntfy Bot so one command does not create two groups (`/newgroup@bouncer` still works).
 - 🔍 **Member Search (`/search <query>`)**: Find group members across active transports by email or substring.
 - 📬 **Relay Check (`/relays`)**: Scan group members using standard webmail providers (Yandex, Mail.ru, Gmail, etc.).
@@ -46,6 +47,9 @@ In the **Configuration** tab:
 4. **Lookups & Integrations (Optional)**:
    - `virustotal_api_key`: Free API key from VirusTotal (virustotal.com) for `/virus` URL and file scanning.
    - `ipinfo_token`: Optional [ipinfo.io](https://ipinfo.io) token for `/ip`. `/ip` works without it; a paid token adds VPN / proxy / Tor / hosting flags.
+   - `mention_reply` *(default: on)*: Resend `@Nick` messages as replies so the mentioned member gets a notification.
+   - `username_bot_addrs`: Addresses of Username Bot, comma-separated full addresses or local parts (default `usernamebot`).
+   - `username_lookup_url`: Username Bot web service used to look up nicks of people not in the group (default `https://deltachat.id`).
    - `ntfy_bot_addrs`: Addresses of Ntfy Bot, comma-separated full addresses or local parts (default `ntfydcbot`). In groups where one of them is a member, plain `/newgroup` is left to Ntfy Bot.
 
 5. **Echo Calls (Optional)**:
