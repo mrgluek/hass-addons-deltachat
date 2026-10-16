@@ -126,29 +126,55 @@ def get_upstream_changelog(bot_repo: str) -> str:
 
     return ""
 
-def extract_changelog_section(changelog_text: str, version: str) -> str:
-    if not changelog_text:
-        return ""
-    lines = changelog_text.splitlines()
-    header_re = re.compile(rf'^##\s*\[?{re.escape(version)}\]?(?:\s*-\s*\S+)?', re.IGNORECASE)
-    next_header_re = re.compile(r'^##\s+')
+def parse_version(version: str):
+    """Return the version as a tuple of ints for comparison, or None if it is not numeric."""
+    try:
+        return tuple(int(p) for p in str(version).strip().split("."))
+    except ValueError:
+        return None
 
-    found = False
-    section_lines = []
-    for line in lines:
-        if not found:
-            if header_re.match(line):
-                found = True
-                continue
-        else:
-            if next_header_re.match(line):
-                break
-            section_lines.append(line)
+# A release heading in a bot changelog: "## 1.2.3" or "## [1.2.3] - 2026-10-16"
+VERSION_HEADER_RE = re.compile(r'^##\s*\[?(\d+(?:\.\d+)*)\]?(?:\s*-.*)?\s*$')
 
-    return "\n".join(section_lines).strip()
+def extract_changelog_sections(changelog_text: str, old_version: str, new_version: str) -> list:
+    """Return [(version, notes)] for every upstream section with old_version < version <= new_version,
+    newest first. If old_version is not a usable version, only new_version's section is returned."""
+    new_t = parse_version(new_version)
+    old_t = parse_version(old_version)
+    if not changelog_text or new_t is None:
+        return []
 
-def sync_addon_version(addon_dir: str, new_ver: str, bot_repo: str = "") -> bool:
-    addon_path = os.path.join(ADDONS_DIR, addon_dir)
+    sections = {}
+    current = None
+    for line in changelog_text.splitlines():
+        m = VERSION_HEADER_RE.match(line)
+        if m:
+            current = m.group(1)
+            sections.setdefault(current, [])
+        elif re.match(r'^##\s+', line):
+            current = None  # e.g. "## [Unreleased]": not a release, skip its body
+        elif current is not None:
+            sections[current].append(line)
+
+    result = []
+    for ver, body in sections.items():
+        t = parse_version(ver)
+        if t is None or t > new_t:
+            continue
+        if old_t is not None and t <= old_t:
+            continue
+        if old_t is None and t != new_t:
+            continue
+        result.append((ver, "\n".join(body).strip()))
+    result.sort(key=lambda item: parse_version(item[0]), reverse=True)
+    return result
+
+def has_changelog_entry(ch_content: str, version: str) -> bool:
+    # Anchored match so "## 2.1" is not mistaken for "## 2.12"
+    return re.search(rf'^##\s*\[?{re.escape(version)}\]?(?:\s|$)', ch_content, re.M) is not None
+
+def sync_addon_version(addon_dir: str, new_ver: str, bot_repo: str = "", addons_dir: str = None) -> bool:
+    addon_path = os.path.join(addons_dir or ADDONS_DIR, addon_dir)
     cfg_path = os.path.join(addon_path, "config.yaml")
     df_path = os.path.join(addon_path, "Dockerfile")
     ch_path = os.path.join(addon_path, "CHANGELOG.md")
@@ -156,9 +182,10 @@ def sync_addon_version(addon_dir: str, new_ver: str, bot_repo: str = "") -> bool
     if not os.path.isfile(cfg_path):
         return False
 
-    # 1. Update config.yaml
+    # 1. Update config.yaml (remember the old version to know which changelog sections are new)
     with open(cfg_path, "r", encoding="utf-8") as f:
         cfg_content = f.read()
+    old_ver = str((yaml.safe_load(cfg_content) or {}).get("version", ""))
     updated_cfg = re.sub(r'version:\s*["\']?[^"\'\n]+["\']?', f'version: "{new_ver}"', cfg_content)
     with open(cfg_path, "w", encoding="utf-8") as f:
         f.write(updated_cfg)
@@ -171,17 +198,25 @@ def sync_addon_version(addon_dir: str, new_ver: str, bot_repo: str = "") -> bool
         with open(df_path, "w", encoding="utf-8") as f:
             f.write(updated_df)
 
-    # 3. Prepend CHANGELOG.md with real upstream changelog
+    # 3. Prepend CHANGELOG.md with every upstream section newer than the old add-on version,
+    #    so intermediate releases are not lost when the bot jumps several versions at once
     if os.path.isfile(ch_path):
         with open(ch_path, "r", encoding="utf-8") as f:
             ch_content = f.read()
-        if f"## {new_ver}" not in ch_content and f"## [{new_ver}]" not in ch_content:
+        if not has_changelog_entry(ch_content, new_ver):
             upstream_text = get_upstream_changelog(bot_repo) if bot_repo else ""
-            notes = extract_changelog_section(upstream_text, new_ver)
-            if notes:
-                entry = f"## {new_ver}\n\n{notes}\n\n"
-            else:
-                entry = f"## {new_ver}\n- Upstream update to version {new_ver}.\n\n"
+            sections = extract_changelog_sections(upstream_text, old_ver, new_ver)
+            if new_ver not in (ver for ver, _ in sections):
+                sections.insert(0, (new_ver, ""))
+            entries = []
+            for ver, notes in sections:
+                if has_changelog_entry(ch_content, ver):
+                    continue
+                if notes:
+                    entries.append(f"## {ver}\n\n{notes}\n\n")
+                else:
+                    entries.append(f"## {ver}\n- Upstream update to version {ver}.\n\n")
+            entry = "".join(entries)
 
             if ch_content.startswith("# Changelog\n"):
                 parts = ch_content.split("# Changelog\n", 1)
