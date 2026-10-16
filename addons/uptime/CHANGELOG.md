@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.13.0
+
+### Changed
+- **Peers Identified by Key Fingerprint, Not Address**: Since Delta Chat 2.61 a bot can have several relays and sends from whichever one is reachable. Peers were stored and matched by email address, so as soon as a peer switched relays (e.g. `ruptimebo@chat.gluek.info` → `ruptimebot@chatmail.uk`) its telemetry, cross-check requests and answers were dropped as coming from an "untrusted sender", although they arrived end-to-end encrypted, from the same key, in the same 1:1 chat. Each peer now stores its OpenPGP fingerprint:
+  - taken from the invite when adding a peer with `/addpeer <link>`, from an encrypted `HELLO` when a bot pairs with an `/invitepeer` token, or from the first encrypted message for existing peers;
+  - incoming peer messages are matched by fingerprint first; the stored address and 1:1 chat follow the peer, and probe targets it mirrored to this node move with it;
+  - once a key is bound, a message from the peer's address signed by another key (or unencrypted) is rejected, which is stricter than the address check before.
+- **Cross-Check Answers Matched by Chat**: Answers are expected from the 1:1 chats the request was sent to instead of from the addresses, so a peer answering via another relay is still counted.
+- **`/peers` Shows Keys, `/rmpeer` Accepts Them**: `/peers` shows the first 16 hex digits of each peer's key (or "not bound yet"). `/rmpeer` accepts the current address, the full fingerprint or a unique prefix of at least 8 hex digits.
+- **Re-adding a Known Bot**: `/addpeer <link>` for a bot whose key is already a peer updates that peer instead of creating a second entry.
+
+### Upgrade Notes
+- No action needed. Existing peers are bound to their key on their first encrypted message: in their 1:1 chat (also when they already send from a new address) or from their stored address. Peers that switched relays before this release recover on the next telemetry round (every 2 minutes).
+- All nodes should run 2.13.0: an older node still drops this node's messages once this node sends from another relay.
+
 ## 2.12.1
 
 ### Added
