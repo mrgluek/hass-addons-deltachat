@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.13.0
+
+### Added
+- **MIT License**: the project is now licensed under MIT (`LICENSE`).
+- **Invite Link in the Lookup API**: `GET /api/username/<name>` now also returns `invite_link`, the invite on `i.delta.chat` (the same link `/username` sends as the card caption; mirror domains such as `i.deltachat.id` are turned into `i.delta.chat`). Delta Chat apps open it directly, while the short link `url` goes through the browser first. Like `/username` and the profile page, it contains the address and fingerprint the user published.
+
 ## 1.11.0
 
 - **`/transports` Shows the Relay Actually Used for Sending**: Since core 2.61 the core sends through the relay that last worked and switches only when it cannot connect, so the main address (`configured_addr`) says nothing about where mail goes out. `/transports` now lists relays in the order the core tries them, with the current sending relay first, shows the core's send queue (waiting messages and retries) and outgoing status, and per relay the incoming status, when the last message arrived, mailbox storage usage (⚠️ from 80%) and when it was added. The sending order and queue are read from the core's account database (read-only); the report is built by the shared `transports_view.py`.
