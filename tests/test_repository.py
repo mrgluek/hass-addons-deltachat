@@ -112,5 +112,18 @@ class TestRepositoryStructure(unittest.TestCase):
                     self.assertIn(opt_key, en_trans["configuration"], f"{addon}: Option '{opt_key}' missing in en.yaml")
                     self.assertIn(opt_key, ru_trans["configuration"], f"{addon}: Option '{opt_key}' missing in ru.yaml")
 
+    def test_empty_defaults_pass_schema(self):
+        # Supervisor validates "" against url/email types even when the option is
+        # optional ("url?"), so an empty default fails the update with "expected a URL"
+        for addon in EXPECTED_ADDONS:
+            with open(os.path.join(ADDONS_DIR, addon, "config.yaml"), "r", encoding="utf-8") as f:
+                config = yaml.safe_load(f)
+            schema = config.get("schema", {})
+            for key, value in config.get("options", {}).items():
+                with self.subTest(addon=addon, option=key):
+                    if value == "":
+                        self.assertNotRegex(str(schema.get(key, "")), r"^(url|email)\??$",
+                                            f"{addon}: '{key}' defaults to \"\" but its schema rejects empty strings; use str?")
+
 if __name__ == "__main__":
     unittest.main()
