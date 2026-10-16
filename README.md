@@ -15,7 +15,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Home%20Assistant-Add--on-blue.svg" alt="Home Assistant Add-on" />
   <img src="https://img.shields.io/badge/arch-amd64%20%7C%20aarch64-brightgreen.svg" alt="Architectures" />
-  <img src="https://img.shields.io/badge/license-Unlicense-blue.svg" alt="Unlicense" />
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" />
 </p>
 
 ---
@@ -80,10 +80,11 @@ Each bot includes a built-in setup wizard in its **Configuration** tab in Home A
 - **Home Assistant Ingress**: Web UIs are securely embedded into the Home Assistant frontend and sidebar without requiring open host ports or router port forwarding.
 - **Pre-built Multi-Arch Containers**: Images are built for `linux/amd64` and `linux/arm64` (aarch64) and hosted on `ghcr.io/mrgluek/`.
 - **Automatic Fallback**: If `ghcr.io` images are not available, Home Assistant builds from the local `Dockerfile` by pulling from GitHub with an automatic fallback to the self-hosted Forgejo mirror at `https://git.gluek.info/gluek/`.
+- **Mail Relays**: The Delta Chat core (2.61+) chooses the relay: it sends through the one that last worked and switches to the next only if it cannot connect. `/transports` shows the relay actually used for sending, the send queue and per-relay status; `/addtransport` / `/rmtransport` add or remove relays (admin only).
 - **Persistent Data**: All account keys, SQLite databases, and configurations are safely stored in `/data`, persisting across container restarts and add-on updates.
 
 ---
 
 ## 📄 License
 
-This project is released into the public domain under [The Unlicense](LICENSE).
+This project is licensed under the [MIT License](LICENSE). The bots themselves are separate projects; see each bot's repository for its license.

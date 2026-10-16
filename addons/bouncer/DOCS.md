@@ -14,11 +14,15 @@
 - 🔐 **Join Approval Workflows**: Private groups (`🔐`) require approvals from existing members via dynamic `/approve<ID>` commands.
 - 👋🏻 **Custom Welcome Messages (`/welcome`)**: Configurable greetings for new members joining groups with common chat statistics.
 - 🔗 **Invite Link & QR Code (`/invite`)**: Generate SecureJoin invite links and QR codes directly in chat.
+- ➕ **New Group (`/newgroup <name>`)**: Create a new group with the bot in it and get its join link. Anyone can use it, with a 1-minute cooldown per sender (admins are exempt). In a group where Ntfy Bot is a member, plain `/newgroup` is left to Ntfy Bot so one command does not create two groups (`/newgroup@bouncer` still works).
 - 🔍 **Member Search (`/search <query>`)**: Find group members across active transports by email or substring.
 - 📬 **Relay Check (`/relays`)**: Scan group members using standard webmail providers (Yandex, Mail.ru, Gmail, etc.).
 - 🏓 **ChatMail Ping (`/cmping`)**: Ping mail relays (transports) to/from specified target servers using the `cmping` utility with real-time reaction progress.
 - 📞 **Echo Calls**: Call the bot from any Delta Chat app: it answers, echoes your voice back and, after you hang up, sends a call report (media path, packet loss, jitter, round trip). `/callstats` shows your recent calls.
 - 📲 **Call Test (`/cmcall`)**: Test a Delta Chat call between two relays (signaling, TURN, audio) using the `cmcall` utility.
+- 🌐 **IP / Network / AS Lookup (`/ip`)**: Location, organization / AS, announced prefix, open ports and known CVEs for an IP, block, AS number or host name (ipinfo.io, Shodan InternetDB, RIPEstat; works without a key).
+- 🧭 **DNS Lookup & Mail / Chatmail Check (`/dns`, `/dig`)**: dig-like lookups and a full report for a domain: addresses, reverse DNS, DNSSEC, MX, SPF, DKIM, DMARC, MTA-STS, TLS-RPT, plus the records `cmdeploy dns` expects for a chatmail relay.
+- 📇 **WHOIS / RDAP (`/whois`)**: Registrar, expiry dates, status and name servers for any TLD (RDAP or port-43 WHOIS); for an IP / AS the holder and abuse contact.
 - 🛡️ **VirusTotal Inspection (`/virus`)**: Check URLs and files (attachments or reply messages) against VirusTotal threat database.
 - 📡 **Server Connectivity Monitoring**: Periodic background monitoring of server connectivity with incident-based alerting.
 
@@ -39,8 +43,10 @@ In the **Configuration** tab:
 3. **Web Service & Base URL**:
    - `base_url`: Public base URL for channel preview links and RSS feeds (e.g. `https://dc.yourdomain.com` or `https://my-ha.duckdns.org:8080`).
    - If port `8080` is forwarded on your router or exposed in the add-on's network settings, channel preview links can be accessed directly from the internet.
-4. **VirusTotal (Optional)**:
+4. **Lookups & Integrations (Optional)**:
    - `virustotal_api_key`: Free API key from VirusTotal (virustotal.com) for `/virus` URL and file scanning.
+   - `ipinfo_token`: Optional [ipinfo.io](https://ipinfo.io) token for `/ip`. `/ip` works without it; a paid token adds VPN / proxy / Tor / hosting flags.
+   - `ntfy_bot_addrs`: Addresses of Ntfy Bot, comma-separated full addresses or local parts (default `ntfydcbot`). In groups where one of them is a member, plain `/newgroup` is left to Ntfy Bot.
 
 5. **Echo Calls (Optional)**:
    - `call_echo`: Answer calls with an echo (default on).

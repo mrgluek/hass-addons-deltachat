@@ -32,6 +32,8 @@ options:
   display_name: "Bouncer Bot"
   status_text: "Monitors group inactivity and manages group catalogs"
   virustotal_api_key: ""
+  ipinfo_token: ""
+  ntfy_bot_addrs: ""
   base_url: ""
   call_echo: true
   call_echo_who: "everybody"
@@ -52,6 +54,8 @@ schema:
   display_name: "str?"
   status_text: "str?"
   virustotal_api_key: "password?"
+  ipinfo_token: "password?"
+  ntfy_bot_addrs: "str?"
   base_url: "str?"
   call_echo: "bool?"
   call_echo_who: "list(everybody|contacts)?"

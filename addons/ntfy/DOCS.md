@@ -11,6 +11,8 @@ It provides a modern web interface for each topic (e.g., `http://your-ha-ip:8082
 - **Topic Web UI & Ingress**: View topic notification history and send notifications directly from the browser inside Home Assistant.
 - **JSON Stream API (`/mytopic/json`)**: Programmatic JSON streaming for automated agents or scripts (`since=all`, `poll=1`).
 - **Subscription Management**: Users subscribe/unsubscribe to topics directly in Delta Chat (`/sub <topic>`, `/unsub <topic>`, `/list`).
+- **Dedicated Groups (`/newgroup [name]`)**: Create a group chat with the bot in it and get its join link.
+- **Any Text Encoding**: Bodies that are not UTF-8 (e.g. Windows PowerShell 5.1 sends Windows-1251) are decoded by the `Content-Type` charset, UTF-8 or Windows-1251, so a notification is never rejected because of its encoding.
 
 ## Configuration
 

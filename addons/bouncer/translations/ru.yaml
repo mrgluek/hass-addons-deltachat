@@ -38,6 +38,12 @@ configuration:
   virustotal_api_key:
     name: "API ключ VirusTotal"
     description: "Бесплатный API ключ с сайта virustotal.com для проверки ссылок и файлов по команде /virus (необязательно)."
+  ipinfo_token:
+    name: "Токен ipinfo.io"
+    description: "Необязательный токен ipinfo.io для /ip. /ip работает и без него; платный токен добавляет признаки VPN / прокси / Tor / хостинга."
+  ntfy_bot_addrs:
+    name: "Адреса Ntfy Bot"
+    description: "Адреса или локальные части адресов Ntfy Bot через запятую (по умолчанию ntfydcbot). В группах с Ntfy Bot простую команду /newgroup выполняет он."
   base_url:
     name: "Базовый веб-URL"
     description: "Публичный базовый адрес для предпросмотра каналов и RSS лент (например, https://dc.yourdomain.com или https://my-ha.duckdns.org:8080)."

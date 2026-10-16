@@ -10,9 +10,11 @@
 - 📢 **Public Telegram Channels**: Bridge any public channel to a Delta Chat broadcast group.
 - ✨ **Rich Text & Formatting**: Full conversion of Telegram rich text (bold, italic, underline, strikethrough, spoiler, inline code, code blocks, blockquotes, expandable blockquotes, and links) into native Delta Chat Markdown.
 - ⭐ **Telegram Paid Media & Extended Types**: Full support for Telegram Paid Media (posts/photos/videos locked with Telegram Stars), Stories, Giveaways, Polls, Contacts, and Invoices without skipping posts.
+- 🖼️ **Channel Name & Avatar Sync**: When a bridged Telegram channel changes its title or photo, the Delta Chat chat is renamed and gets the new avatar.
 - 📜 **Historical Context**: Pre-fills newly bridged channels with the last 3 historical posts.
 - 👤 **Userbot Mode**: Bridge channels without needing administrator permissions.
 - 🛡️ **Watchdog & Auto-Reconnection**: Detects and recovers from connection hangs and polling timeouts automatically.
+- 📈 **Send Load Statistics (`/status`)**: Shows what is waiting to be sent, the core's unsent backlog, the busiest chats and hourly send statistics (kept 30 days) for capacity planning. Sends stay within the relay's rate limit.
 - 🧹 **Automatic Cleanup Worker**: Purges orphaned records and dead ghost groups.
 
 ## Configuration
