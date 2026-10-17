@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.17.0
+
+### Added
+- **Quorum Also When Only Peers See the Failure**: In 2.16.0 the vote started only when this node's own check failed, so a target this node reached but most other nodes did not (e.g. blocked in one country, broken routing) raised nothing. Now, when a peer's telemetry reports a target DOWN (a result at most 5 minutes old) that is UP here, in a `quorum` chat, the target's next regular check asks all peers and votes: most nodes cannot reach it → 🔴 DOWN; some cannot → 🟠 DEGRADED after two votes (about two telemetry rounds). Peers are asked about such a target at most once per 2 minutes, however many of them report it.
+- **Status Page**: DEGRADED monitors are shown in orange with their last vote (`🔴 RU · 🟢 DE (40ms), IT (9ms)`), the header says "N Service(s) Unreachable From Some Regions" when nothing is down but something is degraded, and a "Partial Outages" section lists recent ones (ongoing and ended, with the nodes that could not reach the target).
+- **`/events` and `/history <id>`** list partial outages too, marked as not counted as downtime. `/events` no longer says only "No incidents" when there were partial outages.
+
+### Changed
+- In quorum results the check error and the vote are separated by " — " instead of nested parentheses, e.g. `timeout — Unreachable from 🇩🇪 DE, 🇷🇺 RU; reachable from 🇮🇹 IT`.
+
 ## 2.16.0
 
 ### Added
