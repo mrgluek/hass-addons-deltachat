@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.16.0
+
+### Added
+- **Quorum Alerting (`/alertmode quorum`, default for every chat)**: Whether a target is down was decided by this node alone; peers' cross-check answers were only appended to the error text. A problem on this node's own network raised a full DOWN incident even when every other node reached the target. Now, when a target fails here (after the usual two retries and the host connectivity check), this node and its live peers vote:
+  - more than half of the voting nodes cannot reach it → 🔴 **DOWN**, an incident as before;
+  - some, but not most, cannot reach it → 🟠 **DEGRADED**: a notice in the chat ("Partial Outage"), no incident, not counted as downtime. Entered and left only after two consecutive votes, so a single flap does not notify;
+  - fewer than two voters (no live peers, no answers, monitor not shared by `/peershare`) → this node decides alone, as before.
+  Votes are per node (RU and RU2 count separately). Offline peers, peers that cannot check the target (IPv6) and peers that `/probeignore` it abstain.
+- **Who Can Reach It, in Every Alert**: Incident messages, `/list` and DEGRADED notices show the vote, e.g. `🔴 DE, RU, RU2 · 🟢 IT (196ms)`. The answers are also kept for monitors in `local` mode.
+- **`/alertmode [quorum|local]`**: Per chat. `local` keeps the previous behaviour. Without arguments it explains the current mode, how many nodes vote and the majority needed, and warns when the chat's monitors are not shared with peers.
+- **Partial outage history**: DEGRADED periods are recorded (`partial_outages`) for the status page and history in the next release.
+
+### Changed
+- **`/probeignore` Targets Abstain in Cross-Checks**: A node that ignores a target (e.g. blocked in its region) used to answer cross-checks for it with `down`. It now answers `skip`, so it does not vote.
+- **Offline Peers Are Not Asked**: Cross-checks skip peers marked offline instead of waiting for them to time out.
+- **DOWN/DEGRADED Targets Ask Peers Less Often**: While a target stays down or degraded and this node's own result does not change, peers are asked again at most every 2 minutes (every 10 minutes after the first hour), not on every check. Retries are no longer repeated every minute for DEGRADED targets.
+- `/status` shows degraded monitors and the alert mode; `/list` shows 🟠 DEGRADED.
+
+### Upgrade Notes
+- Chats switch to `quorum` automatically. Run `/alertmode local` in a chat to keep the old behaviour.
+- Quorum needs peers: with none (or none live) nothing changes. Monitors outside `/peershare` are decided locally.
+- Nodes on older versions still vote (they answer cross-checks); only the `/probeignore` abstention needs this version on the ignoring node.
+
 ## 2.15.0
 
 Ready for 1000+ monitors. Measured on de2 (148 monitors) the bot used 1.5 % of one core, and a local benchmark put the bot's own work at about 0.15 ms of CPU per check (plus 1-3 ms for a TLS handshake), so CPU is not what limits it; the changes below address what does.
