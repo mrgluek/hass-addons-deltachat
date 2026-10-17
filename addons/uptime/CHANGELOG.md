@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.14.0
+
+### Added
+- **IPv6 targets**: `/ping` and `/add` accept IPv6 addresses - `2a00::1` or `[2a00::1]` (ICMP ping), `[2a00::1]:443` (TCP; with a port the address goes in brackets, as in URLs, because `2a00::1:22` is itself a valid address). Addresses are stored normalized (compressed, lowercase). Private, link-local and loopback IPv6 addresses stay blocked.
+- **`/ping -4` / `/ping -6`**: check a name only over IPv4 / IPv6, like `ping -4/-6`. The flag is sent to the other regions too (older peers ignore it and check either family); a name without an address of that family gets "has no IPv6 address". The `/add` hint is left out, since monitors have no family setting; `/add -6` explains to add the address itself.
+
+### Fixed
+- **IPv6 address read as host:port**: `/ping 2a00:da00:f443:e900::1` was parsed as a TCP check of `2a00:da00:f443:e900:` on port 1 and failed with "Name or service not known".
+- **No IPv6 on a node is not an outage**: before connecting, the bot asks the kernel for a route to each IPv6 address (a UDP `connect()`, which sends nothing). Unroutable IPv6 addresses are dropped, so a host with A and AAAA records is checked over IPv4 instead of failing with `[Errno 101] Connect call failed ('2a00:…', 22)`. An IPv6-only target on such a node is skipped - no retries, no peer cross-check, no alert, status unchanged - and `/ping` shows ⚪ "Not checked" with the verdict of the other regions. Peers answer such requests with status `skip` (shown as ⚪). `/add` of an IPv6 target warns when this node has no IPv6.
+- **TCP error of the preferred address**: when every address of a host fails, the error of the first one (IPv4 first) is reported instead of the last one.
+- **Peer measurements of IPv6 targets**: check responses were classified as TCP whenever the target contained ":", so IPv6 ping targets were dropped as unsafe; the type now comes from the same parser as `/add`.
+
 ## 2.13.0
 
 ### Changed
