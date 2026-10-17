@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.18.0
+
+### Added
+- **`/probeignore` Accepts Hosts and Patterns**: A node that cannot reach whole groups of targets (a residential ISP blocking outgoing port 25, a domain blocked in its region) had to ignore every target one by one, exactly as written, and every new such target raised a partial outage notice again. An entry can now be:
+  - a target as shown in alerts: `https://nine.testrun.org/` (with or without the trailing slash), `dnd.wb.ru:25`;
+  - a host: `nine.testrun.org` — every target on it (HTTP, TCP ports, ping);
+  - a pattern with `*`, matched against the target, its host and its host:port (HTTP/HTTPS with their default port): `*:25` (all SMTP port checks), `*.testrun.org`, `*:443`.
+  Matching targets are no longer probed or reported by this node, and it abstains (`skip`) when peers vote on them, also for targets added later. Entries are case-insensitive; adding one reports how many mirrored targets it matched.
+
+### Changed
+- `/probeignore example.org` (no scheme) now ignores the host with all its targets instead of only `https://example.org`. Existing entries keep working.
+
 ## 2.17.2
 
 ### Fixed
