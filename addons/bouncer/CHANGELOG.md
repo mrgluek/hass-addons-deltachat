@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.37.0
+
+### Added
+- **`/host` Command**: a short lookup like the `host` tool. `/host chatmail.uk` lists the CNAME it follows (`www.x is an alias for x.`), addresses (`has address`, `has IPv6 address`) and mail servers (`mail is handled by 10 …`, sorted by preference; a null MX shows as "accepts no mail"); `/host 213.165.89.146` gives the reverse name (`… domain name pointer …`). A missing name prints `Host … not found: 3(NXDOMAIN)`, a name without any of these records says so, and a type that failed (e.g. AAAA timed out) is listed. `@1.1.1.1` and `@auth` work as in `/dns`. Asking for a record type (`/host x TXT`) points to `/dns x TXT`.
+  - `/host` runs on the `/dns` worker pool and shares its queue limit and 5-minute cache (under its own keys, so `/host` and `/dns` answers for one name do not mix).
+
 ## 2.36.0
 
 ### Added
