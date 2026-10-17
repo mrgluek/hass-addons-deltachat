@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.15.0
+
+Ready for 1000+ monitors. Measured on de2 (148 monitors) the bot used 1.5 % of one core, and a local benchmark put the bot's own work at about 0.15 ms of CPU per check (plus 1-3 ms for a TLS handshake), so CPU is not what limits it; the changes below address what does.
+
+### Changed
+- **Hung targets no longer block the queue**: a `HEAD` request that times out (or cannot connect: refused, DNS, certificate) is no longer repeated as `GET`, which held a check slot for a second full timeout. Up to 200 checks run at once instead of 50 (`CHECK_CONCURRENCY`; HTTP connection pool 250, since aiohttp counts the wait for a pooled connection against the timeout), and `docker-compose.yml` raises the open-file limit from 1024 to 8192. 300 targets that accept connections but never answer: 131 s before, 21 s now - before, they delayed every other check past its one-minute interval.
+- **Batched peer cross-checks**: failing monitors found within 5 seconds are sent to each peer in one `[UPTIME_PEER_CHECK_BATCH_REQ]` message (up to 100 targets, identical targets once), answered with one `[UPTIME_PEER_CHECK_BATCH_RESP]`; the peer runs them 20 at a time. Before, each failing target sent a message to every peer and got one back - 600 mails per peer a minute for 300 failing targets, far over the relays' 60 messages a minute. Bots announce support with `caps: ["batch_check"]` in telemetry and check messages; until a peer has announced it, it gets the old one-target requests, so mixed versions keep working. Answers are only accepted from the chat the batch went to; URLs are taken from the request, the peer's answer only fills positions; refused targets keep their position as "Target refused".
+- **Telemetry with changes first**: with more than 200 targets per peer, each message starts with the targets whose status changed since the last one and fills the rest by rotation over the whole list, so a status change reaches peers within 2 minutes even with 1000+ monitors (before: up to 10 minutes). 200 per message stays, as receivers take no more.
+- **Quiet logs**: `Check result` lines are INFO only for DOWN results and status changes, routine UP results and `Triggering N target checks` are DEBUG, and a summary is logged once a minute: `Checks in the last 60s: 148 (146 up, 2 down, 0 skipped), avg latency 87 ms, slowest … ; running now: 3`. At 1000 monitors the per-check lines alone filled Docker's 30 MB log rotation in 2-3 hours.
+- **One DB transaction per check**: the status of every monitor of a target and the local peer measurement are written together (`database.record_check_results`) instead of in 2+ transactions. Results are still written right away: deferring them would let the scheduler re-read an old `last_checked` and run the same check twice.
+
 ## 2.14.0
 
 ### Added
