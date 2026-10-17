@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.17.2
+
+### Fixed
+- **Renamed Nodes Kept Their Old Names on Peers**: Since 2.12.0 the `node_name` in a peer's messages was ignored (the sender was only identified by address then), and the stored name changed only with a new HELLO, which `/nodename` does not send. A node renamed with `/nodename` therefore stayed under its old name in votes, alerts, `/ping` and status pages of its peers. Peers are now bound to their key, so a key-verified peer's announced name (in telemetry and cross-check messages) is taken over, together with its cached measurements. It is refused if it is this node's name or another peer's name (case-insensitive), so a peer cannot pose as a different node.
+- **`/nodename` Moves This Node's Cached Measurements** to the new name and sends telemetry on the next scheduler tick, so peers see the new name within seconds instead of up to 2 minutes.
+- **Partial Outage Nodes Not Cleared**: When the nodes that could not reach a DEGRADED target stopped answering, its partial outage was updated with an empty list of nodes; the last known nodes are now kept.
+
 ## 2.17.1
 
 ### Fixed
