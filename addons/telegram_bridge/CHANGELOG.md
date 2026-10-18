@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.29.3
+
+- **Fix: `/bridge` Failed With "no column named created_at"**: The database migration that adds `created_at` to the `bridges` table used a non-constant default (`strftime('%s','now')`), which SQLite does not allow in `ALTER TABLE ADD COLUMN`. The error was silently ignored, the column was never created, and creating a bridge failed. The column is now added with a constant default and existing bridges are backfilled with the current time; new databases create it directly.
+
 ## 2.29.2
 
 - **Fix: Group Messages Dropped as "Duplicate"**: The userbot is often a member of Bot API-bridged groups too. It marked every message it saw as processed before checking whether the chat was one of its bridged channels, and that mark is shared with the Bot API handlers. When the userbot saw a group message first (it usually does), the Bot API handler skipped it as a duplicate, so only some messages of a burst reached Delta Chat. The userbot now marks only messages of channels it actually relays.
