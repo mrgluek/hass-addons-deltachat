@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.19.1
+
+### Added
+- **Why a Node Failed, in Vote Lines**: Partial outage notices, incident messages, the status page and the quorum log showed only which nodes could not reach a target (`🔴 🇮🇹 · 🟢 🇩🇪 (57ms)`), although every node already reports its error. The reason is now shown next to the node: `🔴 🇮🇹 (Timeout)`, once for all nodes when they failed the same way (`🔴 DE, RU (Timeout)`). A timeout points to the network between node and target, `Connection refused`, SSL or HTTP errors to the service itself. Long aiohttp errors are shortened (`SSL: self-signed certificate`, `Connection refused`, no `[Errno N]`), at most 60 characters.
+
+### Fixed
+- `test_batch_request_is_answered_in_one_message` failed now and then: its mock answered by call order while the checks run concurrently.
+
 ## 2.19.0
 
 ### Added
