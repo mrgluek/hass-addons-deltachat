@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.38.0
+
+### Added
+- **Paced outbox for everything the bot sends** (`outbox.py`, the module from Uptime Bot 2.19.0): chatmail relays allow each sender 60 messages a minute with a burst of 10 and answer `450 Too much mail` above it; the core retries, the retries count too, and everything after a burst arrives minutes late. Bouncer is in ~70 chats, and cmping / cmcall alerts with their live edits go to every report chat at once, on top of replies, mentions and welcome messages. Now all of it goes through one queue:
+  - **Token bucket** of 50 a minute with bursts of 5, in one sending thread.
+  - **Priorities**: cmping and cmcall monitoring alerts and their edits → replies and everything a user started (commands, reactions, mentions, welcome messages, VirusTotal reports) → background posts (auto-kick warnings, deleting used single-use invites). Same priority: arrival order.
+  - **Merging**: alert messages are queued per incident (cmcall: per event) and report chat, and the message id is read when the job runs - a first message still waiting is merged with later updates and goes out once, with the latest text, then later updates edit it. Edits of one message and reactions on one message (`⏳` → final) merge the same way.
+  - A backlog of 20+ messages is logged once a minute.
+- `dc_helpers._edit_or_send()`: edit a message, or send a new one if there is none or the edit fails - one queue job (cmping, cmcall and VirusTotal had this logic three times).
+
+### Changed
+- `dc_helpers._send()` queues and returns `None`; `wait=True` waits for the send and returns the msg_id. Used where the id is needed (VirusTotal status message, single-use invites) or a temp file is deleted right after sending (invite QR code, vCard, stickers - the core reads the file when it sends).
+- Deleting a used single-use invite for everyone (a message, too) goes through the queue at background priority.
+
 ## 2.37.0
 
 ### Added
