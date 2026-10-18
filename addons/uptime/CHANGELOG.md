@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.19.0
+
+### Added
+- **Paced outbox for everything the bot sends** (`outbox.py`): chatmail relays allow each sender 60 messages a minute with a burst of 10 and answer `450 Too much mail` above it; the core retries, the retries count too, and alerts arrive minutes late. Measured on the relay the bot sends ~2.3 messages a minute normally, but an outage across all 14 chats with 3 peers came to an estimated 80-115 in the first minutes (new incidents, live edits every 15-60 s, cross-checks both ways). Now every message, edit and reaction goes through one queue:
+  - **Token bucket** of 50 a minute with bursts of 5 (headroom for what the core sends itself), in one sending thread.
+  - **Priorities**: alerts (new and resolved incidents, status changes, SSL, stale reminders, partial outage notices, admin notifications) → command replies and reactions → duration-only incident refreshes → peer protocol (cross-checks, hello) → telemetry. Same priority: arrival order.
+  - **Merging**: a job with the same key as a waiting one replaces it, keeps its place in line, takes the more urgent priority, and goes out once with the newest content - the incident message (by incident), the reaction on one message (`⏳` still waiting is replaced by `☑️`), telemetry to one peer.
+  - **Expiry**: cross-check requests and answers that waited past the time the other side waits for them are dropped without using a send token; queued telemetry expires after 2 minutes (the next one replaces it anyway).
+  - The minute summary in the log shows a backlog: `outbox waiting 12 (alert 2, peer 10)`.
+
+### Changed
+- **Incident messages are queued per incident**: the message id is read when the job runs, so an incident whose first message is still waiting gets one message with all monitors that failed meanwhile; an outage that ended before its first message went out still gets the resolved message (before: nothing, if the first send had failed). Telemetry bookkeeping (which status changes a peer already got) now happens only after the message really went out.
+- **Live incident edits every 5 minutes** (hourly after a day) instead of every 15 s / 30 s / 1 min in the first hour. Status changes are still edited in right away, as alerts; the message shows the start time.
+
+## 2.18.1
+
+### Fixed
+- **Ping Checks DOWN on Nodes Without Raw Sockets**: On hosted containers without `CAP_NET_RAW` and without a `ping` binary (seen on the Botkeep.cloud node), aioping could not open its raw socket and the fallback failed with `[Errno 2] No such file or directory: 'ping'`, so every ping target was reported DOWN from that region. Ping now falls back to an unprivileged ICMP datagram socket ("ping socket", allowed by `net.ipv4.ping_group_range`, which Docker opens to all groups), which needs neither. Works over IPv4 and IPv6.
+- **No Way to Ping Is "Not Checked", Not DOWN**: If a node has no raw socket, no ping socket and no `ping` binary, its ping checks return "Ping not available on this node" and are skipped like IPv6 targets on a node without IPv6 (⚪ in `/ping`, abstains in peer votes, no alert). A warning is logged once.
+
 ## 2.18.0
 
 ### Added
