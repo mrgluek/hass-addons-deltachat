@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0
+
+- **Paced sending below the relay's limit**: chatmail relays allow each sender 60 messages a minute with a burst of 10 and answer `450 Too much mail` above it; the core retries, the retries count too, and everything after a burst arrives minutes late. A notification goes to every subscribed chat (up to 5 per topic today), so a publisher posting several at once could get there. All sends - notifications, daily stats, command replies - now go through one queue (`outbox.py`, the same module as in Uptime Bot): 50 a minute with bursts of 5, in one sending thread.
+  - **Priorities**: ntfy priority 4-5 notifications first, then command replies, then priority 3 (default), then 1-2 and the daily stats. Within a priority in arrival order, so a topic's notifications keep their order in a chat. Notifications are never dropped or merged.
+  - **Attachments**: the temp file of an uploaded or downloaded attachment is deleted after its last queued send (the core copies it when it sends), not right after the HTTP request. A temp file of a notification without subscribers is now deleted too (it was left behind).
+  - The HTTP request returns as soon as the notification is queued. A backlog of 20+ messages is logged once a minute with an estimate of how long it takes to send.
+
 ## 1.3.2
 
 - **Shorter `/newgroup` Reply**: dropped the "Share this link or scan the QR code…" line; the reply is now just the confirmation and the join link.
