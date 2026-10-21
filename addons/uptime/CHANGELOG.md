@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.21.0
+
+### Added
+- **Unstable Nodes Do Not Flood Chats with Partial Outages**: A node whose own network has trouble fails many targets at once that the other nodes reach, and each became a separate "Partial Outage" notice: in one week a home node caused 97 and another node 104, mostly in bursts of 14–29 targets within two minutes. A node that fails 5 or more targets within 5 minutes alone (at least two other nodes reach them, and DOWN is the minority) is now marked unstable for 10 minutes, extended while it keeps failing. Its DOWN votes abstain, partial outage notices it alone caused that are still waiting to be sent are dropped (and their "resolved" notices too), and vote lines show `⚪ RU (node network unstable, not counted)`. The admin gets one notice when a node becomes unstable and one when it is stable again. Outages that most nodes see are reported as before.
+
+### Fixed
+- **Misleading IPv6 Error for Dual-Stack Hosts**: When all connection attempts of an HTTP check failed, aiohttp reported only the last one, often an IPv6 address (`Connect call failed ('2a06:98c1:...', 443)`), so a node looked like it had an IPv6 problem while IPv4 had failed as well. The check is now repeated over IPv4 only: if that works the target is up, otherwise the error shows both families (`IPv4: Timeout · IPv6: Connect call failed`).
+
 ## 2.20.0
 
 ### Added
