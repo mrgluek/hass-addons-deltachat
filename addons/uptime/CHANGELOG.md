@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.22.0
+
+### Added
+- **Monitors of Chats the Bot Left Are Paused**: When the bot was removed from a group, the chat was deleted or a 1:1 contact blocked the bot, its monitors were still checked every minute and shared with peers, so every node in the mesh kept checking them, and any alert failed to send (one node checked 4 monitors of two groups it had left in August and October). Every hour, and at start, the bot now asks the core whether it can still write to each chat with monitors. If not, the chat's monitors are paused: not checked, not alerted, not shared with peers (their copies expire there within a day), and its ongoing incidents are no longer updated. If the bot is added back, they resume with all settings. After 30 days they are deleted together with their history and incidents. The admin gets a notice for each step, and `/peers` shows how many chats are paused.
+
 ## 2.21.0
 
 ### Added
