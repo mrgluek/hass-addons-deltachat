@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.39.4
+
+### Fixed
+- **Catalog notices to the admin were not delivered**: The admin chat was opened with `lookup_contact_id_by_addr(admin address)`, which gives the address-only contact. Current cores only send encrypted, so catalog review notices failed with `e2e encryption unavailable`. The bot now sends to the admin's contact with their key: the one with the fingerprint saved by `/initadmin`, otherwise the most recently seen key contact of the admin address.
+
 ## 2.39.3
 
 ### Fixed
