@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.39.3
+
+### Fixed
+- Update cmping to v0.17.4: creating a test profile is limited to 20 s per attempt and falls back to `/new` + `dclogin` with the standard ports (IMAP 993, SMTP 465, SSL). Relays whose autoconfig lists ports unreachable from the bot's server (chat.chudppl.org) no longer hang until the 60 s timeout, and failed attempts no longer pile up unconfigured profiles in `data/cmping_cache`.
+
 ## 2.39.2
 
 ### Fixed
