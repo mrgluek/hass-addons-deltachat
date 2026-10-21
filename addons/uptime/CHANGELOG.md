@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.20.0
+
+### Added
+- **Slower Checks for Long Outages**: A resource that stays down was checked at its normal interval for up to 30 days, and every peer kept checking it every minute: DNS queries, retries and peer votes for a target nobody waits for. Now checks slow down the longer it is down: every 5 minutes after 1 day, every 15 minutes after 7 days, every hour after 14 days (never more often than the resource's own interval). A recovery is noticed within that time and the normal interval applies again. `/list`, incident messages and the 7/14-day notices show the slower interval (`🐢 checked every 15 min`).
+- **Peers' Targets Slow Down Too**: Targets mirrored from a peer had no limit at all: a peer whose user never removed a dead resource made every node check it every minute, indefinitely (a domain gone for 50 days caused about 12 DNS queries a minute on each node). Each node now tracks how long a mirrored target has been down for itself and applies the same steps, then checks it only once a day after 30 days.
+
+### Changed
+- **Stale Notices and Auto-Cleanup Count Uptime, Not Continuous Downtime**: The 7-day notice, 14-day warning and 30-day removal counted from the last status change, so a single short "up" (a flap, or a peer that could still reach the target) restarted the count and a dead target could stay monitored forever. A resource is now unreachable for N days when its uptime over the last N days is under 1%, as the README already described ("0% uptime for 30 days").
+- **Auto-Cleanup Always Warns First**: A resource is removed at least 3 days after the 14-day warning was sent, also for resources that already qualify when this version starts.
+- **Notices Do Not Repeat After a Flap**: Stale notices were reset by any recovery, so a flapping target would get the 7-day notice again. They now start over only after a resource has been up for a full day.
+
 ## 2.19.1
 
 ### Added
