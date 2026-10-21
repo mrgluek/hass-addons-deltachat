@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.22.2
+
+### Fixed
+- **Admin Notifications Were Not Delivered**: The admin chat was created with `create_contact(admin address)`, which gives the address-only contact. Current cores only send encrypted, so every admin notification (probe offline, unstable node, paused chats) failed with `e2e encryption unavailable`. The bot now finds the admin's contact with their key (the fingerprint saved by `/initadmin`), sends to the 1:1 chat with that contact and replaces a cached admin chat that pointed elsewhere. The "admin" peer share scope uses the same contact, so groups the admin is in are recognized again.
+
 ## 2.22.1
 
 ### Fixed
