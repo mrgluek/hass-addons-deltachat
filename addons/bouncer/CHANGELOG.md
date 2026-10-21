@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.39.0
+
+### Added
+- **Catalog submissions by users** (`catalog_review.py`): `/chatadd` (inside a group) and `/dchanneladd <link>` work for everyone, not only the admin. The admin path is unchanged.
+  - **Eligibility:** the bot must have known the submitter for 3+ days (`CATALOG_MIN_AGE_DAYS`); at most 2 pending and 5 per week per user, 50 pending in total; banned submitters are refused.
+  - **Red flags:** stop words (`CATALOG_STOPWORDS`) in name, description and recent channel posts; VirusTotal verdicts for up to 3 links (new quiet `virustotal.url_verdict()`). Flags only stop auto-approval.
+  - **Auto-approval** for submitters known for 30+ days (`CATALOG_AUTO_APPROVE_DAYS`, 0 = never) without red flags; a channel whose join is not finished is always reviewed.
+  - **Review card** in the admin's private chat: submitter with age, owner check, flags, review preview link, `/chatapprove<ID>`, `/chatreject<ID> [reason]`, `/chatban<ID>` (same with `/dchannel…`). `/catalogqueue` lists what waits.
+  - **Groups** submitted by a member are private by default (joining from the catalog needs the members' approval); members of such a group may use `/private` and `/chatremove`. A pending group hands out no invites from `/chat<ID>`.
+  - **Channels** submitted by someone who did not create the invite link are listed without web preview, RSS and Fediverse (`web_enabled = 0`); `/dchannelweb<ID>on|off` for the admin. A rejected channel is left, its cached posts and media deleted.
+  - **Reports:** `/chatreport<ID>`, `/dchannelreport<ID> [reason]`; 3 reports (`CATALOG_REPORT_THRESHOLD`) from contacts of the minimum age hide the entry until the admin decides.
+  - `/catalogsubmit on|off` (runtime switch, overrides `CATALOG_SUBMISSIONS`), `/catalogban <addr>`, `/catalogunban <addr>`.
+- Database: `status`, `submitted_by`, `submitted_at` on `catalog_chats` and `catalog_channels`, `web_enabled` on `catalog_channels`; new tables `catalog_submissions`, `catalog_reports`, `catalog_banned_submitters`. Existing entries stay approved.
+
+### Changed
+- Web preview, RSS, media, QR, ActivityPub actor/inbox/outbox and WebFinger look channels up through `database.get_web_channel_by_token()`, which hides channels without web mirroring; the landing page lists only mirrored channels.
+- `/dchannels` and `/dchannel<ID>` show the preview link only for mirrored channels, mark pending ones for the admin, and offer `/dchannelreport<ID>`; the `/chat<ID>` invite reply offers `/chatreport<ID>`.
+
 ## 2.38.0
 
 ### Added
