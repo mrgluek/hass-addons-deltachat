@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.39.2
+
+### Fixed
+- `/chats` and `/dchannels` show only the first non-empty line of a description, with spaces collapsed and cut at a word boundary (100 / 200 characters, `…`). Multi-line chat descriptions (rules, links) used to spill into the list. The full description is still stored; existing entries are fixed too.
+
 ## 2.39.1
 
 ### Fixed
