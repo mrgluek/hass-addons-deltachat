@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.39.1
+
+### Fixed
+- **cmping profiles grew without bound** (cmping `v0.17.3`): every run created a new "cmping" group on the sender and receivers and never deleted it. The monitor's cached profiles reached ~20k groups and 20+ MB `dc.db` each (487 MB in `data/cmping_cache`), read on every run every 30 minutes; the page cache this kept hot showed up as ~105 MB of the container's memory. cmping now deletes chats from earlier runs before each ping (10 s budget per run, so an old big profile is cleaned over several runs).
+
 ## 2.39.0
 
 ### Added
