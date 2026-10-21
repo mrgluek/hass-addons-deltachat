@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.23.0
+
+### Added
+- **SMTP / STARTTLS Monitors (`smtp://host[:port]`)**: A `host:25` TCP check only showed that the port is open. An `smtp://` monitor talks to the server like a sending mail server: greeting `220`, `EHLO`, `STARTTLS` must be offered, TLS handshake with the certificate verified against trusted CAs and the target host name, `QUIT`. It is DOWN with the reason (`SMTP: STARTTLS not offered`, `SSL: certificate has expired`, `SSL: Hostname mismatch, ...`, `SMTP: greeting 554 ...`) - exactly what makes MTA-STS senders (`mode: enforce`) stop delivering. Port 25 is the default, 587 works the same way, 465 uses implicit TLS. The certificate expiry is tracked like for HTTPS (alerts at 7 / 3 / 1 days, countdown in `/list`, `/ping` and on the dashboard). `/ping smtp://host` shows the certificate too. The session ends with `QUIT`, so the server logs an ordinary connection (`ehlo=1 starttls=1 quit=1`) and fail2ban does not count it. `SMTP_EHLO_NAME` sets the `EHLO` name (default: the host's FQDN, or `localhost`).
+- **Peer Capability `smtp_check`**: `smtp://` targets are only sent for cross-checks to peers that announce it, so older nodes neither vote on them nor make `/ping` wait for their timeout.
+
+### Fixed
+- **`/probeignore *:25` Covers `smtp://` Targets**: The ignore patterns now know the default SMTP port, so a node with outbound port 25 blocked can abstain on `smtp://host` monitors with the same pattern as on `host:25` TCP monitors.
+
 ## 2.22.2
 
 ### Fixed
