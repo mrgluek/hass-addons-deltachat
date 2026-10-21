@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.1
+
+- **Fix: Low-Disk Warning to the Admin Was Not Delivered**: The warning went to a chat opened with `create_contact(admin address)`, the address-only contact, which current cores cannot send to (`e2e encryption unavailable`). It now goes to the admin's contact with their key: the one with the fingerprint saved by `/initadmin`, otherwise the most recently seen key contact of the admin address.
+
 ## 1.10.0
 
 - **Long Audio in 10-Minute Parts**: Videos without chapters that are longer than 60 minutes no longer show "💿 Too long" for audio. The menu offers `💿 Part 1/N` (`/ytm_ID_0_600`), on the same 10-minute grid as video chunks; each part is stream-copied, so the original quality is kept (~10 MB per part). A tail shorter than a minute is merged into the last part. Each delivered part's caption shows `Part k/N` and links the next part (plus `/ytms` for admins). Audio up to 60 minutes is still sent as one file.
