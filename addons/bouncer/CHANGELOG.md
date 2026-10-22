@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.41.0
+
+### Added
+- **`/dns` shows the domain's certificates from Certificate Transparency logs** (new `certs.py`, data from SSLMate Cert Spotter): the number of valid certificates and their CAs, the date of the latest one, until when the domain itself is covered (⚠️ under 10 days: renewal may be failing), a ⚠️ for certificates from a CA the current CAA record does not allow, a note for Cloudflare Universal SSL (Cloudflare issues wildcard certificates for zones on its DNS by itself and adds its CAs to the CAA answer - so `chatmail.uk`'s `*.chatmail.uk` from SSL.com is expected), and the subdomain names found in certificates (often names that are nowhere in DNS).
+- Chatmail relay check: whether one valid Let's Encrypt certificate covers the domain, `mta-sts.` and `www.`.
+- Optional `CERTSPOTTER_API_KEY` in `.env` (free Small plan: 10 full-domain and 100 single-hostname queries an hour). The bot counts its queries per hour, falls back to a single-hostname query (no subdomains) when the full-domain budget is spent, pauses after HTTP 429 and caches CT answers for an hour. If Cert Spotter does not answer, the rest of the report is unchanged.
+- Censys is not used for this: its free plan cannot search certificates by domain and every lookup costs a credit.
+
 ## 2.40.0
 
 ### Added
