@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.41.1
+
+### Fixed
+- `/dns`: a DKIM key published as several separate TXT records (e.g. a long key pasted in three parts into a DNS panel) was reported as "key is not valid base64". It now says `❌ DKIM <selector>: split into N separate TXT records - it must be one record`. Records of a set have no order and receivers never join them, so such a key never verifies; a long key belongs in one TXT record split into strings of up to 255 characters.
+
 ## 2.41.0
 
 ### Added
