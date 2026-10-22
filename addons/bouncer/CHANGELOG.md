@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.40.0
+
+### Added
+- **`/ip` asks Censys when Shodan has nothing**: Shodan InternetDB has no record for many hosts whose networks block Shodan's scanners (e.g. a Selectel server with ports 80 and 443 open for years showed "none seen by Shodan"). With `CENSYS_API_TOKEN` in `.env` (free Censys account), the bot then looks the IP up in the Censys Platform API and shows `🔌 Open ports (Censys): ...`, the software, web page titles per port (`📄 8083: LOGIN - ... - Hestia Control Panel`) and a link to the Censys host page. If Censys sees nothing either: "none seen by Shodan or Censys".
+- Censys credits are limited (free: 100 per 30 days, 1 per lookup, shared with the web UI), so the bot calls it only as a fallback, caches answers for a day, makes at most `CENSYS_MONTHLY_LIMIT` (default 90) lookups in any 30 days (rolling window: Censys resets 30 days after sign-up, not on the 1st) and pauses for a day on HTTP 401/402/403. Each lookup is logged with the credits used.
+
 ## 2.39.4
 
 ### Fixed
