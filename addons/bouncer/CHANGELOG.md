@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.42.0
+
+### Added
+- **`/ip` and `/dns` check the Russian mobile internet whitelists** (new `whitelist.py`). When Russian operators restrict mobile internet, only whitelisted resources stay reachable, so it matters whether a relay is listed. Data: the community lists [hxehex/russia-mobile-internet-whitelist](https://github.com/hxehex/russia-mobile-internet-whitelist) - `cidrwhitelist.txt` (IPv4 subnets; its `ipwhitelist.txt` lies entirely inside them) and `whitelist.txt` (exact host names, the SNI the filters let through).
+  - `/ip <address>`: `📶 RU mobile whitelist: ✅ in 2.63.0.0/17` or `❌ not listed` (IPv6: not checked, the list is IPv4 only).
+  - `/ip <block>`: listed as a whole, partly (how many addresses, which subnets) or not at all; `/ip AS<n>`: how many of the announced IPv4 prefixes are listed in whole or part.
+  - `/dns <domain>`: in the Addresses section, one line for the IPv4 addresses of the domain and of its MX hosts, and one for the name: `✅ … is listed` (with its listed subdomains), `⚠️ … is not listed, only N of its subdomains: …` or `❌ … is not listed`.
+- **`/ruwhitelist [ip|domains] [on|off]`** (admin): switches the IP check, the domain check or both, stored in the database; without arguments it shows the state and how many entries are loaded. Switching drops cached `/ip` and `/dns` answers. Until the admin sets it, `RU_WHITELIST_URL` / `RU_WHITELIST_DOMAINS_URL` in `.env` decide: unset means on with the default list, another URL a list in the same format, an empty value off.
+- Each list is downloaded on first use and refreshed every 6 hours; a failed download keeps the old copy and is retried after 10 minutes.
+
+### Fixed
+- ActivityPub requests (Fediverse deliveries, follows, actor fetches) sent `User-Agent: BouncerBot/2.14.2`: `activitypub.py` kept its own stale version number. It now uses the bot's version from `config.py`, like everything else.
+
 ## 2.41.1
 
 ### Fixed
