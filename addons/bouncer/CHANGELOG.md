@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.43.1
+
+### Fixed
+- **`/ip` and `/dns` could hang for minutes on the RU mobile whitelist.** The first lookup after a restart (and every 6 hours after) downloaded the list inside the lookup, and the 20 s timeout only covered each socket read: a throttled connection that trickles bytes kept the download, the lookup and every `/ip` queued behind it waiting, with nothing in the log. The list is now downloaded in its own thread: a lookup waits at most 15 s for the first copy (then shows `list unavailable, try later`), a stale copy answers right away while the refresh runs, and a download is stopped after 2 minutes. The log shows `RU whitelist: downloading …` and `loaded N … in X s`.
+
 ## 2.43.0
 
 ### Changed
