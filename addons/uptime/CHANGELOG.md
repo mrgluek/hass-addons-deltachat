@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.25.1
+
+### Fixed
+- **IPv4 Fallback Did Not Happen After a Failed A Query**: The A and AAAA queries run together and their answers were cached for the record TTL. When the A query failed (timeout, SERVFAIL - seen from a home resolver) and AAAA answered, only the IPv6 address was cached; an HTTP check over a broken IPv6 then failed with `Connect call failed ('2a01:...')`, and the IPv4 recheck found no IPv4 in the cache and treated the host as IPv6-only, so the node voted DOWN (a partial outage notice for `delta.chat`). A partial answer (one query failed, not "no such record") is now cached for 30 s only, and the IPv4 recheck resolves the host again once when the cached answer has no IPv4.
+- **Degraded Paths Need 3 Bad Series Over 3 Minutes**: A node that is a few ms from its targets voted degraded after a single short spike (2 ms usual, 107 ms once, on two targets at the same moment - its own uplink, not the paths). A node now calls a path degraded only after 3 bad ping series in a row spanning at least 3 minutes; checks asked for by peers count, but cannot shorten the time. Until then the check stays UP and its details show the slow round trip (`178 ms, usual 4 ms`). With the 2 quorum confirmations a DEGRADED notice now takes about 5 minutes.
+
 ## 2.25.0
 
 ### Changed
