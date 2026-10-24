@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.43.2
+
+### Fixed
+- **`/cmcall` and the call monitor failed at `setup` with "Could not find DNS resolutions" for a relay that resolved fine** ([#7](https://github.com/mrgluek/deltachat_bouncer/issues/7)). While the relay's DNS was broken, profile setup outlasted the 240 s subprocess timeout; every killed `cmcall` left a half-created profile in `data/cmcall_cache/<relay>/` (144 for cm2.wwire.su), until deltachat-rpc-server ran out of file descriptors and every DNS lookup failed with EMFILE. cmcall [0.1.6](https://github.com/mrgluek/cmcall/releases/tag/v0.1.6) removes such leftovers when it opens a relay's profiles, and the container's open-files limit is raised from 1024 to 65536 (`ulimits` in `docker-compose.yml`).
+
 ## 2.43.1
 
 ### Fixed
