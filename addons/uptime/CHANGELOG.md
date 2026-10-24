@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.24.0
+
+### Added
+- **Degraded Path Detection for Ping Monitors**: A ping check sent a single echo, so a target behind a lossy or congested path (2026-10-24: 50-80% loss and 550 ms instead of 60 ms from a home connection to a relay, due to a bad peering on the way) was simply UP. A ping check now sends 5 echoes 200 ms apart (about 3 s at most) and reports the median round trip. With 2 or more lost, or a median at least 3 times this node's usual round trip for that address and 100 ms above it, the check is DEGRADED: the target is reachable, so it is not DOWN, but the node votes 🟠 degraded. In quorum chats one degraded vote makes a DEGRADED notice (never an incident or downtime), and the vote line tells why: `🟠 HOME (561 ms, loss 80%, usual 60 ms; trace: +589 ms between hop 6 ... and hop 7 ...)`. The usual round trip is learned from healthy checks only and stored in the new `ping_baselines` table. The `trace:` hint comes from one `traceroute` of the degraded path (cached 15 min, run in the background, so it arrives with the confirming vote) and names the link where the round trip rises most. Degraded results travel in cross-check answers and telemetry, so a peer whose own path is bad (e.g. a node at home) triggers the vote. Nodes that degrade 5 or more targets alone count as unstable like nodes that fail them. The Docker image now includes `traceroute`.
+- **Automatic Account Creation**: `serve` without a configured account no longer exits with "There are no configured accounts to serve". The bot asks the core (`init_transports`, core 2.62+) to create an account on the fastest chatmail relay of its built-in list; the core adds further relays in the background. `bot.py init <addr> <password>` and `bot.py init DCACCOUNT:server.tld` still choose the account explicitly.
+
 ## 2.23.0
 
 ### Added
