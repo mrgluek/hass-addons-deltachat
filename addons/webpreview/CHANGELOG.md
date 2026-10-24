@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.18.0
+
+### Added
+- **Automatic account creation**: `serve` without a configured account no longer exits with "account not configured". The bot creates its own account: `init_transports` (core 2.62+) without a QR code lets the core probe its built-in chatmail relay list, configure the fastest relay and add further relays in the background. The new address is logged. If creation fails, the error is logged and `serve` exits as before, so the container restart retries. `bot.py init <addr> <password>` and `bot.py init DCACCOUNT:server.tld` still work and take precedence; the "Initialize Account" setup step is now optional.
+
+### Changed
+- **The server runs releases, not the tip of `main`.** `update.sh` deploys the newest `vX.Y.Z` tag, so a merge into `main` reaches the server only once it is released; several PRs can go out together. `UPDATE_REF` in `.env.local` pins a release (`UPDATE_REF=v2.17.1` - a rollback; empty again = newest) or follows a branch as before (`UPDATE_REF=main`). A release tag moved on GitHub or Forgejo makes the update fail instead of deploying the changed code. Errors that stopped the script with a message (both remotes unreachable, an unknown `UPDATE_REF`) now also ping the healthcheck's `/fail`, not only failed commands. The script now runs as one function, so the `git reset` that rewrites `update.sh` cannot confuse the running copy.
+- **Releases are published by a tag** (new `.github/workflows/release.yml`): pushing `vX.Y.Z` checks that `bot.py` has that version, creates the GitHub release with the version's section of this file as its notes (an existing release is left alone), then sends the ntfy notification and the `bot-updated` dispatch to `hass-addons-deltachat` (now with `"version"` in the payload). Both used to go out on every push to `main` (`webpreview-changelog.yml`, removed), so Home Assistant users got unreleased code.
+- Releasing: merge, then `git tag -a vX.Y.Z -m "..." <commit> && git push origin vX.Y.Z`.
+- **Upgrading:** tag `v2.18.0` right after merging this. Until then the new `update.sh` would deploy `v2.17.1`, which still has the old script that follows `main` - and the server would switch back and forth on every run.
+
 ## 2.17.1
 
 - **MIT License**: the project is now licensed under MIT (`LICENSE`).

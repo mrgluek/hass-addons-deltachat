@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.44.0
+
+### Added
+- **The bot creates its own account at first start.** `serve` without a configured account (a fresh `data/` directory) no longer exits with "no configured accounts": the bot asks the Delta Chat core (2.62+) to create one, and the core picks the fastest chatmail relay from its built-in list and later adds further relays in the background. The new address is logged (`Account created: …`). If no relay answers, the error is logged, the bot exits and the container restart tries again. `bot.py init <addr> <password>` and `bot.py init DCACCOUNT:server.tld` still choose the account, and the admin is still set with `set_admin.py` or `/initadmin`.
+
 ## 2.43.2
 
 ### Fixed
