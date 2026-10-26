@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.4
+
+### Fixed
+- **GET Is Memorized When Only HEAD Fails**: A monitor switched to `GET` for good only after `405 Method Not Allowed`. A server that answers `HEAD` with another error but `GET` with 200 - changedetection.io returns `500` to `HEAD /login` and logs a traceback - stayed green through the `GET` fallback, but got the failing `HEAD` again on every check from every node. Now `GET` is memorized when `HEAD` returns any 4xx/5xx and the `GET` right after it succeeds; if `GET` fails too, nothing is memorized. Timeouts and connection errors are handled as before.
+
 ## 2.26.3
 
 ### Added
