@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.26.0
+
+### Added
+- **`/stats`** (admin): version and uptime; CPU of the bot and of the Delta Chat core over the last minutes and since start (from `/proc`); sizes of both databases; monitors by type and state; checks in the last minute; mail received and sent in the last hour; outbox counters and what is waiting; peers online and unstable, the telemetry interval, votes sent and reports held back in the last hour, protocol messages deleted; relays. What took SSH sessions to find on 2026-10-26 is now one command.
+- **Telemetry Interval by Mesh Size**: every 2 minutes up to 10 peers, 3 minutes up to 20, 5 minutes beyond, so the relay's send limit (60 a minute) keeps room for alerts and votes. The interval is announced in the telemetry (`telemetry_interval`); receivers mark a peer offline after 3 of its own intervals (older peers: 2 minutes, as before).
+- **Votes Ask the Most Stable Peers**: a vote asks up to 7 peers. In meshes of up to 7 peers that is all of them (no change today); beyond that the node whose report started the vote plus the others that are not unstable now, failed targets alone least often in the last day and were heard from most recently. Cost per vote stops growing with the mesh.
+
+### Fixed
+- **Trimming Peer Chats Stopped at a Message Already Gone**: the core's `delete_messages` stops at the first message that no longer exists - usually one its own `delete_device_after` removed meanwhile, as both start with the oldest (`Could not trim peer chat 11: Message Msg#37104 does not exist`). Such a chunk is now deleted one message at a time, skipping the missing ones.
+
 ## 2.25.4
 
 ### Fixed
