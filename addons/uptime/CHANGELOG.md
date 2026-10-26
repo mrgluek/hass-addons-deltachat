@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.25.2
+
+### Fixed
+- **Peers Checked `smtp://` Targets as Web Pages**: A peer stored the `smtp://` targets it mirrors with the type `http` (only http/tcp/ping were accepted), so it checked `smtp://chatmail.uk` with an HTTP request, always got DOWN and reported it in telemetry, making the main node ask all peers again and again. The type is kept now; mirrored targets stored wrongly are fixed at start and their false DOWN is forgotten.
+- **Ping in Docker Desktop**: Docker Desktop's network proxy (macOS / Windows) drops ICMP replies as soon as several echoes are in flight: 68% lost with 5 targets at once, 89% with 20, 17% even one at a time next to the running bot, against 0% on a Linux host. A home node there voted degraded (`loss 80%`) and DOWN (`Timeout`) on most ping targets. A node in Docker Desktop (kernel `linuxkit`) now abstains on ping targets, like a node without ICMP, and logs why once; `PING_ON_DOCKER_DESKTOP=1` checks them anyway.
+- **Reports of Unstable Nodes Started a Vote Every Two Minutes**: A node marked unstable has its votes masked, so the target stayed UP and the node's next telemetry report started another vote: the main node asked all peers about 450 times an hour (each time encrypted mail to every peer, the Delta Chat core at 10-65% CPU). When a vote that a report started finds the reporter's vote masked as unstable, its reports of that target are ignored for 30 minutes. A reporter whose vote counts is still heard, so a target only one node fails still becomes DEGRADED after two reports.
+- **Private Addresses at a Peer**: A name resolving to a private address on a peer (split-horizon DNS at home, a VPN) made the peer vote DOWN with "Target blocked". The peer abstains now in cross-check answers and mirrored targets; the node's own monitors still show the error.
+
 ## 2.25.1
 
 ### Fixed
