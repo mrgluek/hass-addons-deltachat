@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.3
+
+### Added
+- **Peer Versions**: Telemetry now carries the bot version, and the version a peer announces (in telemetry, or in the peering handshake of older versions) is stored. `/peers` shows each peer's version, marked ⚠️ when older than this node; `/stats` lists the outdated peers in one line. Peers that do not send it yet are shown as `≤2.26.2`.
+
 ## 2.26.2
 
 ### Changed
