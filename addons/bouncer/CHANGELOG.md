@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.44.1
+
+### Changed
+- **Download Limit 64 KB Instead of 1 Byte**: The intent was to skip attachments, but with a limit of 1 byte the Delta Chat core treats every incoming message, plain text too, as too large and fetches it later one by one instead of in the normal batch, which delayed replies to commands. With 64 KB commands arrive at once; larger attachments are still downloaded only on demand (`/sticker`, `/virus`, `/save`).
+
 ## 2.44.0
 
 ### Added

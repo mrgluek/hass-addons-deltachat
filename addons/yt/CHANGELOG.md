@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.11.1
+
+### Changed
+- **Download Limit 64 KB Instead of 1 Byte**: The intent was to skip attachments, but with a limit of 1 byte the Delta Chat core treats every incoming message, plain text too, as too large and fetches it later one by one instead of in the normal batch, which delayed replies to links and commands. With 64 KB links and commands arrive at once, while videos, photos and files sent to the bot (over 64 KB) are still not downloaded.
+
 ## 1.11.0
 
 ### Added
