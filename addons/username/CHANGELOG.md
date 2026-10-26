@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.14.1
+
+### Changed
+- **Download Limit 64 KB**: Photos, videos and files over 64 KB sent to the bot are no longer downloaded automatically (the bot only reads commands), saving traffic and disk space. Plain text and small attachments arrive as before.
+
 ## 1.14.0
 
 ### Added
