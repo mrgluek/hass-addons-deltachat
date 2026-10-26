@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.26.2
+
+### Changed
+- **Unconfirmed Peer Reports Are Held Longer Each Time**: A report its own sender does not confirm when asked (it answers UP) was ignored for 10 minutes, so an older peer that keeps reporting a target wrongly (e.g. an `smtp://` target it checks as a web page) started a vote every ~10 minutes per target: still ~300 votes an hour from ~50 such reports. The hold now doubles each time in a row - 10, 20, 40, 80, then 120 minutes - and starts over when the peer confirms a report (it then still makes the target DEGRADED as before) or after two hours without one; an unanswered vote changes nothing. Holds are kept in the database (`held_reports`), so a restart no longer starts all of them over with a burst of votes.
+- **Download Limit 64 KB Instead of 1 Byte**: The intent was to skip attachments, but with a limit of 1 byte the core treats every incoming message, plain text too, as too large and fetches it later one by one instead of in the normal batch - peer answers and telemetry took that slow path. With 64 KB the protocol messages arrive normally, while photos, GIFs and files sent to the bot are still not downloaded.
+
 ## 2.26.1
 
 ### Changed
