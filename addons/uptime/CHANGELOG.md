@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.1
+
+### Changed
+- **Telemetry Interval Set by the Receiver Too**: In a star (one hub linked to every node, each of them only to the hub) every leaf has one peer and kept sending every 2 minutes while the hub received from all of them - the hub's load grew with the mesh and the leaves could not know. Telemetry now carries `desired_interval` (how often the sender wants to receive, from its own peer count: 2 / 3 / 5 minutes), and each node sends to each peer at the longer of its own interval and that peer's wish. The broadcast runs every minute and sends to the peers that are due; `telemetry_interval` in each message is the interval for that receiver. In a full mesh nothing changes; older peers ignore the field and keep 2 minutes. `/stats` shows to how many peers telemetry goes less often.
+
 ## 2.26.0
 
 ### Added
