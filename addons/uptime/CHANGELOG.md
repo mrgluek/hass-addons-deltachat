@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.25.3
+
+### Fixed
+- **Delta Chat Core at 40-65% CPU**: Peer chats carry only protocol messages, handled as they arrive, but they were kept for the account's `delete_device_after` (a day, which incident edits in user chats need): 65k messages, a 175 MB database, and the core spent ~0.5 s CPU per message (~0.1 s in a bot with a small database). Every 10 minutes (and at start) all but the newest 20 messages of each peer chat are deleted on this device.
+- **Reports Their Own Sender No Longer Confirmed Started a Vote Every Few Minutes**: Older peers (smtp targets checked as web pages, degraded after one burst) reported a target in telemetry and answered UP when asked a minute later; the target stayed UP and the next report started the next vote: 273 cross-check batches an hour to each of 5 peers, mostly one target each. When the reporter itself answers UP to the vote its report started, its reports of that target are ignored for 10 minutes (30 minutes for unstable nodes, as before).
+
+### Added
+- **`/health` Endpoint**: `{"status": "ok", "version": "2.25.3"}` (also for `HEAD`), without database or page, for monitors and other nodes.
+
 ## 2.25.2
 
 ### Fixed
