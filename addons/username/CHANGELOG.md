@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.15.1
+
+### Security
+- **HTML/SVG escaping on the web pages**: the profile page (`/<name>`), the `/card` page, the 404 page and the `/og.svg` card inserted names, e-mail, the invite link and the requested path into the page without escaping. A group name like `"><script>…` registered with `/link`, or a crafted URL such as `/<img src=x onerror=…>` on the 404 page, ran script on the site's domain. All such values are now HTML-escaped (XML-escaped in the SVG), and the redirect script gets the invite link as a JSON string literal. A name with `&` no longer breaks the SVG/PNG card either.
+
+### Changed
+- **"Open in ArcaneChat" opens the app directly**: for ArcaneChat admin-group links, the button on the profile page and on `/card` now uses an `openpgp4fpr:FINGERPRINT#v=3&…&z=…` URI instead of `https://i.delta.chat/#…`, so the installed ArcaneChat app opens the invite without the i.delta.chat page in between (which offers Delta Chat, which can't join these groups). The `/card` QR code keeps the `https` link, which ArcaneChat scans fine.
+
 ## 1.15.0
 
 ### Added
