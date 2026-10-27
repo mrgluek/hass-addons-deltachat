@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.15.0
+
+### Added
+- **ArcaneChat Admin Groups**: Invite links with the `z=` group-name parameter (ArcaneChat admin groups) are recognised as groups and flagged `arcanechat_only`. The chat card, the `/link` reply, the OpenGraph description and the SVG/PNG cards say "ArcaneChat only"; the web page no longer auto-redirects such links, shows a notice with a link to https://arcanechat.me and an "Open in ArcaneChat" button; `GET /api/username/<name>` has a new additive `arcanechat_only` field (`type` stays `group`).
+
+### Fixed
+- ArcaneChat admin-group links were classified as `contact` (shown as the inviter's email). Because of that, `update_invite_link_contact_info` could rewrite their `a=`/`n=` with the sender's address and name; links with `z=` are now never modified.
+
 ## 1.14.1
 
 ### Changed
