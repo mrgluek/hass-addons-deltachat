@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.16.0
+
+### Added
+- **Relay sync (`r=`)**: personal invite links now carry the owner's full relay list. The bot reads it from the contact's key (`get_contact_encryption_info`, "Relays:"), keeps `a=` on the current address when it is still listed (else the first relay) and puts the other relays (up to 5 in all, as the core reads) into `r=`.
+- **Hourly contact sync**: relay changes arrive as core keyupdate messages (core 2.60+), which the core trashes without a message event, so the bot now also re-checks every personal link once an hour (new `contact_sync.py`, first run 2 minutes after start). It only reads the core's local data, no network requests.
+
+### Fixed
+- **Links are only synced with their own key**: the sync now compares the contact's fingerprint with the link's. A link registered for another profile or another person is no longer rewritten with the sender's address and name.
+- **Address sync never worked**: the old code read `contact.addr`, but the RPC contact field is `address`, so only the name was ever updated.
+- **`n=` no longer becomes an address**: the name is taken from the name the contact set (`auth_name`), not from `display_name`, which falls back to the address.
+- **`r=` kept intact**: rewriting a link whose `r=` lists several relays encoded the separating commas as `%2C`. The core splits `r=` on raw commas, so the result was one invalid address. Each address is now encoded on its own.
+
 ## 1.15.1
 
 ### Security
