@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.45.1
+
+### Changed
+- **cmping 0.17.6**: fixes ported from upstream chatmail/cmping: a time limit for profiles to come online, `[ip]` in dclogin links for IP relays with 9-character logins, and a warning when a profile uses more than one relay.
+- **Relay Check Errors Name the Relay**: cmping runs now get `-w` with half their time limit (30 s of 60, 45 s of 90). A relay that never lets a profile in is reported as "<address> not online after 30s" instead of the whole run being killed with "Timeout expired (60s)". The command line is built in one place, `cmping.cmping_cmd()`.
+
 ## 2.45.0
 
 ### Changed
