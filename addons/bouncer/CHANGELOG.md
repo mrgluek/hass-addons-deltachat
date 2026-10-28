@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.45.0
+
+### Changed
+- **Delta Chat Core 2.66.0**: `deltachat-rpc-server` is pinned to 2.66.0 (was 2.65.0). Core 2.66 removes the `configured_addr` config: `get_config("configured_addr")` now fails with "unknown key", and `addr` has been empty since core 2.61. The bot's own address now comes from its self contact (`dc_fingerprint.get_self_addr()`), which the core fills from the primary relay; this also works on older cores.
+- **cmping 0.17.5 and cmcall 0.1.7**: Both read their profiles' addresses from `configured_addr` and would fail on core 2.66 (relay monitoring and call checks). `deltachat-rpc-client` is pinned to 2.66.0 too, so the client the tools use matches the server.
+
 ## 2.44.3
 
 ### Fixed
