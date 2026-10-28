@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.27.0
+
+### Changed
+- **Display Name Shows the Node**: Without `DISPLAY_NAME` (or `display_name` in the Home Assistant options) the bot is named `Uptime Bot (<node name>)` instead of `Delta Chat Uptime Bot`, so peers and the admin can tell the nodes apart. `/nodename <name>` updates it right away, no restart needed; contacts see the new name with the bot's next message. A display name set by the operator is never touched.
+
 ## 2.26.6
 
 ### Security
