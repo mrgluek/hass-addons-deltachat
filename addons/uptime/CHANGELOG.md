@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.26.6
+
+### Security
+- **Admin Check No Longer Fooled by a Display Name**: The contact's key fingerprint was found by searching the whole `get_contact_encryption_info()` text for hex strings, including the line with the contact's display name, so a contact named `x<admin fingerprint>x` passed the admin check. The fingerprint is now read only from the lines under each key header, and the bot's own key is recognised by the fingerprint in its invite link instead of by its address. When the keys cannot be told apart the check fails instead of guessing. The code is in `dc_fingerprint.py`, shared verbatim between the bots.
+- **Bot's Own Key Was Never Filtered Out**: It was read from the encryption info of contact 1, which the core refuses for special contacts, so the fingerprint lookup returned both keys and `/initadmin` could store the bot's own key as the admin's, letting every contact with a key pass the admin check. The running nodes were checked: none had stored it.
+- **Admin Notices Could Reach Another Contact**: The admin's key contact was found by a substring search of the same text, so the display-name trick also redirected admin notices. It now compares the parsed fingerprint.
+
+### Changed
+- **Ready for the Core 2.66 Fingerprint Format**: Core 2.66 prints `Me:` instead of `Me (address):` and sorts the key blocks by fingerprint, so finding a key block by address stops working. The new parser handles both formats.
+- **Peers Keep Their Key Binding on Core 2.66**: Peers are identified by their key; the peer's key block was picked by its address, which core 2.66 no longer prints.
+- **Shorter Landing Page Blurb**: The federated checks feature text is shorter.
+- **Core Pinned to 2.65.0**: `deltachat-rpc-server` was `>=2.62.0`, so any image rebuild pulled core 2.66.0, which removes the `configured_addr` option the bot still reads. Core upgrades are now made on purpose, after reading the core changelog.
+
 ## 2.26.5
 
 ### Fixed
