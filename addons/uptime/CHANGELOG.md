@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.26.5
+
+### Fixed
+- **A Peer With Broken DNS No Longer Floods Revotes**: A peer whose DNS failed reported 50-60 targets DOWN that were UP here, and still answered DOWN when asked again, so none of the per-target holds applied: one node caused about 600 revotes in 2.5 hours and a CPU peak on the server. When a peer's report names 10 or more targets that are UP here, all its reports are now ignored for 30 minutes (logged as a warning, counted among the held reports in `/stats`).
+- **Admin Notices Reach the Admin After Their Address Changed**: The admin's key contact was looked up by the address given in `/initadmin`. After the admin moved to another transport (an address on another relay) the key contact has a different address, so none was found and notices went to the address-only contact, which fails with `e2e encryption unavailable` (25 failed notices in a few hours). If no key contact matches the address, the key contacts are now searched by the admin's fingerprint.
+
+### Changed
+- **Landing Page**: The landing page lists the federated multi-location checks.
+
 ## 2.26.4
 
 ### Fixed
