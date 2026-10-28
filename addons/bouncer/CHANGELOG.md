@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.44.3
+
+### Fixed
+- **Info Messages Handled Again**: Since v2.38.0 the info-message decorator sat on a helper inserted above its handler (`_expire_invite_message`), so every info message raised a `TypeError` and `handle_dc_info_message` never ran. Catalog channel renames and new pictures, member counts after joins and leaves, removing chats the bot was removed from, welcome messages for new members and withdrawing used single-use invites all work again. A new test checks that every `@dc_cli.on` hook takes `(bot, accid, event)` and that the info-message handler is registered.
+
 ## 2.44.2
 
 ### Security
