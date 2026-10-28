@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.46.0
+
+### Changed
+- **cmping 0.19.0**: adds `--both`, `--json` and `--grace`; it no longer stops itself with SIGINT 60 s after the last ping.
+- **`/cmping` Pings Both Ways in One Run**: each server pair is one cmping run with `--both` (90 s limit) instead of two runs, so the profiles are set up once.
+- **Results Read from JSON**: the monitor and `/cmping` read cmping's `--json` result instead of guessing from its text. Setup failures ("<address> not online after 30s") are reported as errors about the relay; lost pings as "N of M pings lost". `--grace` (a sixth of the time limit) keeps cmping from being killed while waiting for lost pings. When the output is not JSON (killed, crashed) the text is parsed as before.
+
 ## 2.45.1
 
 ### Changed
