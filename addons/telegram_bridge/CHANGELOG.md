@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.2
+
+### Fixed
+- **Filtered Album Leaked One Image**: A Telegram album arrives as one message per image and only one of them carries the caption. The first message claimed the whole album, so the filter only saw its own (empty) text: a captionless image of a post with `#реклама` was relayed while the captioned message was dropped as "already processed". The userbot now filters on the captions of the whole album (read from its sibling messages) and drops all of it. The Bot API also checks the caption on the public post page, remembers a filtered album, and if the captioned message arrives after an image was already relayed, deletes that Delta Chat message.
+
 ## 2.32.1
 
 ### Fixed
