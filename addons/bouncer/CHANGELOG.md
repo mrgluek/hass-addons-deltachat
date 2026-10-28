@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.46.1
+
+### Changed
+- **Monitor Checks Each Pair in One Run**: the connectivity monitor ran cmping twice per pair (source -> target, then target -> source), setting the profiles up twice. It now runs `cmping --both` once (90 s limit). A failed direction is retried once with 5 pings (120 s limit); only the failed direction takes the retry's result, a passed direction keeps its own.
+
 ## 2.46.0
 
 ### Changed
