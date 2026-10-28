@@ -1,5 +1,13 @@
 name: Sync Upstream Bot Versions
 
+# Home Assistant offers an update as soon as config.yaml on main has a new
+# `version`, and then pulls <image>:<version>. So the order here is:
+#   1. detect  - find add-ons whose bot has a newer tag, save the bump as a patch
+#   2. build   - build and push the image for each of them from the patched tree
+#   3. commit  - put on main only the bumps whose image is in GHCR for every arch
+# A failed build leaves that add-on's config.yaml at the old version; the next
+# sync (dispatch or the daily cron) tries it again.
+
 on:
   schedule:
     - cron: "0 4 * * *" # Every day at 04:00 UTC
@@ -9,23 +17,24 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 # Pushes from several bots fire dispatches at once; run syncs one at a time so
-# they don't race each other pushing to main ("cannot lock ref").
+# they don't race each other pushing to main ("cannot lock ref"). A queued run
+# replaced by a newer one is fine: every run checks all bots.
 concurrency:
   group: sync-upstream
   cancel-in-progress: false
 
 jobs:
-  sync:
-    name: Check & Sync Bot Versions
+  detect:
+    name: Check Bot Versions
     runs-on: ubuntu-latest
+    outputs:
+      addons: ${{ steps.changed.outputs.addons }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.SYNC_TOKEN || secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,19 +44,107 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml
 
-      - name: Sync versions
+      - name: Sync versions in the working tree
         run: python3 check_versions.py --sync
 
+      - name: List changed add-ons
+        id: changed
+        run: |
+          # JSON list of add-on dirs touched by the sync, e.g. ["bouncer"]
+          ADDONS=$(git diff --name-only -- addons/ | cut -d/ -f2 | sort -u | jq -R . | jq -sc .)
+          echo "Changed add-ons: $ADDONS"
+          echo "addons=$ADDONS" >> "$GITHUB_OUTPUT"
+          git diff --binary -- addons/ > sync.patch
+
+      - name: Save version bump patch
+        if: steps.changed.outputs.addons != '[]'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-patch
+          path: sync.patch
+          retention-days: 1
+
+  build:
+    name: Build ${{ matrix.addon }}
+    needs: detect
+    if: needs.detect.outputs.addons != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        addon: ${{ fromJSON(needs.detect.outputs.addons) }}
+    steps:
+      # Same commit detect ran on, so the patch applies cleanly
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Fetch version bump patch
+        uses: actions/download-artifact@v4
+        with:
+          name: sync-patch
+
+      - name: Apply this add-on's version bump
+        run: git apply --include="addons/${{ matrix.addon }}/*" sync.patch
+
+      - name: Build & publish image
+        uses: ./.github/actions/build-addon
+        with:
+          addon: ${{ matrix.addon }}
+
+  commit:
+    name: Commit Published Versions
+    needs: [detect, build]
+    # Also after a partly failed build: the add-ons that did build still get bumped
+    if: always() && needs.detect.result == 'success' && needs.detect.outputs.addons != '[]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SYNC_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Fetch version bump patch
+        uses: actions/download-artifact@v4
+        with:
+          name: sync-patch
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply bumps whose image is published
+        id: apply
+        env:
+          CHANGED: ${{ needs.detect.outputs.addons }}
+        run: |
+          # Check the registry itself rather than trusting the build job result
+          READY=""
+          for ADDON in $(jq -r '.[]' <<<"$CHANGED"); do
+            git apply --include="addons/$ADDON/*" sync.patch
+            if .github/scripts/addon-image.sh published "$ADDON"; then
+              READY="$READY $ADDON"
+            else
+              echo "::warning::$ADDON: image not published, keeping the old version"
+              git checkout -- "addons/$ADDON"
+            fi
+          done
+          rm sync.patch
+          echo "ready=${READY# }" >> "$GITHUB_OUTPUT"
+
       - name: Commit & Push Changes
+        if: steps.apply.outputs.ready != ''
+        env:
+          READY: ${{ steps.apply.outputs.ready }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet; then
-            echo "Changes detected, committing and pushing..."
-            git add addons/
-            git commit -m "chore: auto-sync bot versions with upstream repositories"
-            git pull --rebase origin main
-            git push origin main
-          else
-            echo "All add-on versions are already up to date."
-          fi
+          git add addons/
+          # "[images prebuilt]" tells "Build & Publish Add-ons" not to rebuild on this push
+          git commit -m "chore: auto-sync bot versions with upstream repositories" \
+                     -m "Updated: $READY [images prebuilt]"
+          git pull --rebase origin main
+          git push origin main

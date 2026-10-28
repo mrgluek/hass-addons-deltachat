@@ -1,0 +1,48 @@
+name: Build & publish add-on image
+description: >-
+  Build addons/<addon> from the checked-out tree for every arch in its config.yaml,
+  push <image>:<version> and <image>:latest to GHCR, then check the tag is complete.
+
+inputs:
+  addon:
+    description: Add-on directory name under addons/
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Read image, version and platforms from config.yaml
+      id: meta
+      shell: bash
+      run: .github/scripts/addon-image.sh meta "${{ inputs.addon }}" | tee -a "$GITHUB_OUTPUT"
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+
+    - name: Build & push ${{ steps.meta.outputs.platforms }}
+      uses: docker/build-push-action@v6
+      with:
+        context: addons/${{ inputs.addon }}
+        file: addons/${{ inputs.addon }}/Dockerfile
+        platforms: ${{ steps.meta.outputs.platforms }}
+        push: true
+        tags: |
+          ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.version }}
+          ${{ steps.meta.outputs.image }}:latest
+        # One cache scope per add-on, otherwise parallel builds overwrite each other's cache
+        cache-from: type=gha,scope=${{ inputs.addon }}
+        cache-to: type=gha,mode=max,scope=${{ inputs.addon }}
+
+    - name: Check the tag is published for every arch
+      shell: bash
+      run: .github/scripts/addon-image.sh published "${{ inputs.addon }}"
