@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.35.1
+
+### Fixed
+- **Album Gallery Kept the Bot's Icon**: The Bot API returns no profile photo for a user whose privacy settings hide it from bots, so the gallery of such a sender (2.35.0) kept the bot's avatar. The userbot, a normal member of the group, is now asked next and reads the photo through the sender of the message. Every step of the lookup is logged, so a missing avatar can be explained.
+
 ## 2.35.0
 
 ### Added
