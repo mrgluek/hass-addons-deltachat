@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.18.0
+
+### Fixed
+- **"Linked" Shows the Claim Date Again**: The card, web pages and social previews showed the time the record last changed as "Linked", so every contact sync (v1.16.0) that rewrote a personal link reset it to the sync time. Claims now keep a separate `linked_at`, set by `/link`; contact sync only moves `updated_at`. Re-linking the same name from the same chat keeps the original date; a new name or a takeover by another chat starts a new one.
+
+### Added
+- **"Updated" Date**: When the link changed after it was claimed, the chat card, `/{username}` preview text and the `/{username}/card` page show `🔄 Updated: …` next to `📅 Linked: …`. The PNG/SVG cards show only the claim date.
+
+### Changed
+- **Database**: New `linked_at` column in `usernames`, added on startup. Existing claims take it from `updated_at`, so claims synced before this release show their last sync date as the claim date.
+
 ## 1.17.0
 
 ### Changed
