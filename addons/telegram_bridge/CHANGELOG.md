@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.35.2
+
+### Fixed
+- **Attachments Kept Their File Names**: A file bridged from Telegram arrived in Delta Chat under the name of the bridge's temp file (`tmp6_dbmamo.json`), and a file sent from Delta Chat reached Telegram under the hashed name of the DC blob (`42f8ee8e….zip`). Both directions now carry the original name (`log-windows-2.json`, `passage-iroh.zip`).
+
 ## 2.35.1
 
 ### Fixed
