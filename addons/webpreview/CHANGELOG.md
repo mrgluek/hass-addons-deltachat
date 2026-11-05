@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.20.0
+
+### Added
+- Private Delta Chat warnings to the bot administrator when Jina tokens fall below 1,000,000 or Reader returns HTTP 402. Balance is checked only on Reader requests, in a background thread that does not delay the reply, at most once an hour. Each warning has a separate 24-hour cooldown persisted across restarts, and is sent to the admin's key contact so it stays encrypted.
+
 ## 2.19.0
 
 ### Changed
