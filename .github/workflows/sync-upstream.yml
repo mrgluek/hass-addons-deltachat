@@ -32,9 +32,15 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       addons: ${{ steps.changed.outputs.addons }}
+      sha: ${{ steps.changed.outputs.sha }}
     steps:
+      # Check out the live tip of main, not the event's GITHUB_SHA (which is
+      # frozen when the run is queued and becomes stale if an earlier run
+      # in the concurrency group pushed a commit while this run was waiting).
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,6 +60,7 @@ jobs:
           ADDONS=$(git diff --name-only -- addons/ | cut -d/ -f2 | sort -u | jq -R . | jq -sc .)
           echo "Changed add-ons: $ADDONS"
           echo "addons=$ADDONS" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           git diff --binary -- addons/ > sync.patch
 
       - name: Save version bump patch
@@ -77,6 +84,8 @@ jobs:
       # Same commit detect ran on, so the patch applies cleanly
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.detect.outputs.sha }}
 
       - name: Fetch version bump patch
         uses: actions/download-artifact@v4
@@ -101,6 +110,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
+          ref: main
           token: ${{ secrets.SYNC_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
@@ -120,7 +130,11 @@ jobs:
         id: apply
         env:
           CHANGED: ${{ needs.detect.outputs.addons }}
+          BASE_SHA: ${{ needs.detect.outputs.sha }}
         run: |
+          # Start on the exact commit detect created sync.patch against so git apply
+          # cannot fail even if a manual commit landed on main during the build
+          git checkout -B main "$BASE_SHA"
           # Check the registry itself rather than trusting the build job result
           READY=""
           for ADDON in $(jq -r '.[]' <<<"$CHANGED"); do
