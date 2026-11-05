@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.12.1
+
+### Changed
+- **Current Chrome User-Agent**: The browser User-Agent now says Chrome 158 instead of Chrome 120, which had gone stale.
+
 ## 1.12.0
 
 ### Changed
