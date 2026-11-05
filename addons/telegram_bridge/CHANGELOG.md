@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.35.3
+
+### Changed
+- **Current Chrome User-Agent**: The browser User-Agent the bridge sends now says Chrome 158 instead of Chrome 120, which had gone stale.
+
 ## 2.35.2
 
 ### Fixed
