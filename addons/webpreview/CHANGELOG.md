@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.20.1
+
+### Changed
+- **Current Chrome User-Agent**: the standard browser User-Agent now says Chrome 158 instead of Chrome 120, which had not changed since the first release and could look outdated to sites that check it.
+
 ## 2.20.0
 
 ### Added
