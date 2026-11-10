@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.2
+
+### Fixed
+- **Images show as pictures**: A `.webp` attachment arrived as a plain file (`tmpXXXX.webp`). Images (jpg, png, webp, gif and others) now get an explicit Image/Gif viewtype.
+
 ## 1.6.1
 
 ### Fixed
