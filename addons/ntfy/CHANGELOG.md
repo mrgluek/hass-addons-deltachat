@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.4
+
+### Fixed
+- **`Message` header is no longer ignored**: When the request body is a file (`curl -T`), the notification text now comes from the `Message` header (also `X-Message`, `Msg`, `m`) instead of the fixed "File attachment". The header also fills in the text when the body is empty.
+
 ## 1.6.3
 
 ### Changed
