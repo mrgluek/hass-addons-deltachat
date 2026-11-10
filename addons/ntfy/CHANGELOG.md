@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.1
+
+### Fixed
+- **Replies in groups reach the topic again**: Replying to a notification in a group did nothing, because only private-chat notifications start with `[topic]`. The topic is now also taken from the quoted sender name (`#topic`), and only if the group is subscribed to it.
+
 ## 1.6.0
 
 ### Changed
