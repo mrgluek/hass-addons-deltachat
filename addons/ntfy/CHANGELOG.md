@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.5
+
+### Changed
+- **Reaction instead of a confirmation message**: When you post to a topic (a reply to a notification, or `/send`), the bot now puts a reaction "✅ topic" on your message instead of sending a separate "Sent to `topic`" message. The core accepts any reaction string under 30 bytes with no ASCII whitespace, so the text is built with a no-break space and a long topic name is cut. If the reaction cannot be sent, the bot falls back to the old text reply.
+
 ## 1.6.4
 
 ### Fixed
