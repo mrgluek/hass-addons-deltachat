@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.3
+
+### Changed
+- **Real attachment file names**: Attachments no longer arrive as `tmpXXXX.ext`. The name comes from the `Filename` header (or JSON `filename`), else from the URL of an `Attach` download, else `attachment`. Names are stripped of paths and control characters.
+
 ## 1.6.2
 
 ### Fixed
