@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.6
+
+### Changed
+- **Reactions for subscriptions, "📋 topic" for posts**: `/sub` and a subscription by link react with "✅ topic", `/unsub` with "🔕 topic", "already subscribed" / "not subscribed" with "ℹ️ topic" instead of a text reply. A post to a topic is confirmed with "📋 topic" (was "✅ topic"). If a reaction cannot be sent, the bot replies with text as before.
+
 ## 1.6.5
 
 ### Changed
