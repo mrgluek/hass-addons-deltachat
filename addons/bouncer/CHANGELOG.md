@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.51.1
+
+### Changed
+- **❓ for "not checked yet"**: the call badge of a server without a call check shows `📞❓` instead of `📞⚪️` (also in `/cmcallstatus`), so it is not mistaken for the white circle of a whitelisted relay in `/cmpinglist`; the legend names it.
+
 ## 2.51.0
 
 ### Changed
