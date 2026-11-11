@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.36.0
+
+### Added
+- **Sub-admins in Delta Chat**: The owner can let a person manage their own groups without full admin access. `/subadminadd <email>`, `/subadminremove <email>` and `/subadmins` (owner only, private chat). A sub-admin is matched by key fingerprint only. They can use `/bridge`, `/unbridge` (only bridges they created) and `/stats` in a private chat (only their own bridges); every other admin command stays owner-only. DC bridges now record their creator.
+
 ## 2.35.3
 
 ### Changed
