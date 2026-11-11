@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.36.2
+
+### Added
+- **`/subadminadd` by contact card**: Send the bot the person's contact card (vCard) with the caption `/subadminadd`. The bot takes the address and the key from the card, so the person does not have to write to the bot first. A card without a key is refused with a hint; `/subadminadd <email>` still works for people the bot already knows.
+
 ## 2.36.1
 
 ### Added
