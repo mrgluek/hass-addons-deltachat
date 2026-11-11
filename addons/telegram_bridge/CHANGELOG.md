@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.37.1
+
+### Fixed
+- **`/bridge` in Telegram when the command message is deleted**: If something (for example a moderation bot) deleted the `/bridge` message while the bridge was being set up, the bridge was created but the confirmation with the invite link failed with "Message to be replied not found" and the log said "Failed to create TG bridge". The bot now sends its replies to the chat directly when the command message is gone.
+
 ## 2.37.0
 
 ### Added
