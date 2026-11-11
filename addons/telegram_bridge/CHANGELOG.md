@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.36.1
+
+### Added
+- **`/adminadd @username` in Telegram**: `/adminadd` and `/adminremove` accept an @username as well as a numeric ID. The username is looked up through the userbot, so it works for regular accounts with a public username while the userbot is connected. Channels, bots and unknown names are refused with a clear message.
+
 ## 2.36.0
 
 ### Added
