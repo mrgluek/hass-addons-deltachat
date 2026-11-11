@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.53.0
+
+Security and reliability release: the fixes of a full code audit.
+
+### Security
+- **ActivityPub**: the address check now covers the connection itself (checked resolver, one resolution used for check and connect, redirects off, DNS off the event loop), so a redirect or DNS rebinding cannot reach an internal service; the exemption of test host names is gone, and so is the `allow_private_networks` switch. Remote JSON is capped at 256 KiB, outgoing fetches are limited to 8 at a time and the delivery queue to 2000 items.
+- **ActivityPub**: a `Delete` no longer removes followers on a failed key fetch; it needs a verified signature from the actor's own key. The HTTP signature must cover the request target, host, date and (for POST) the body digest, and the digest must match the body.
+- **Channel media**: attachments over 20 MB (`CHANNEL_MEDIA_MAX_BYTES`) or beyond 2 GB in total (`CHANNEL_MEDIA_MAX_TOTAL_BYTES`) are not stored (the post says "Attachment not stored"); files are deleted with their posts and with removed channels; deleted channels no longer serve media or avatars; uploaded SVG/HTML and any non-media type are served as a download with `nosniff` and a sandbox CSP.
+- **Docker**: `.env*`, keys, credentials and database files are excluded from the image.
+- **`/initadmin`** works only in a private chat with a readable key and claims email and fingerprint in one atomic step; an existing admin is never overwritten.
+- **`/cmping`, `/cmcall`, `/cmpingadd`**: IP addresses are refused and the name must resolve only to public addresses; `/dns @auth` ignores name servers on private addresses.
+- **Contact names with U+2028 / U+0085 and similar** no longer hide the contact's key fingerprint (this allowed to dodge `/ban`).
+- Web: `X-Ingress-Path` is validated and the preview/RSS caches are bounded with expiry (256 entries).
+
+### Fixed
+- **Admission limits**: `/virus` has a per-sender cooldown (20 s); `/virus`, `/cmping` and `/cmcall` have a cap on waiting requests (`MAX_QUEUED_VIRUS`, `MAX_QUEUED_CMPING`, `MAX_QUEUED_CMCALL`), and the outbox drops the oldest ordinary messages beyond 500 waiting.
+- **`/ban`**: checked when the bot itself joins a group and after a restart, retried when the new member's key cannot be read yet, with no limit of 1000 bans. The relay whitelist circle in `/cmpinglist` looks at all IPv4 addresses and follows the list and switch.
+- Messages are deduplicated per account and only after they were handled, so a temporary RPC failure no longer drops a command or a join.
+- **Echo calls**: capacity is reserved atomically before network work, the peer and the slot are always released, a duplicate call event no longer hangs up the running call.
+- **Monitoring**: shared state is protected by a lock and commands work on snapshots (no "dictionary changed size during iteration").
+- **Autokick**: a member counts as warned only after the core accepted the warning.
+- `update.sh -f` moves the checkout to the selected release before rebuilding.
+
 ## 2.52.1
 
 ### Fixed
