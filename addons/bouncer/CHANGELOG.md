@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.48.0
+
+### Added
+- **`/ban <user|ID|address|fingerprint>`** (admin only; also as a reply, `/ban` alone lists the bans): remembers the person's key fingerprint, removes them from every group the bot is in and removes them again whenever they are added to a group the bot is in, for instance by joining through an invite link the bot made. The ban follows the key, so a changed address does not help; a new key does. The bot administrator and the bot cannot be banned. `/unban <address|ID|fingerprint start>` lifts a ban.
+- The ban list is also checked once an hour (by contact ID) in case a join was missed. Only the key matters, so `/ban` needs a contact the bot has an end-to-end encrypted key for.
+
 ## 2.47.0
 
 ### Added
