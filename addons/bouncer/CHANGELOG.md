@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.51.2
+
+### Changed
+- **Stricter `/cmpinglist` Colours**: with a tight spread (most relays between 1.2 and 3 s) nearly everything came out green. The limits are now 1.1 × / 1.4 × / 2 × the median (🟢 / 🟡 / 🟠, slower is 🔴) instead of 1.25 × / 2 × / 3 ×; the guards stay (under 1 s always 🟢, 6 s and more never better than 🟠).
+
 ## 2.51.1
 
 ### Changed
