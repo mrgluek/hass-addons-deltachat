@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.51.0
+
+### Changed
+- **`/cmpinglist` Circles Relative to the Other Servers**: the colour no longer comes from fixed limits but from the average ping compared with the median of all servers with data (🟢 up to 1.25 × the median, 🟡 up to 2 ×, 🟠 up to 3 ×, 🔴 slower), so a slow outlier shows even when every relay is fast. Guards: under 1 s is always 🟢, 6 s and more is never better than 🟠. With fewer than 3 servers the old fixed limits (2 / 4 / 6 s) stay. A legend with the current limits is printed under the list. The colours do not change with the country filter (the median is always taken over all servers).
+- A server without ping data shows no speed instead of "⚪️ no data".
+
+### Added
+- **White circle for whitelisted relays**: a relay whose IPv4 addresses are all in the Russian mobile internet whitelist (the `/wl` list) gets ⚪️ instead of a speed colour, the speed is still shown. The check runs in the background together with the country lookup (cached for a day, so it can lag the list by up to a day) and follows `/ruwhitelist ip off`.
+
 ## 2.50.0
 
 ### Added
