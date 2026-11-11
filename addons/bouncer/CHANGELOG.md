@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.52.1
+
+### Fixed
+- **`/kick faq bot` removed every bot in the group**: the name was split into words and each word ("faq", "bot") matched as a substring, so "bot" matched all bots. Now the words are tried together first (a name of several words is one name), an exact match of a name, display name or address wins over a partial one, and a name that fits several members removes nobody and lists the candidates (use the ID or address). Separate names (`/kick alice bob`) still work when no member is called "alice bob". `/ban` uses the same matching.
+
 ## 2.52.0
 
 ### Changed
