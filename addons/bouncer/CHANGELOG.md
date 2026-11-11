@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.49.1
+
+### Changed
+- **Tidier `/cmpinglist`**: the country flag now comes before the server name, the average ping is shown in seconds rounded to one decimal (`1.7s` instead of `1439.7 ms`), and the ping count `(🏓 N)` only when fewer than 100 pings are behind the average (at 100 it is the full window and only noise).
+
 ## 2.49.0
 
 ### Added
