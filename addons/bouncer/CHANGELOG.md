@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.47.0
+
+### Added
+- **`/wl <domain | IPv4>`**: only the Russian mobile whitelist lines of `/dns` and `/ip`, without the rest of the report. For a domain: its A/AAAA and MX host addresses against the IP list, and the name itself against the domain list; for an address: the `/ip` line. A link is reduced to its host. For everyone, queued and cached like `/dns` (answers for 5 minutes); says so when the checks are turned off with `/ruwhitelist` or a list is unavailable. Not listed in `/help`.
+
 ## 2.46.1
 
 ### Changed
