@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.31.0
+
+### Changed
+- Shorter plain-text incident and partial outage messages, with compact monitor lines and targets shown only when different from the name. All available node votes, flags, errors and latencies remain visible, including after recovery; report delays are unchanged.
+
 ## 2.30.0
 
 ### Added
