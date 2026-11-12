@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.54.0
+
+Security release: fixes from an independent audit of the public code.
+
+### Security
+- **FAQ Bot** is recognized only by its address (`FAQ_BOT_ADDR`, empty = not recognized). Before, any member could name themselves "FAQ" and set the bot flag to switch Bouncer's FAQ into shadow mode.
+- **`/save`**: at most 100 topics and 100 MB per chat, a 3 s cooldown per sender, and attachments are copied by a bounded pool of 2 workers with a short queue instead of one thread each.
+- **Images** (`/sticker`, sticker tool): files over 25 MB or 24 million pixels are refused before decoding (decompression bombs).
+- **`/ip <host>`** no longer lists private or reserved addresses a name resolves to.
+- **Web pages**: invite links are validated (http(s), dc:, openpgp4fpr: only) and escaped for HTML and JavaScript contexts.
+- **One public-address check** (`netutil.is_public_ip`) now used by ActivityPub, `/ip`, `/cmping` and friends: it also rejects 6to4, NAT64 and Teredo addresses that embed private IPv4 ones. `/whois`, RDAP, ipinfo and RIPEstat requests no longer follow redirects.
+- **ActivityPub**: the remote actor cache, last-status table and signature replay table are bounded with expiry.
+- **`/dns`**: SPF lookups (10, depth 5), PTR names (5) and MX hosts (10) are capped and the whole report has a time budget.
+
+### Fixed
+- **`/ban`**: when a member joins without a join event, the retry checks the whole group (not only 64 unresolved members), so a banned user cannot hide in a large group.
+
 ## 2.53.1
 
 ### Fixed
