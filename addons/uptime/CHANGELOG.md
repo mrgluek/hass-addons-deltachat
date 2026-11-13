@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.34.1
+
+### Fixed
+- Status apps update on significant changes; changing latency, node errors and uptime refresh only alongside another update or after 30 minutes when values changed.
+- Fresh app instances receive their first state even when the rolling hourly cap is full; later updates and status line edits still respect the shared cap.
+- Capped updates and status line edits log a warning at most once per chat per hour and appear in `/stats`.
+
 ## 2.34.0
 
 ### Added
