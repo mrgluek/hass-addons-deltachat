@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.36.0
+
+### Security
+- Enforce transactional monitor quotas for new additions (300 per chat, 3,000 total, configurable), field lengths, a 30-command sliding budget per non-admin sender/chat, and byte limits before parsing sync or peer messages; existing monitors stay unchanged.
+- Bound the outbox to 2,000 pending items, dropping routine replies before alerts or peer protocol traffic, with a drop counter and throttled warnings.
+- Trust forwarded web addresses only through configured `TRUSTED_PROXIES`, bound and expire client rate buckets, cap dashboard rendering at four concurrent requests, and cache rendered pages per token for 15 seconds while retaining security headers.
+
+### Changed
+- Fetch automatic monitor titles in bounded background workers with a five-second overall deadline; add without a title on timeout or saturation.
+- Resolve DNS with five-second deadlines and a bounded system-resolver pool, check `/ping` cooldowns before validation, and apply one 30-second probe deadline across DNS, redirects, HEAD/GET fallback, body reads and cleanup.
+
 ## 2.35.0
 
 ### Fixed
