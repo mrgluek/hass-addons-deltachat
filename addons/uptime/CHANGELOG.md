@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.1
+
+### Fixed
+- **Status App Never Got Its First Update**: it called `rpc.get_chat`, which the core does not have (`Method not found`, hidden by mocks in the tests), so the app was posted and pinned but stayed on "Waiting for the first update". The chat name now comes from `get_basic_chat_info`, which also fixes the chat name on the web status page. A new test checks every `rpc.<method>` used by the bot against the installed core's schema.
+
 ## 2.32.0
 
 ### Added
