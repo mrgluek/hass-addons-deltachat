@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.35.0
+
+### Fixed
+- Keep HTTP keyword requirements separate when scheduling checks and reusing peer results across chats.
+- Resolve incidents only when no linked downtime remains open, reloading concurrent failures instead of announcing recovery.
+- Retry initial incident and partial-outage notices after definite core rejections, up to three attempts at least five minutes apart; uncertain sends keep their at-most-once claims.
+- Pin status lines only after server delivery and at least 60 seconds since posting; pending pins retry on the 30-second audit before the app's first state and old-message unpins.
+
+### Security
+- Admit inbound single and batch probes through one 20-slot bound, with at most 10 outstanding probes and 120 requests per minute per peer, a bounded 10-minute replay cache, and throttled warnings.
+- Reject node-name collisions during HELLO, HELLO_ACK, enrollment and renaming, preserving existing peer names. Known limitation: votes and measurement replacement still use collision-checked display names rather than immutable peer identities.
+- Retain peer measurements by local receive time, clamp claimed timestamps to seven days ago through 60 seconds ahead, keep at most 1,000 measurements per peer identity, and prune mirrored targets unseen for seven days.
+
 ## 2.34.2
 
 ### Security
