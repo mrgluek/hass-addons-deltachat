@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.32.0
+
+### Added
+- Opt-in pinned webxdc status app: `/report app on|only|off`, full monitor/node snapshots, light/dark themes, debounced updates and a rolling hourly cap. App-only mode suppresses outage chat notices while keeping detection, incidents and statistics active.
+
+### Changed
+- Keep local bot messages for seven days and re-post expired/missing status apps, with an hourly re-post guard. Peer chat trimming remains separate. Pending notices from app-only time are dropped when notices resume.
+
 ## 2.31.0
 
 ### Changed
