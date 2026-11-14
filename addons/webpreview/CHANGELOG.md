@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.21.0
+
+### Added
+- **Gemini 4 Hydrogen First in the Chain**: `gemini-4-hydrogen` is now the first model tried for `/tldr`, `/ai` and preview captions. `gemini-3.8-flash` and the older models stay behind it, so if Hydrogen is rate limited, overloaded or times out, the usual fallback applies. The model name is still shown under each AI answer. A `GEMINI_MODELS` set in `.env` overrides the new default.
+
 ## 2.20.1
 
 ### Changed
