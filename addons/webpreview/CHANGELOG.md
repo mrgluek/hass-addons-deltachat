@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.2
+
+### Fixed
+- **Long `/google` and `/ai` Answers No Longer Cut Off**: Delta Chat shows only the first 3800 characters or 38 lines of a message and hides the rest behind "Show Full Message", which in a `/google` answer also hid the source links. The bot now shortens only the answer text so the whole message (header, answer and sources or link) stays inside both limits, cutting at a paragraph, line or sentence end and marking it with an ellipsis. The default answer style also asks the model to stay under about 2800 characters, so the conclusion is not the part that gets cut.
+
 ## 2.26.1
 
 ### Fixed
