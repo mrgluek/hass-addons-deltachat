@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.25.0
+
+### Added
+- **Adjustable `/ai` Limits**: `AI_CONTEXT_CHARS` (article or quoted text sent as context, default 16000, up to 200000) and `AI_MAX_OUTPUT_TOKENS` (answer cap, default 4096, up to 16384) can now be set in `.env`. The defaults are the old fixed values, so nothing changes until they are raised. `/tldr`, previews and `/google` are not affected.
+
 ## 2.24.0
 
 ### Added
