@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.0
+
+### Changed
+- **Answer Style for `/ai` and `/google`**: the prompt no longer caps answers at 2-3 paragraphs. Simple or factual questions now get a direct answer in a word or a sentence or two without filler, and complex questions get a reasoned answer (key considerations, steps, then the conclusion) with as much space as it needs. The wording is the new optional `AI_ANSWER_STYLE` setting in `.env`; empty keeps the built-in default. `/tldr` and previews are unchanged.
+
 ## 2.25.0
 
 ### Added
