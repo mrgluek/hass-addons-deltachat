@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.22.0
+
+### Added
+- **Optional Gemini Tools for `/ai`**: the new `GEMINI_TOOLS` setting (empty by default) turns on built-in Gemini tools for `/ai` one at a time: `code_execution`, `url_context` and `google_search`. `/tldr`, previews and captions never use them. Gemma models are sent no tools. If a model or key rejects the tools (for example Google Search on a free key), the same model is retried at once without them and skipped for tools for an hour, so the model stays in the fallback chain. Answers are not cached for 24 hours while `google_search` is on.
+
 ## 2.21.0
 
 ### Added
