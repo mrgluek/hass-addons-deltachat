@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.24.0
+
+### Added
+- **`/google` Command**: answers a question from live Google Search results (Gemini grounded in Google Search) and lists up to 3 source links. It also works as a reply to any message. It needs the new `GEMINI_SEARCH_API_KEY`, a paid Gemini key, because Search is not available on the free tier; that key is used for `/google` only, while `/ai`, `/tldr`, previews and captions stay on `GEMINI_API_KEY`. There is no fallback to the free key or OpenRouter, since they would answer without searching. If the key is rejected (for example prepaid credits run out) `/google` pauses for an hour. Answers are never cached.
+
+### Changed
+- **`GEMINI_AI_API_KEY` Is Now `GEMINI_SEARCH_API_KEY`**: the paid key no longer serves all of `/ai`; it serves `/google` only, so `/ai` is back on `GEMINI_API_KEY`. Rename the variable in `.env`.
+- The Gemini API key is now sent only in the `x-goog-api-key` header, no longer also in the request URL.
+
 ## 2.23.0
 
 ### Added
