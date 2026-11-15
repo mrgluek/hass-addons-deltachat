@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.1
+
+### Fixed
+- **Real Source Links in `/google`**: the sources under a `/google` answer were long `vertexaisearch.cloud.google.com/grounding-api-redirect/...` links. The bot now reads where each redirect points (only Google's own redirect host is contacted, the source pages themselves are not fetched) and shows the real page URLs, with the old link kept if that fails. Sources that point to the same page are listed once.
+
 ## 2.26.0
 
 ### Changed
