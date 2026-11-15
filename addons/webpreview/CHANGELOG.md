@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.27.0
+
+### Added
+- **PDF and Video Attachments for `/ai`**: send `/ai` with a PDF or a video (MP4, MOV, WebM, MPEG, AVI, 3GP, FLV, WMV), or reply `/ai` to one, to get a summary or ask a question about it. The file is sent to Gemini inline, so PDFs and videos are limited to 14 MB (photos and audio keep 20 MB), and a failed size check says both limits. These requests get a 90 second time budget and 60 seconds per call, because the model needs longer for them. A PDF is recognised by its header; a video needs a video type or file extension, so an MP4 voice recording is still treated as audio. Videos stay usable with `/tldr`, as before.
+
 ## 2.26.2
 
 ### Fixed
