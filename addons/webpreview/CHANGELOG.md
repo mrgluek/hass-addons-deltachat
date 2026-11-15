@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.23.0
+
+### Added
+- **Separate Gemini Key for `/ai`**: the new optional `GEMINI_AI_API_KEY` is used only for `/ai`, so a paid key can serve `/ai` while `/tldr`, previews and captions stay on the free `GEMINI_API_KEY`. The two keys have separate per-model cooldowns and share one time budget. If the `/ai` key is rejected (HTTP 401, 402 or 403, for example when prepaid credits run out), `/ai` goes back to the main key for an hour instead of failing.
+
+### Changed
+- The Gemini API key is now sent only in the `x-goog-api-key` header, no longer also in the request URL.
+
 ## 2.22.0
 
 ### Added
