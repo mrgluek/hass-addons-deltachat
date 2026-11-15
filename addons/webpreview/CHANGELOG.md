@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.28.0
+
+### Added
+- **Cost Controls for `/google`** (it runs on the paid key):
+  - `GEMINI_SEARCH_THINKING` sets the reasoning depth (default `low`). In a test the same question took 28 s and about 4400 output tokens at the model default, and 9 s and about 1300 at `low`.
+  - Identical questions (same text and chat language) are answered from memory for `GOOGLE_CACHE_MINUTES` (default 60) instead of a new paid request.
+  - `GOOGLE_DAILY_LIMIT` (default 100, all users, rolling 24 h) and `GOOGLE_USER_DAILY_LIMIT` (default 10 per user, the admin is exempt) stop runaway use; cached answers do not count.
+  - `GEMINI_SEARCH_MODELS` chooses the models `/google` uses and their order, separately from `GEMINI_MODELS`.
+
+### Fixed
+- `/google` no longer tries Gemma models, which cannot use Google Search and would have answered without searching.
+
 ## 2.27.1
 
 ### Fixed
