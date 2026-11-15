@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.29.0
+
+### Added
+- **`/google` Cost Estimate in `/stats`**: each paid `/google` search now logs its token counts and number of search queries (answers from the cache are not logged). For the bot admin `/stats` shows the searches, tokens and search queries of the last 24 hours and 30 days, an estimated token cost from Google's list prices (the introductory prices of Flash 3.8 and Gemini 4 Argon/Carbon switch on their end dates), and how many of the 5000 free search queries of the month are used, with about $14 per 1000 beyond that. It is an estimate; the real bill is in AI Studio. The usage history is kept for 400 days.
+
 ## 2.28.0
 
 ### Added
