@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.37.0
+
+### Added
+- Failed HTTP(S) checks now say when the failure looks like filtering: a second probe from the same node compares the real name with a neutral one. `SNI block?` (https: the handshake with the name is reset or hangs, a handshake without it is answered), `HTTP Host block?` (the same for the Host header of a plain http request) and `DNS spoofing?` (the system resolver answers other addresses than 1.1.1.1 / 8.8.8.8, and only the public answer works). The tag shows in the node's vote line (`🔴 RU (SNI block? Connection reset by peer) · 🟢 DE (44ms)`). When both probes fail, no tag is given: the address itself is unreachable and the other nodes' votes tell a dead server from a block by IP. The status of a monitor never depends on it; older peers show the text as it is. A diagnosis runs at most once per target in 5 minutes, 8 at a time, within 10 seconds. `BLOCKCHECK=0` turns it off, `BLOCKCHECK_RESOLVERS` sets the public resolvers.
+
 ## 2.36.0
 
 ### Security
