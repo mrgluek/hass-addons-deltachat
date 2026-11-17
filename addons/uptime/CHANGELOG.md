@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.39.0
+
+### Added
+- The diagnosis of a failed check runs inside the check's overall deadline (it gets what is left, and none starts with less than 2 s left), so a failing target never takes longer than before.
+- A GET check whose body stops after a few KB says so: `Freeze? Stalled after 10 KB of 2.0 MB` (below 64 KB; above it `Stalled after 100 KB of 5.0 MB`, a slow link, no tag). This is what the TSPU "freeze" of hosting networks looks like: the connection opens, a few packets pass, then nothing and no reset. It needs a `Content-Length` and a body read (GET: after a `405`, for keyword monitors, or when HEAD is not enough); a HEAD check never reads a body and a response without length (a stream) is read once as before.
+
+### Changed
+- With a known `Content-Length` the body is now read until the limit (16 KB, 128 KB for a keyword) instead of one read of whatever has arrived, so a keyword in a later part of a larger page is found. A body that stops early now makes the check DOWN instead of UP with an empty body.
+
 ## 2.38.0
 
 ### Added
