@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.43.0
+
+### Added
+- Show disk usage and the largest files and directories in `/stats`, and warn the admin when disk space is low.
+
 ## 2.42.0
 
 ### Added
