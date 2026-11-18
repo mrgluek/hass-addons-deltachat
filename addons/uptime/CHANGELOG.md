@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.44.1
+
+### Fixed
+- Disable core dumps for the bot and its Delta Chat RPC server on supported systems.
+
+### Added
+- Notify the admin about existing core dumps, show them in `/stats`, and let the admin remove them with `/rmcore`.
+
 ## 2.44.0
 
 ### Added
