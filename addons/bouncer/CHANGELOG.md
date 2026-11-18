@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.54.1
+
+### Changed
+- **Call alerts are no longer posted to chats.** `Calls failing / degraded / restored` messages filled the `/cmreport` chats. Incidents are still recorded and shown in `/cmcallstatus`, `/cmcallhistory` and the 📞 badges of `/cmpinglist`. `CMCALL_ALERTS=1` brings the chat messages back.
+
 ## 2.54.0
 
 Security release: fixes from an independent audit of the public code.
