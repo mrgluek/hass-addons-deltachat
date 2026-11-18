@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.40.1
+
+### Fixed
+- Apply large-chat mail pacing when live mode is enabled and no live session is active.
+
+### Changed
+- Start large-chat mail pacing at 10 members.
+
 ## 2.40.0
 
 ### Added
