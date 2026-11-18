@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.42.0
+
+### Added
+- Track peer mail counts and bytes by message kind, including realtime advertisements, and show 24-hour mail counts, round-trip percentiles, and timeouts in `/stats`.
+
 ## 2.41.0
 
 ### Added
