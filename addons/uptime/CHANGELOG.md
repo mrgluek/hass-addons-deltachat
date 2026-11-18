@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.44.0
+
+### Added
+- Show outgoing mail by kind for the last 24 hours in `/stats`.
+
+### Changed
+- Send unchanged peer telemetry every five minutes and prompt updates on monitor or probe status changes, at most once per peer every 20 seconds. Continue to honor longer intervals requested by peers.
+
 ## 2.43.2
 
 ### Fixed
