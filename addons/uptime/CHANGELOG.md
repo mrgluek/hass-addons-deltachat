@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.41.0
+
+### Added
+- Missing-keyword errors show a short, redacted response excerpt or a byte count for binary data.
+
 ## 2.40.1
 
 ### Fixed
