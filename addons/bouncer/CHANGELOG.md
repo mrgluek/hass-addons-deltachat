@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.55.0
+
+### Added
+- Call incidents appear as short, centered service lines in `/cmreport` chats. The Call Notices webxdc shows the latest incidents it receives. Set `CMCALL_NOTICES=0` to disable the lines or combine it with `CMCALL_ALERTS=1` to use the original text alerts.
+
 ## 2.54.1
 
 ### Changed
