@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.43.1
+
+### Changed
+- Send fewer peer vote mails by batching routine revotes on shared time ticks and spacing out votes for ongoing outages.
+- Pause routine votes to peers after repeated timeouts, probe them after the pause, and show active pauses in `/stats` and `/peers`.
+
 ## 2.43.0
 
 ### Added
