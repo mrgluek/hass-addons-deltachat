@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.40.0
+
+### Added
+- **Live status app.** The status app can update over the webxdc realtime channel (iroh) while it is open: a "Live updates" button in the app, remembered per device, shows "Live · checked HH:MM:SS" and refreshes within seconds. Turn it on per chat with `/report live on|off` (default off, same permission as `/report`, shown in `/report` and `/help`). The bot joins the channel when the app announces itself and leaves 3 minutes after the app goes quiet. In a live chat the routine status mail interval is 30 minutes, and only while the app really talks to the bot; when it stops, the normal mail behavior and the status line return. Privacy: live mode connects the app directly to the bot and to other members who have it on, so they can see each other's IP address; the app says so.
+- **Recovery after a restart.** An open app that gets no answer for 3 minutes leaves and joins the channel again, so a bot restart or deploy no longer leaves it on "no news" until reopened.
+- **Less mail in large chats.** A chat with 20 or more members without live mode gets routine status updates at most every 5 minutes and at most 12 per hour. Incidents, monitor changes and notification journal entries still go out at once.
+
+### Changed
+- App layout version 5: the app is posted again once in every chat that has it enabled.
+- A fresh app instance gets its first state without waiting for the old instance's attempts.
+- `STATUS_REALTIME_CHATS` (comma-separated chat ids) still turns live mode on for those chats.
+
+### Known limits
+- Live mode serves the bot that posted the app; with several bots in a chat each has its own app.
+- The app shows latency only in per-node lines, which need votes from peer nodes.
+
 ## 2.39.0
 
 ### Added
