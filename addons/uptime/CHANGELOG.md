@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.44.2
+
+### Fixed
+- Fix the METRICS mail volume regression in 2.44.0. Status changes now wait for the peer’s normal interval of at least two minutes, and idle snapshots still go out every five minutes or longer if the peer requests it. `/stats` shows how many METRICS messages were sent on change and while idle.
+
 ## 2.44.1
 
 ### Fixed
