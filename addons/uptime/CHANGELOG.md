@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.0.0
+
+### Added
+- Add the optional iroh peer channel (off by default; `/peerrt off|canary|on`). Nodes that enable it exchange votes and telemetry directly, with mail as an automatic fallback. Mixed meshes with older nodes keep working over mail.
+- Privacy note: enabling the channel lets the two paired bots see each other's network address (IP), because iroh connects peers directly or through relays. Leave it off if this is not acceptable.
+- Join accepted peer channels, exchange authenticated heartbeats, and show channel health and round-trip time in `/peers` and `/stats`.
+- Send cross-check requests and answers over healthy iroh peer channels. Fall back to mail after three seconds without acknowledgment or when the channel goes down. Count one answer per peer and show round-trip times by transport in `/stats`.
+- Send peer telemetry over healthy iroh channels, with full snapshots at the peer interval, a ten-second window for status changes, and an hourly mail keepalive. Resume regular mail on the next tick after a channel goes down. Valid realtime frames keep peers online, and `/stats` counts realtime METRICS.
+
+### Fixed
+- Send a realtime ping every 30 seconds on each side so both peers can measure their own round-trip time while replying to each other.
+- Announce peer capability changes on the next telemetry tick, including when the realtime preview is enabled on idle peers. Limit changes to three attempts per peer in ten minutes and send the carrier offer after announcing `rt1`.
+- Recover deleted peer channel apps on the next telemetry tick, including after restart, and check once a minute for missed deletions, offer retries, and rotation. Replace an accepted app promptly after a reset or after re-enabling the preview.
+- Acknowledge realtime check requests only after admission so requests rejected at capacity can fall back to mail.
+- Coalesce and rate-limit cached check answers while honoring the first mail fallback.
+- Validate telemetry message IDs and deduplicate them per verified peer.
+- Satisfy capability requests over realtime so healthy channels can rotate after 14 days.
+- Send hourly mail heartbeats when an established peer channel is down and there are no targets to share.
+- Validate incoming telemetry in bounded worker queues so DNS cannot stall peer event delivery.
+
 ## 2.44.2
 
 ### Fixed
