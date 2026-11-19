@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.32.1
+
+### Changed
+- Deleting a bot answer with 🗑️ now replaces the ☑️ on the original request with “🗑️ Deleted by user request”.
+- The downvote report to the admin now fires at 3 👎 (was: more than 3), as `DOWNVOTE_THRESHOLD` says.
+
 ## 2.32.0
 
 ### Added
