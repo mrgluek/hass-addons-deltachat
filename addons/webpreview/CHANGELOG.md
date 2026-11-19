@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.2
+
+### Changed
+- When several people save the same message (💾 KaraKeep, 🏛️ Web Archive), the bot's single reaction now combines the results, e.g. “💾 KaraKeep · 🏛️ Archive”, instead of the last one overwriting the others. The KaraKeep reaction uses 💾.
+
 ## 2.32.1
 
 ### Changed
