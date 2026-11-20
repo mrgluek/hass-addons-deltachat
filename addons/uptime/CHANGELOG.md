@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.0.1
+
+### Fixed
+- Close nested SQLite readers safely during database replacement and shutdown.
+- Store in-flight check results under the current local node name after a rename.
+- Normalize legacy local measurement sources during database initialization.
+- Count remote measurements in SQLite for `/peers` and load only remote rows for status page badges.
+- Read an uncached local node name without waiting for ongoing database writes.
+- Reuse one read-only SQLite connection per thread, release read snapshots when a checkout is closed or collected, and let active reads finish during shutdown or database replacement. At 10,000 monitors, pooling alone reduced the status app workload from 19,996 reader opens and 11.32 s of CPU to 602 SQLite opens and 1.57 s.
+- Batch incident and partial-notice reads, use the partial index for unlinked open downtime, and skip expired resolved incidents before joining their downtime history. With pooled readers, report notices fell from 8.28 s to 2.98 s of CPU and startup from 5.66 s to 2.83 s.
+- Reuse monitor data and batch settings and incident history during status app updates. At 10,000 monitors, CPU fell from 1.63 s to 0.78 s and measured rows from 126,783 to 99,303 across two passes.
+- Use the partial outage end-time index for open journal entries. Skip outage events already recorded and ended partial outages without a journaled start. At 10,000 monitors, report notices used 3,421 write transactions per simulated minute, down from 45,304.
+- Skip startup cleanup after a recent run, prune old records in batches, and retry failed runs after ten minutes. A saved cleanup time in the future makes cleanup due immediately. On the 90-day fixture, cleanup finished in 8.29 s with a 31 ms longest write lock hold. The previous run exceeded 60 s.
+- Keep local measurements when saving probe-only results, including during a local rename. At 10,000 monitors and 4,000 mirrored targets, local measurements retained rose from 1,000 to 14,000 while the 1,000-row quota per remote peer stayed in place.
+- Sweep expired DNS entries at capacity and evict the least recently used live entries as needed. Keep the 20,000 most recently written vote keys. The second pass hit all 12,000 DNS hosts and 10,000 vote keys, up from zero hits in both caches.
+- Start the realtime ACK timeout after the RPC send succeeds and discard tracking for cancelled or expired sends. With a simulated 3.5 s queue delay, all 10 peer links stayed up and mail fallbacks dropped from 20 to zero.
+- Limit recovery checks for down realtime peer links to every five seconds while no fresh activity arrives. Seven offline peers used 84 connections and dispatches per minute, down from 840 connections and 420 dispatches, with CPU time down from 328 ms to 45 ms per simulated minute.
+- Cache the local node name between checks and invalidate it on rename. In 1,000 lookups, connections dropped from 1,000 to 1 and CPU time from 342 ms to 0.94 ms.
+- Stop opening a database connection per outage row in the 30 s journal pass. It read a setting for every partial outage and incident of the last 30 days through its own connection, which made it the biggest CPU consumer of the bot. Settings are now read in one query per pass.
+
 ## 3.0.0
 
 ### Added
