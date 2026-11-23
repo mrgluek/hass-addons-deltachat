@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.0.2
+
+### Fixed
+- Answer cross-check requests that the probe admission turns away instead of dropping them in silence. One batch now reserves at most 5 worker slots (was 10) so a second request of the same peer fits next to it, and a request that does not fit the per-requester cap of 10 gets the free slots instead of nothing. A multi-target batch (3 targets or more) is never granted fewer than 3 slots, so a batch is not left running on one or two workers past its requester's deadline; it is rejected instead. A request that is still rejected gets an immediate `skip` answer (error text `Busy: ...`; at most 20 per minute per peer and 30 per minute in total; never over the 120 requests per minute or the 10,000 id bound; rejected requests count towards the 120 per minute), which every version files as an abstention, so the requester no longer waits its 25 s. A node that receives such a busy answer does not treat it as a real answer: it does not store it as a measurement (an earlier up or down stays), does not record a successful round trip, and counts it like a failed answer for the vote backoff of that peer. Production saw 34 of 36 drops on ru turn into a `got no answer` on de2 25 s later: a grid batch of 11 targets held all 10 slots and the next urgent batch was dropped. Admission for one requester is unchanged in total (10 slots, 20 global, 120 requests per minute). With a grid batch of 11 targets: slots held 10 -> 5, an urgent request after it 0 answers -> 1 answer. `/stats` shows requests turned away (last hour, since start) and how many got fewer workers.
+- Always acknowledge an authenticated realtime request frame, also when its request is rejected. A rejection used to count as an ACK failure on the sender, and two in a row marked the link DOWN and sent every pending frame by mail (120 mail fallbacks in 24 h on de2).
+- Read the bot's own key fingerprint once per account and process instead of on every incoming peer message. Each `get_chat_securejoin_qr_code` call made the core store a new invite token (460,625 rows, 24-30k a day on de2, never deleted) and cost an extra core write and RPC on the event thread. For 1,000 incoming peer messages the calls fall from 1,000 to 1. A failed lookup is not cached. The same helper (`dc_fingerprint.py`) is shared by the sibling bots.
+- Delete trimmed peer-chat messages in chunks of 50 (was 500) and hold the realtime lock for one chunk at a time (the check of which message ids are protected and the delete RPC of that chunk), releasing it between chunks (with a 2 ms pause, so a waiting thread can take it). The event thread and the event loop wait for at most one chunk (about 200 ms) instead of the 1.6-6.8 s a pass of about 430 messages kept the lock, and a just-accepted carrier OFFER is still protected against deletion in every chunk. For 430 messages, the longest wait of a second thread for the lock fell from 1,622 ms to 191 ms, the time of one chunk (`python -m tools.loadbench.release302`, 3.8 ms per delete as on de2); the pass takes the same time.
+- Wait up to five seconds for readers that are still opening the old database file when the file is replaced, instead of failing. This only affects tests that recreate the database; production never replaces the file.
+
+### Added
+- `tools/loadbench/release302.py`: before and after micro-benchmark for these changes.
+
 ## 3.0.1
 
 ### Fixed
