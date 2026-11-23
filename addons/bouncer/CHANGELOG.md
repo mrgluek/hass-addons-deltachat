@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.55.3
+
+### Fixed
+- The bot's own key fingerprint is read from the core once per account and process instead of on every lookup. Each lookup asked the core for a new invite link, and the core never removes the invite tokens it creates (about 1.2 million on production, 51,000 more per day), which grew its database. Admin checks, the hourly autokick passes, bans and the other fingerprint lookups now share one cached value; a failed lookup is retried and not cached.
+- Measured with a fake core: an autokick pass over a group of 200 members made 400 invite-link requests before and makes 1 after (3 passes: 1,200 before, 1 after); a `/help` command made 1 before and at most 1 after, the first one in the process only.
+
 ## 2.55.2
 
 ### Fixed
