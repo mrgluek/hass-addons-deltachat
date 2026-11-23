@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.3
+
+### Fixed
+- Link preview cards posted in group chats were not tracked, so 👎 reactions never reached the administrator and 🗑️ could not delete them. They are now tracked like other answers.
+
 ## 2.32.2
 
 ### Changed
