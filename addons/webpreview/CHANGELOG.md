@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.4
+
+### Fixed
+- The bot's own key fingerprint is now read from the core once per process instead of on every admin check. Each read made the core create a new invite token that is never removed, and the check runs for every link, preview, command and reaction of a non-cached user. Measured with a fake core and 1,000 requests from 1,000 different users: 1,000 invite-token requests before, 1 after. A failed lookup is not cached. `dc_fingerprint.py` is the shared copy from the other bots (adds `forget_self_fingerprint()`).
+
 ## 2.32.3
 
 ### Fixed
