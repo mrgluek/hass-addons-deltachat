@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.4
+
+### Added
+- Deletion of old status app instances on the members' devices. Every status app the bot replaces (after 7 days or more than 500 updates) stays in every chat member's database for ever; a full instance holds up to 501 status updates of 34-53 KB, about 26 MB. Measured on the owner's client: two busy chats held 36 instances, 503 MB, after 12 days. The 3.0.3 trim only deletes the bot's own hidden carriers in its own core database. Now, when a new instance is posted, the replaced id is recorded (config key `webxdc_retire:<chat id>`, a JSON list of `[message id, replaced at, failed attempts]`), and a pass of the existing 10-minute trim timer deletes every recorded id with the core RPC `delete_messages_for_all` once it was replaced at least 24 hours ago. An id is never deleted when it is the chat's current instance, a status line, an open incident or a peer channel app, or when the chat's current instance no longer exists (then the whole chat is left alone). An id that no longer exists is dropped. A failed call is logged (WARNING), the ids stay and are tried again next pass; after 5 failed attempts an id is dropped.
+- `/appretire [off|dry|on|sweep]` shows or sets the mode (config key `app_retire`, default `dry`). `delete_messages_for_all` is irreversible and visible to every member, so only `on` deletes or records anything for deletion: `dry` makes the automatic pass log how many it would delete (INFO) and keeps the list (rotation still records); `off` records nothing, deletes nothing and the pass makes no RPC call. `sweep` (admin, run in the chat) finds the old instances that exist from before this release: the bot's own webxdc messages (sent by the bot itself, not the current instance, not the status line, not a peer channel carrier) whose app is named `Uptime Status` (the name in `webxdc/manifest.toml`; the peer app is `Uptime peer link`), older than 24 hours. In `dry` it only reports how many; in `on` it records them. The number of updates in an instance is not known to the bot without reading all of them, so the reply gives the instance count (each holds up to 501). `/stats` and `/help` show the mode.
+
+### Load
+- What runs: one pass per 10 minutes on a worker thread, inside the existing trim timer (no new timer). Per pass: one query for all retire lists, one for the current instances, one for the protected ids, at most 100 ids in total (not 100 per chat), one `get_existing_msg_ids` call for the whole pass, at most 2 `delete_messages_for_all` calls of at most 50 ids (2 ms pause between them), and one config write transaction for all changed lists. No RPC, database or config read per id or per chat inside the loops. Rotation adds one config write per rotation (once per chat per 7 days at most). `/appretire sweep` is a manual admin command and reads each of the chat's webxdc messages once (at most 1,000).
+- The scale test (`tests/test_release_304.py`, 300 chats, 5,000 recorded ids) asserts the bounds above and fails on code without the pass.
+
 ## 3.0.3
 
 ### Added
