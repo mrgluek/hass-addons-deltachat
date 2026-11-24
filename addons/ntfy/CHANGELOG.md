@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.1
+- Upstream update to version 1.7.1.
+
 ## 1.7.0
 - Upstream update to version 1.7.0.
 
