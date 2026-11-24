@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.3
+
+### Added
+- Cleanup of hidden status update messages. The core keeps every status app update the bot sends as a hidden message of its own (10-80 KB, the whole update in the `param` column, 900-1,700 a day) and never deletes it; the chat trims only see visible messages. On de2 this was 12,920 messages and 457 MB of a 628 MB core database. Every 10 minutes (the existing trim timer) the bot reads the ids of the oldest such messages from the core database and deletes them through the core RPC in chunks of 50, with the realtime lock held for one chunk at a time, like the peer chat trim. A message is only a candidate when it is hidden, of type 10, sent by the bot (`from_id` 1), older than 24 hours, has a `param` over 1,000 bytes and contains the update marker `E={`. The current status app and status line messages, open incident messages, the peer channel app messages and every visible message are never deleted.
+- `/hiddentrim [off|dry|on]` shows or sets the mode (config key `hidden_trim`). The default is `dry`: each pass logs how many messages it would delete and their size (INFO) and deletes nothing. `on` deletes, `off` does nothing and does not open the core database. `/stats` shows the mode, the number deleted since start and what the last pass found.
+- `tools/loadbench/release303.py`: benchmark of one pass on a fake core database.
+
+### Load
+- What runs: one pass per 10 minutes, on a worker thread (never on the event loop). It opens the core database file once, read-only (`mode=ro`, `query_only`), runs one query that reads at most 500 ids (`ORDER BY id LIMIT 500`, so the oldest first and the scan stops after 500 hits), and closes it. No connection, config read or RPC per row. In mode `on` it issues at most 10 `delete_messages` calls of at most 50 ids (about 4 ms per message measured on de2, so about 2 s a pass in chunks, the realtime lock held for about 200 ms at a time). At 900-1,700 new carriers a day (6-12 per pass) a backlog of 500 per pass (72,000 a day) clears in under a day. If the core database file is not found or cannot be read, one warning is logged and the pass is skipped.
+- Measured (`python -m tools.loadbench.release303`, fake core database of 140,000 rows, 12,920 hidden carriers of 10-80 KB, 445 MB, on a development Mac): read only pass 13 ms CPU (1 connection); worst case without any candidate, a scan of the whole table, 12 ms CPU; pass in mode `on` 500 deleted, 10 delete calls, 1 connection, about 2.3 s wall with a stub RPC that takes 4 ms per message. The tests (`tests/test_release_303.py`, 20,000 rows) assert at most one core database open and at most 10 delete calls of 50 ids per pass.
+
 ## 3.0.2
 
 ### Fixed
