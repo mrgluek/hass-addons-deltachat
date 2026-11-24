@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.6
+
+### Fixed
+- `/appretire` (3.0.4) could not delete anything for members. The local trim of user chats (`trim_user_chats`, messages older than 24 hours) removed a replaced status app instance from the bot's own database as soon as it stopped being the current one, long before the 24-hour grace of the retire pass was over; the pass then found the message gone and dropped it, and `delete_messages_for_all` needs the message to exist. Found on 2026-11-24: in a chat with 14 old instances on the owner's device, `/appretire sweep` found 0 because the bot's database held only the current one. Now, in mode `on`, the ids on the retire lists are kept out of the local trim until the pass has deleted them. In modes `dry` and `off` nothing changes (the local trim still removes them, so the bot's database does not grow).
+- Instances replaced before this release (and before mode `on`) are already gone from the bot's database; the bot cannot delete them on members' devices. `/appretire sweep` only finds instances that are still in the bot's database.
+- Cost: one extra query for the retire lists per trim pass (every 10 minutes), only in mode `on`.
+
 ## 3.0.5
 
 ### Changed
