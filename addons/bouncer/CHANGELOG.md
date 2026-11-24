@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.56.0
+
+### Added
+- **`/relays` lists unreachable relays.** A new first block, `🔴 Unreachable relays`, names each member with a relay the cmping monitor sees as down right now: `/contact<ID>`, name, the relay, how long it has been down and the short error. Relays the monitor has no result for yet are left out. The list of members on public Russian mail providers follows unchanged. A member's relays are the ones the Delta Chat core lists for their key, so secondary relays count.
+- **Relay notes.** When someone writes to the bot in a 1:1 chat or uses a command in a group, and one of their relays has been down for at least 4 hours (`RELAY_NOTE_MIN_DOWN_SECONDS`, default 14400) or is a public Russian mail provider, the bot sends them a short note quoting their message, with two working relays as `https://<relay>/new` links (the app offers to add the relay). The same note follows the welcome greeting in groups with `/welcome` on. Suggested relays are healthy, have at least 10 ping measurements and are picked at random among the 5 with the lowest average ping; for public mail provider users, relays in the RU mobile whitelist come first. A relay that is down is mentioned at most once per 6 hours per person, a public mail provider once a week; in groups only commands this bot handled trigger it, bots are skipped. A contact whose relays could not be read is looked up again after 10 minutes, not a day later.
+
+### Load
+- The relay domains of a contact (domains only, no addresses) are kept in a new `contact_relays` table and read again from the core at most once a day per contact, only when that contact writes to the bot, joins a group with a welcome greeting or is listed by `/relays`. Nothing runs on a timer and nothing scans all contacts; the cmping monitor cycle is unchanged.
+- Per message: one cache read; once a day per contact one core call and one write. Plain group messages (not commands) cost nothing beyond a chat type lookup, which is cached for the life of the process. Relay health is read from memory. Only when a note is due: one downtime query, one rate-limit read and write, one transport list call, one monitor list query and one ping query for all servers together (before: one query per server, as in `/cmpinglist`).
+- Measured with tests on 1,000 contacts and 150 monitored relays: a message from a contact with a working relay costs 1 database connection (2 and 1 core call the first time in a day); a message that triggers a note costs 7 (8 for a public mail provider user, + the whitelist switch); 1,000 messages from 1,000 contacts cost one core call per contact. `/relays` in a 1,000-member group makes 2 database connections in total (one cached write, one downtime query) and no core calls beyond the existing two per member. The scale tests fail on a per-server or per-member query version.
+
 ## 2.55.3
 
 ### Fixed
