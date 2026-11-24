@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0.5
+
+### Changed
+- Status app updates are now small deltas, with a full snapshot now and then. Every update the bot stored on every member's device was a full snapshot of 34-81 KB (84 monitors, 7 voting nodes each), up to 500 a day in a busy chat (about 25 MB a day per member). A new app instance (app format version 6, posted at the normal rotation; no instance is re-posted at deploy, instances at version 5 keep receiving full snapshots exactly as before) receives, as stored update, either a snapshot (the current payload plus `"snap":1`) or a delta `{"v":6,"delta":1,"base":<generated_at of the previous update sent to this instance>,"generated_at":...,"chg":[full monitors that are new or changed],"rm":[ids no longer present], chat, counts, events, event_serial, incidents, partial_outages, *_omitted}`. A monitor counts as changed when a field `status_state_hash` treats as significant changed (id, name, url, type, status, since, each node's name and status); latency, error and 30-day uptime drift travel with snapshots only, as the 30-minute refresh does today. A snapshot is sent for the first update of an instance, for the 30-minute refresh, for every 20th update, when the delta would be larger than 60 % of the snapshot (or over the size limit), when the previous-state record is missing or unreadable, when the clock did not advance, and for instances below version 6. After each successful send the bot stores `webxdc_sent:<chat id>` = `{"g": generated_at, "m": {monitor id: 8 hex characters of its significant fields}}` (about 4 KB for 84 monitors); a failed send does not change it.
+- The app applies a delta only when `delta.generated_at > held.generated_at && delta.base <= held.generated_at`: it must hold a state at least as new as the base. If the base is newer than what it holds it missed an update, ignores the delta and waits for the next snapshot (at most 20 updates, or 30 minutes of drift). Applying replaces the listed monitors by id, removes `rm`, keeps the order (down, partial, up, paused, then id) and replaces the small top-level fields. The realtime frames still carry full snapshots and the realtime path is unchanged; its handler now goes through the same accept function.
+- `/appdelta [on|off]` (admin; config key `status_app_delta`, default `on`) is the rollback switch: `off` sends snapshots only, as before. `/help` and `/stats` show it.
+- `tools/loadbench/release305.py`: benchmark of the update size and CPU.
+
+### Load
+- What runs: nothing new on a timer. Per status update actually sent (already limited by the existing interval and hourly cap): one pass over the chat's monitors (84 in the fixture) to hash their significant fields and compare them with the stored record, in memory; one batched config read (`webxdc_sent:<chat>` and `status_app_delta`, in one query) and one extra config write (`webxdc_sent:<chat>`). No database connection, config read, RPC or network call per monitor. Snapshot-only paths (first, refresh, every 20th, version 5) read nothing extra.
+- Measured (`python -m tools.loadbench.release305`, 84 monitors x 7 nodes, 100 updates of 1-3 flipped monitors, stub RPC, development Mac): old, snapshots only, 49.4 KB per update, 4,953,236 bytes per 100 updates, 6.2 ms CPU per update (whole delivery pass); new, deltas, first update 49.4 KB, median 3,135 bytes, 545,363 bytes per 100 updates (9.1 times less), 6.2 ms CPU per update. A one-monitor change is a 2.6 KB delta.
+- The tests (`tests/test_release_305.py`) assert the size bounds, the snapshot rules, the merge round trip (also in Node when installed, against the app's own code), and at most one extra config read and one extra write for 150 monitors; a delta does no database or config access.
+
 ## 3.0.4
 
 ### Added
