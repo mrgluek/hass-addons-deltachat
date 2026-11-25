@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.56.1
+
+### Fixed
+- **`/relays` listed almost every member under almost every relay.** The monitor marks a relay unhealthy as soon as one pair loses a few pings, or when its partner is the dead one, so a group of 250 members got 244 lines like "`chat.gluek.info` — Outgoing to chat.pdvkn.ru failed". The `🔴 Unreachable relays` block now lists only relays with a known downtime of at least 4 hours (the same `RELAY_NOTE_MIN_DOWN_SECONDS` as the notes), grouped by relay: the relay, how long it has been down, the short error, then the members who use it (10 names, "and N more"), at most 15 relays.
+- **Relay notes:** a group gets at most one note per 5 minutes (also after a welcome), so a dead shared relay cannot flood it; a transient RPC error no longer shrinks a known relay list to the primary address (retried after 10 minutes); a public-provider note with no relay to suggest (monitor not warmed up after a restart) is not sent and does not use up the weekly allowance.
+- **Relay list parsing:** the last `Relays:` section counts, and only `\n` separates lines, so a contact named "Relays" or with U+2028 in its name cannot hide or fake relays.
+
+### Load
+- The ping ranking behind the suggested relays is reused for 10 minutes instead of being read for every note, and whitelist lookups cover the 30 best candidates, not every monitored server.
+
 ## 2.56.0
 
 ### Added
