@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.57.0
+
+### Added
+- **`/ip` and `/dns` check the Russian blocklists via [cheburcheck.ru](https://cheburcheck.ru/kb/api)** (`GET /api/v1/check`, no token). The reasons its `blocked` flag combines are shown apart: `🚫 RKN blocklists: ⛔ domain is in the registry` (with the registry entry when it is a parent or wildcard), `⛔ in blocked subnets: …`, `🐢 Throttled CDN in Russia (16-20 KB limit): cloudflare`, `✅ CDN exception` for a domain on cheburcheck's exception list, or `✅ not listed, not on a throttled CDN`. An AS gets how many of its prefixes are blocked or on a throttled CDN (the API counts both together). The number of "does not work" reports from cheburcheck users in the last 14 days and a link to the check page follow. `/ip <host>` checks the name, which covers all its addresses. In `/dns` the lines are in the Addresses section, next to the RU mobile whitelist; the request runs in parallel with the CT lookup. The network scanners (`/probe`) need an API token and are not used.
+- `CHEBURCHECK_URL` in `.env`: another API address; an empty value turns the lines off.
+
+### Load
+- One HTTPS request per uncached target, only when someone runs `/ip` or `/dns`; nothing runs on a timer. Answers are cached for an hour (at most 500 targets), failures are not cached. The bot sends at most 4 requests a minute (cheburcheck limits each IP to a burst of about 5) and pauses for a minute after HTTP 429; a skipped request says "busy, try later" instead of waiting. Tests: 100 repeated lookups of one target make 1 request, 200 different targets in a minute make 4, and after a 429 none are sent for a minute. No CPU measurement: no timer or per-row path changed.
+
 ## 2.56.1
 
 ### Fixed

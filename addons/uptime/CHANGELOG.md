@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.7
+
+### Fixed
+- Delta updates (3.0.5) were never used in the busiest chats. A chat with 84 monitors and 7 nodes each has a full snapshot above the 60 KB wire limit, so the bot drops node details (latency, error) from every snapshot and sets `details_omitted`; the rule "send a snapshot when details are omitted" then made every update a full snapshot. Measured on a member device one day after 3.0.5: a new instance of the busiest chat had 258 of 260 updates as snapshots of about 51 KB (13 MB a day), only 2 deltas. The rule is removed. A delta carries the `details_omitted` flag like the other `*_omitted` flags, and the significant fields of the changed monitors are the same with or without details, so the app state stays identical (the new test compares each applied delta with a fresh state).
+- Test `tests/test_release_307.py` forces `details_omitted` with a tight limit: before the fix every update is a snapshot, after it 19 of 20 are deltas of about 0.9 KB against a 49 KB snapshot, and the 20th is a snapshot again.
+
+### Load
+- Nothing new runs on a timer; per update the same two config reads as in 3.0.5, and the delta is smaller than the snapshot it replaces. Takes effect at the next rotation of each affected chat's app instance (instances already posted at version 6 receive deltas immediately).
+
 ## 3.0.6
 
 ### Fixed
