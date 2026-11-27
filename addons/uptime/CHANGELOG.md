@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.8
+
+### Security
+- **Pillow 13**: Raised the pin from `pillow>=10.4.0,<11.0.0` to `pillow>=13.0.0,<14.0.0`; 10.4.0 has many published vulnerabilities (pip-audit). Requires Python 3.11 or newer (the image is `python:3.11-slim`).
+
+### Changed
+- `docker-compose.yml`: the CPU cap is read from `UPTIME_CPUS` (default `1`, as before). On a host with 2 or more cores, `UPTIME_CPUS=2` is recommended. Measured on de2 (5 cores, 3.0.3): at a cap of 1 core the container was throttled 1,464 periods (76 s) in 62 minutes and 20-27 votes per 30 minutes failed; after raising the cap to 2, 51 throttled periods (1.5 s) in 5 hours 13 minutes and 7 failed votes per 30 minutes. A default of 2 was not used because Docker refuses a cap above the host's core count and the host `ru` has one core.
+
 ## 3.0.7
 
 ### Fixed
