@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.18.2
+
+### Changed
+- **Old Messages and Attachments Are Deleted**: The bot kept every attachment it ever received in group chats (2.1 GB on production). The core's local auto-delete (`delete_device_after`) is now set to 24 hours, so messages and their files older than that are removed from the bot's local storage. The bot keeps its own state in its own database and never reads old messages.
+
 ## 1.18.1
 
 ### Fixed
