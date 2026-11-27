@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.32.5
+
+### Security
+- lxml is now pinned `>=6.1.0,<7.0.0` (was `<6`) and `lxml-html-clean>=0.4.5,<0.5.0` is listed explicitly, fixing PYSEC-2026-87 and PYSEC-2026-2614. No code changes were needed. One difference: a page with an unclosed `<title>` tag now gets the rest of the document as its title (HTML5 parsing, same as browsers).
+- Pillow is now pinned `>=13.0.0,<14.0.0` (was `>=10.4.0,<11.0.0`). 10.4.0 has many published vulnerabilities; the fixes are in 12.x and 13.0.0. No code changes were needed: the image paths (WebP conversion, animated GIF, resize, square icon, map overlay) give byte-identical output on 10.4.0 and 13.0.0. Pillow 13 needs Python 3.11 or newer.
+
+### Fixed
+- OpenRouter requests now send HTTP-Referer, so OpenRouter shows the bot by name instead of "Unknown".
+
 ## 2.32.4
 
 ### Fixed
