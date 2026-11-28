@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.6
+
+### Security
+- Proxy credentials are no longer written to the logs. Proxy URLs (`PROXY_URL`, `JINA_PROXY_URL`, `INSTAGRAM_PROXY_URL`, `ARCHIVE_TODAY_PROXY_URL`) are logged as `scheme://***@host:port`, and `user:pass@` is also scrubbed from the error text logged when a proxy fails. Requests are routed exactly as before.
+
 ## 2.32.5
 
 ### Security
